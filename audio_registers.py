@@ -20,8 +20,8 @@ class Ticker():
             if(time.time() - prevt < self.interval):
                 time.sleep(self.check)
             else:
-                self.callback()
                 prevt = time.time()
+                self.callback()
 
 
 class AudioGrabber():
@@ -34,19 +34,19 @@ class AudioGrabber():
     def receive_tick(self):
         print('tick received...')
         filename = 'audio_buffer/' + str(self.index) + '.wav'
-        subprocess.run(['rm', filename])
-        subprocess.run(['rm', filename[:-4]+'.m4a'])
-        self.record(filename)
+        m4a_fn = filename[:-4] + '.m4a'
+        subprocess.run(['rm', filename, m4a_fn], capture_output=True)
+        self.record(filename, m4a_fn)
         self.index = (self.index + 1) % self.circ_buf_size
 
 #        self.process_audio(*self.read_wave(filename))
+        print('tick handled')
 
-    def record(self, filename):
+    def record(self, filename, m4a_fn):
         # linux
-#        subprocess.run(['rec', filename, 'trim', '0', str(self.interval)])
+#        subprocess.run(['rec', filename, 'trim', '0', str(self.interval)], capture_output=True)
 
         # android
-        m4a_fn = filename[:-4] + '.m4a'
         subprocess.run(['termux-microphone-record', '-f', m4a_fn, '-l', str(self.interval)])
         subprocess.run(['ffmpeg', '-i', m4a_fn, filename])
         
@@ -104,5 +104,5 @@ aggressiveness = 1
 vad = webrtcvad.Vad(aggressiveness)
 file_interval_s = 1
 aud = AudioGrabber(file_interval_s, 50)
-#clock = Ticker(file_interval_s, aud.receive_tick)
+clock = Ticker(file_interval_s, aud.receive_tick)
 #aud.process_audio(*aud.read_wave('sandra.wav'))
