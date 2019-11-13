@@ -35,6 +35,7 @@ class AudioGrabber():
         print('tick received...')
         filename = 'audio_buffer/' + str(self.index) + '.wav'
         subprocess.run(['rm', filename])
+        subprocess.run(['rm', filename[:-4]+'.m4a'])
         self.record(filename)
         self.index = (self.index + 1) % self.circ_buf_size
 
@@ -45,10 +46,9 @@ class AudioGrabber():
 #        subprocess.run(['rec', filename, 'trim', '0', str(self.interval)])
 
         # android
-        m4a_fn = filename[:-4] + '.wav'
+        m4a_fn = filename[:-4] + '.m4a'
         subprocess.run(['termux-microphone-record', '-f', m4a_fn, '-l', str(self.interval)])
         subprocess.run(['ffmpeg', '-i', m4a_fn, filename])
-        subprocess.run(['rm', m4a_fn])
         
     
     def process_audio(self, audio, sample_rate):
@@ -105,4 +105,4 @@ vad = webrtcvad.Vad(aggressiveness)
 file_interval_s = 1
 aud = AudioGrabber(file_interval_s, 50)
 #clock = Ticker(file_interval_s, aud.receive_tick)
-aud.process_audio(*aud.read_wave('sandra.wav'))
+#aud.process_audio(*aud.read_wave('sandra.wav'))
