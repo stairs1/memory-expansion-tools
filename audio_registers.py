@@ -45,7 +45,11 @@ class AudioGrabber():
 #        subprocess.run(['rec', filename, 'trim', '0', str(self.interval)])
 
         # android
-        subprocess.run(['termux-microphone-record', '-f', filename, '-l', str(self.interval)])
+        m4a_fn = filename[:-4] + '.wav'
+        subprocess.run(['termux-microphone-record', '-f', m4a_fn, '-l', str(self.interval)])
+        subprocess.run(['ffmpeg', '-i', m4a_fn, filename])
+        subprocess.run(['rm', m4a_fn])
+        
     
     def process_audio(self, audio, sample_rate):
         frames = frame_generator(30, audio, sample_rate)
