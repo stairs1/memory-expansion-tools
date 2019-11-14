@@ -2,107 +2,145 @@ import subprocess
 import time
 import contextlib
 import wave
-import numpy as np
-import matplotlib.pyplot as plt
-import webrtcvad
+import os
+import threading
+
 
 class Ticker():
 
-    def __init__(self, interval, callback, check=0.100):
-        self.interval = interval
-        self.callback = callback
-        self.check=check
-        self.tick_away()
+    def __init__(self, handler, filename):
+        self.interval=2
+        self.check=0.010
+        self.handler = handler
+        self.filename=filename
+        self.buf_directory = 'audio_buffer'
 
-    def tick_away(self):
-        prevt = time.time()
+    def file_tick(self):
         while True:
-            if(time.time() - prevt < self.interval):
+            if self.filename not in os.listdir(self.buf_directory):
                 time.sleep(self.check)
             else:
-                prevt = time.time()
-                self.callback()
+                time.sleep(self.interval)
+                handler()
 
 
-class AudioGrabber():
+class AudioBuffer():
+    """
+    Maintains a fixed-size buffer of audio data. 
+    Configurable to send notifications on buffer updates.
+    """
 
-    def __init__(self, interval, circ_buf_size):
-        self.interval = interval
-        self.index = 1
-        self.circ_buf_size = circ_buf_size
+    def __init__(self, notify=self.noop):
+        # file buffer access
+        self.android = False
+        self.filename = 'buf.wav'
+        self.filepath = 'audio_buffer/buf.wav'
+        self.m4a_file = 'buf.m4a' if self.android else None
+        self.m4a_filepath = 'audio_buffer/buf.m4a' if self.android else None
 
-    def receive_tick(self):
-        print('tick received...')
-        filename = 'audio_buffer/' + str(self.index) + '.wav'
-        m4a_fn = filename[:-4] + '.m4a'
-        subprocess.run(['rm', filename, m4a_fn], capture_output=True)
-        self.record(filename, m4a_fn)
-        self.index = (self.index + 1) % self.circ_buf_size
+        # python buffer properties
+        # 2 bytes per sample, 16000 samples per second =~2MB 60s buffer
+        self.audio_buffer_len_s = 60
+        self.sample_f = 16000
+        self.sample_width = 2
+        self.max_buf_size = self.audio_buffer_len_s * self.sample_f * self.sample_width 
+        self.audio = bytes()
 
-#        self.process_audio(*self.read_wave(filename))
-        print('tick handled')
+        self.ticker = Ticker(
+                self.handler, self.m4a_file if self.android else self.filename
+        )
+        self.notification_callback = notify
 
-    def record(self, filename, m4a_fn):
-        # linux
-#        subprocess.run(['rec', filename, 'trim', '0', str(self.interval)], capture_output=True)
+    def handler(self):
+        # android records m4a audio, convert to wav to process
+        if(self.android):
+            subprocess.run(['ffmpeg', '-i', self.m4a_filepath, self.filepath])
+            subprocess.run(['rm', self.m4a_filepath])
 
-        # android
-        subprocess.run(['termux-microphone-record', '-f', m4a_fn, '-l', str(self.interval)])
-        subprocess.run(['ffmpeg', '-i', m4a_fn, filename])
-        
-    
-    def process_audio(self, audio, sample_rate):
-        frames = frame_generator(30, audio, sample_rate)
-        frames = list(frames)
-        #here for visualization, this a tool
-        visarray = np.zeros(len(frames))
-        for i, frame in enumerate(frames):
-            is_speech = vad.is_speech(frame.bytes, sample_rate)
-            visarray[i] = is_speech
-        plt.plot(visarray)
-        plt.show()
+        audio = self.decode_audio()
+        self.add_audio_to_front(audio)
+        subprocess.run(['rm', self.filepath])
+        self.record()
+        send_notification()
 
-    def read_wave(self, path):
-        """Reads a .wav file.
-        Takes the path, and returns (PCM audio data, sample rate).
+    def start(self):
+        self.record()
+        self.ticker.file_tick()
+
+    def record(self):
         """
-        with contextlib.closing(wave.open(path, 'rb')) as wf:
+        Asynchronously record audio from mic into file.
+        """
+        if(self.android):
+            thread = threading.Thread(
+                    target=subprocess.run,
+                    args=[
+                        'termux-microphone-record',
+                        '-f', self.m4a_filename,
+                        '-l', str(self.interval)
+                    ],
+                    kwargs={'capture_output':True}
+            )
+            thread.start()
+        else:
+            thread = threading.Thread(target=subprocess.run,
+                args=['rec', self.filepath, 'trim', '0', str(self.interval)],
+                kwargs={'capture_output':True}
+            )
+            thread.start()
+
+    def noop(self):
+        pass
+
+    def send_notification(self):
+        """
+        Call notification function asynchronously. 
+        Can use to process new data when buffer is updated.
+        """
+        thread = threading.Thread(target=self.notification_callback, args = None, kwargs=None)
+        thread.start()
+
+    def decode_audio(self):
+        """
+        Reads .wav file into bytes
+        """
+        with contextlib.closing(wave.open(self.filepath, 'rb')) as wf:
             num_channels = wf.getnchannels()
             assert num_channels == 1
             sample_width = wf.getsampwidth()
             assert sample_width == 2
             sample_rate = wf.getframerate()
-            assert sample_rate in (8000, 16000, 32000, 48000)
+            assert sample_rate == 16000
             pcm_data = wf.readframes(wf.getnframes())
-            return pcm_data, sample_rate
+            return pcm_data
 
+    def add_audio_to_front(self, audio):
+        """
+        Add audio to front of audio buffer.
+        If audio buffer is full, remove end bytes.
+        """
+        self.audio = audio + self.audio
+        if(len(self.audio) > self.max_buf_size):
+            self.audio = self.audio[:self.max_buf_size]
 
-class Frame(object):
-    """Represents a "frame" of audio data."""
-    def __init__(self, bytes, timestamp, duration):
-        self.bytes = bytes
-        self.timestamp = timestamp
-        self.duration = duration
+    def get_aud(self, start, end):
+        """
+        Return bytes of audio from start time to end time (seconds).
+        Raises AssertionError on out of bounds access.
+        Raises outofboundserror when data not present.
+        
+        self.audio_buffer_len_s = 60
+        self.sample_f = 16000
+        self.max_buf_size = self.audio_buffer_len_s * self.sample_f * 2 
+        self.audio = bytes()
+        """
+        assert start > end
+        assert start >= 0
+        assert end <= self.audio_buffer_len_s
 
+        startbytes = int(start * self.sample_f * self.sample_width)
+        endbytes = int(end * self.sample_f * self.sample_width)
+        data = self.audio[startbytes:endbytes]
 
-def frame_generator(frame_duration_ms, audio, sample_rate):
-    """Generates audio frames from PCM audio data.
-    Takes the desired frame duration in milliseconds, the PCM data, and
-    the sample rate.
-    Yields Frames of the requested duration.
-    """
-    n = int(sample_rate * (frame_duration_ms / 1000.0) * 2)
-    offset = 0
-    timestamp = 0.0
-    duration = (float(n) / sample_rate) / 2.0
-    while offset + n < len(audio):
-        yield Frame(audio[offset:offset + n], timestamp, duration)
-        timestamp += duration
-        offset += n
+        return data
 
-aggressiveness = 1
-vad = webrtcvad.Vad(aggressiveness)
-file_interval_s = 1
-aud = AudioGrabber(file_interval_s, 50)
-clock = Ticker(file_interval_s, aud.receive_tick)
-#aud.process_audio(*aud.read_wave('sandra.wav'))
