@@ -1,4 +1,4 @@
-
+import subprocess
 
 class Register():
     
@@ -14,7 +14,8 @@ class Register():
         while self.on:
             speech = subprocess.run(['termux-speech-to-text'], capture_output=True)
             if speech.stdout != b'':
-                self.registry.append(speech)
+                self.registry.append(speech.stdout)
+            print()
             print("current registry: ")
             for i, reg in enumerate(self.registry):
                 print(i, ".", reg)
