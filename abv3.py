@@ -1,6 +1,7 @@
 import subprocess
 import socket
 import time
+import json
 
 
 def noop(*args, **kwargs):
@@ -29,7 +30,7 @@ class Register():
         tfin = time.time()
         if speech.stdout != b'':
             self.registry.insert(
-                0, {'speech': speech.stdout, 'start': tstart, 'end': tfin}
+                0, {'speech': str(speech.stdout), 'start': tstart, 'end': tfin}
             )
         if len(self.registry) > self.registry_len:
             self.registry = self.registry[:self.registry_len]
@@ -52,7 +53,8 @@ class WIFITransmitter():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def send(self, message):
-        self.sock.sendto(message, (self.UDP_IP, self.UDP_port))
+        assert isinstance(message,list)
+        self.sock.sendto(json.dumps(message).encode(), (self.UDP_IP, self.UDP_port))
 
 
 wifi = WIFITransmitter()
