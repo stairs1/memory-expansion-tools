@@ -29,7 +29,7 @@ class Register():
                 self.display_callback(reg)
 
             
-class WIFITransmtter():
+class WIFITransmitter():
 
     def __init__(self):
         self.UDP_IP = '192.168.0.22'
