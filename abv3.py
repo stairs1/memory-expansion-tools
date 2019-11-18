@@ -1,10 +1,17 @@
 import subprocess
+import socket
+
+
+def noop(*args, **kwargs):
+    pass
+
 
 class Register():
     
-    def __init__(self):
+    def __init__(self, display_callback=noop):
         self.on = False
         self.registry = []
+        self.display_callback = display_callback
 
     def start(self):
         self.on = True
@@ -19,6 +26,20 @@ class Register():
             print("current registry: ")
             for i, reg in enumerate(self.registry):
                 print(i, ".", reg)
+                self.display_callback(reg)
 
-reg = Register()
+            
+class WIFITransmtter():
+
+    def __init__(self):
+        self.UDP_IP = '192.168.0.22'
+        self.UDP_port = 5005
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    def send(self, message):
+        self.sock.sendto(message, (self.UDP_IP, self.UDP_port))
+
+
+wifi = WIFITransmitter()
+reg = Register(display_callback=wifi.send)
 reg.start()
