@@ -1,0 +1,65 @@
+<html>
+<head>
+    <title>Hey guys</title>
+    <script src="static/js/react.js"></script>
+    <script src="static/js/react-dom.js"></script>
+    <script src="static/js/socket.io-1.0.0.js"></script>
+</head>
+<body>
+    <h1>Conversation</h1>
+    <div id='root'></div>
+
+    <script>
+        var word = 'jerem'
+        window.onload = function() {
+
+            class PhraseTable extends React.Component {
+                constructor() {
+                    console.log('constructing...');
+                    super();
+                    this.state = {
+                        value: {'p1': 'nothing yet', 'p2': 'nothing yet','p3': 'nothing yet', 'p4': 'nothing yet', 'p5': 'nothing yet' }
+                    };
+                }
+
+                componentDidMount() {
+                    console.log('component did in fact mount...')
+                    const socket = io();
+                    socket.on("my_response", data => this.setState({value: data}));
+                }
+
+
+                render() {
+                    console.log('rendering...');
+                    var e1 = this.state.value.p1
+                    var e2 = this.state.value.p2
+                    var e3 = this.state.value.p3
+                    var e4 = this.state.value.p4
+                    var e5 = this.state.value.p5
+                    var listy = [0,0,0,0,0]
+                    listy[0] = e1
+                    listy[1] = e2
+                    listy[2] = e3
+                    listy[3] = e4
+                    listy[4] = e5
+
+                    var listitems = listy.map((num) => 
+                        React.createElement('h3', null, num)
+                    );
+                    return (
+                        React.createElement('ul', null, listitems)
+                    );
+                }
+            }
+
+            ReactDOM.render(
+                React.createElement(PhraseTable),
+                document.getElementById('root')
+            )
+        }
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>superdynamic</title>
+</head>
+<body>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf-8">
+    let phrase1=''
+    let phrase2=''
+    let phrase3=''
+    let phrase4=''
+    let phrase5=''
+    var socket = io();
+    socket.on('phrase_update', function() {
+        phrase1 = data['p1']
+        phrase2 = data['p2']
+        phrase3 = data['p3']
+        phrase4 = data['p4']
+        phrase5 = data['p5']
+        console.log('boobies')
+        console.log(phrase1)
+
+    })
+    
+</body>
+

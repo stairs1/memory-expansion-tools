@@ -30,7 +30,7 @@ class Register():
         tfin = time.time()
         if speech.stdout != b'':
             self.registry.insert(
-                0, {'speech': str(speech.stdout), 'start': tstart, 'end': tfin}
+                0, {'speech': speech.stdout.decode("utf-8").rstrip(), 'start': tstart, 'end': tfin}
             )
         if len(self.registry) > self.registry_len:
             self.registry = self.registry[:self.registry_len]

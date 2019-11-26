@@ -1,8 +1,8 @@
-import socket
-import time
-import json
+import server
 import threading
-
+import time
+import socket
+import json
 
 class WIFIReceiver():
 
@@ -10,9 +10,11 @@ class WIFIReceiver():
         self.UDP_IP=''
         self.UDP_port = 5005
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.UDP_IP, self.UDP_port))
         self.on = False
         self.phrases = ['','','','','']
+        print('receiver listening on port', self.UDP_port)
 
     def start(self):
         self.on = True
@@ -22,32 +24,11 @@ class WIFIReceiver():
             print(json.loads(data.decode()))
             for i, phraseobj in enumerate(json.loads(data.decode())):
                 self.phrases[i] = str(i+1) + '. ' +  phraseobj['speech']
+            server.send(self.phrases[0], self.phrases[1], self.phrases[2], self.phrases[3], self.phrases[4])
             time.sleep(0.01)
 
 receiver = WIFIReceiver()
 t1 = threading.Thread(target=receiver.start).start()
-#app = Flask(__name__)
-#app.config['SECRET_KEY'] = 'fartyvnkdjnfjknfl1232#'
-#socketio = SocketIO(app)
-#
-#socketio.emit('phrase_update', {"p1":"fun"})
-#
-#@app.route('/')
-#def sessions():
-#    return render_template('dynamic.html')
-#
-##@app.route("/output")
-##def output():
-##    return render_template(
-##            'dynamic.html',
-##            title='DYNAMIC Conversation:',
-##            phrase1=receiver.phrases[0],
-##            phrase2=receiver.phrases[1],
-##            phrase3=receiver.phrases[2],
-##            phrase4=receiver.phrases[3],
-##            phrase5=receiver.phrases[4]
-##        )
-##
-#if __name__ == "__main__":
-#    socketio.run(app, debug=True, port=5210)
-#
+
+server.start()
+
