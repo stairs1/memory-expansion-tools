@@ -1,14 +1,38 @@
 <html>
 <head>
+<style>
+h3 {
+    color: #666666;
+    font-family: verdana;
+    size: 200%;
+}
+ol {
+    list-style: none;
+    counter-reset: li;
+}
+li::before {
+    content: counter(li);
+    color: #777777;
+    display: inline-block; width: 1em;
+    margin-left: -1em;
+}
+li {
+    counter-increment: li;
+}
+body {
+    background-color: #fffff8;
+}
+
+</style>
     <title>Hey guys</title>
     <script src="static/js/react.js"></script>
     <script src="static/js/react-dom.js"></script>
     <script src="static/js/socket.io-1.0.0.js"></script>
 </head>
 <body>
-    <h1>Conversation</h1>
+    <h3>What I've been saying</h1>
+    <hr>
     <div id='root'></div>
-
     <script>
         var word = 'jerem'
         window.onload = function() {
@@ -44,10 +68,10 @@
                     listy[4] = e5
 
                     var listitems = listy.map((num) => 
-                        React.createElement('h3', null, num)
+                        React.createElement('li', null, num)
                     );
                     return (
-                        React.createElement('ul', null, listitems)
+                        React.createElement('ol', null, listitems)
                     );
                 }
             }

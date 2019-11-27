@@ -36,7 +36,7 @@ def background_thread():
 @socketio.on('connect')
 def connect_fn():
     global thread
-    emit('my_response', {'bar': 'Connected', 'p1': 'nothing here yet'})
+    emit('my_response', {'bar': 'Connected', 'p1': 'nothing so far tbh'})
     if thread is None:
         thread = socketio.start_background_task(background_thread)
         
