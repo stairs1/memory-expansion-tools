@@ -1,5 +1,4 @@
 <html>
-<head>
 <style>
 h3 {
     color: #666666;
@@ -23,66 +22,109 @@ body {
     background-color: #fffff8;
 }
 
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    top: 0;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
+}
 </style>
+
+<head>
     <title>Hey guys</title>
-    <script src="static/js/react.js"></script>
-    <script src="static/js/react-dom.js"></script>
-    <script src="static/js/socket.io-1.0.0.js"></script>
 </head>
 <body>
-    <h3>What I've been saying</h1>
-    <hr>
-    <div id='root'></div>
-    <script>
-        var word = 'jerem'
-        window.onload = function() {
+    <div class='split left'>
+        <h3>What I've been saying</h1>
+        <hr>
+        <div id='phrase list'></div>
+    </div>
+    <div class='split right'>
+        <h3>The important points</h3>
+        <hr>
+        <div id='stage'></div>
+    </div>
+</body>
 
-            class PhraseTable extends React.Component {
-                constructor() {
-                    console.log('constructing...');
-                    super();
-                    this.state = {
-                        value: {'p1': 'nothing yet', 'p2': 'nothing yet','p3': 'nothing yet', 'p4': 'nothing yet', 'p5': 'nothing yet' }
-                    };
-                }
+<script src="static/js/react.js"></script>
+<script src="static/js/react-dom.js"></script>
+<script src="static/js/socket.io-1.0.0.js"></script>
+<script>
+    var word = 'jerem'
+    window.onload = function() {
+        var onstage = ''
 
-                componentDidMount() {
-                    console.log('component did in fact mount...')
-                    const socket = io();
-                    socket.on("my_response", data => this.setState({value: data}));
-                }
-
-
-                render() {
-                    console.log('rendering...');
-                    var e1 = this.state.value.p1
-                    var e2 = this.state.value.p2
-                    var e3 = this.state.value.p3
-                    var e4 = this.state.value.p4
-                    var e5 = this.state.value.p5
-                    var listy = [0,0,0,0,0]
-                    listy[0] = e1
-                    listy[1] = e2
-                    listy[2] = e3
-                    listy[3] = e4
-                    listy[4] = e5
-
-                    var listitems = listy.map((num) => 
-                        React.createElement('li', null, num)
-                    );
-                    return (
-                        React.createElement('ol', null, listitems)
-                    );
-                }
+        class PhraseTable extends React.Component {
+            constructor() {
+                console.log('constructing...');
+                super();
+                this.state = {
+                    value: {'p1': 'nothing yet', 'p2': 'nothing yet','p3': 'nothing yet', 'p4': 'nothing yet', 'p5': 'nothing yet', 'on_stage': ''}
+                };
             }
 
-            ReactDOM.render(
-                React.createElement(PhraseTable),
-                document.getElementById('root')
-            )
+            componentDidMount() {
+                console.log('component did in fact mount...')
+                const socket = io();
+                socket.on("my_response", data => this.setState({value: data}));
+            }
+
+
+            render() {
+                console.log('rendering...');
+                var e1 = this.state.value.p1
+                var e2 = this.state.value.p2
+                var e3 = this.state.value.p3
+                var e4 = this.state.value.p4
+                var e5 = this.state.value.p5
+                var listy = [0,0,0,0,0]
+                listy[0] = e1
+                listy[1] = e2
+                listy[2] = e3
+                listy[3] = e4
+                listy[4] = e5
+
+                onstage = this.state.value.on_stage
+                var listitems = listy.map((num) => 
+                    React.createElement('li', null, num)
+                );
+                return (
+                    React.createElement('ol', null, listitems)
+                );
+            }
         }
-    </script>
-</body>
+
+        class Thingy extends PhraseTable {
+            constructor() {
+                super();
+            }
+
+            render() {
+                return(
+                    React.createElement('p', null, this.state.value.on_stage)
+                );
+            }
+        }
+
+        ReactDOM.render(
+            React.createElement(PhraseTable),
+            document.getElementById('phrase list')
+        )
+        ReactDOM.render(
+            React.createElement(Thingy),
+            document.getElementById('stage')
+        )
+    }
+</script>
+
 </html>
 
 

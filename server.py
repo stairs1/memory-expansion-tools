@@ -11,20 +11,21 @@ socketio = SocketIO(app)
 thread=None
 def noop(*args, **kwargs): pass
 thread_fp = noop
-ss1,ss2,ss3,ss4,ss5 = '','','','heyyy im 4',''
+ss1,ss2,ss3,ss4,ss5,stage = '','','','heyyy im 4','',''
 
 def sendit():
     global thread_fp
-    socketio.emit('my_response', {'bar': 'Phrases', 'p1': ss1, 'p2': ss2, 'p3': ss3, 'p4': ss4, 'p5': ss5})
+    socketio.emit('my_response', {'bar': 'Phrases', 'p1': ss1, 'p2': ss2, 'p3': ss3, 'p4': ss4, 'p5': ss5, 'on_stage': stage})
     thread_fp = noop
 
-def send(ts1, ts2, ts3, ts4, ts5):
-    global ss1, ss2, ss3, ss4, ss5, thread_fp
+def send(ts1, ts2, ts3, ts4, ts5, tstage):
+    global ss1, ss2, ss3, ss4, ss5, stage, thread_fp
     ss1 = ts1
     ss2 = ts2
     ss3 = ts3
     ss4 = ts4
     ss5 = ts5
+    stage = tstage
     thread_fp = sendit
 
 def background_thread():
