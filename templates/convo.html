@@ -4,6 +4,7 @@ h3 {
     color: #666666;
     font-family: verdana;
     size: 200%;
+    text-align: center;
 }
 ol {
     list-style: none;
@@ -58,9 +59,7 @@ body {
 <script src="static/js/react-dom.js"></script>
 <script src="static/js/socket.io-1.0.0.js"></script>
 <script>
-    var word = 'jerem'
     window.onload = function() {
-        var onstage = ''
 
         class PhraseTable extends React.Component {
             constructor() {
@@ -77,22 +76,25 @@ body {
                 socket.on("my_response", data => this.setState({value: data}));
             }
 
-
             render() {
                 console.log('rendering...');
-                var e1 = this.state.value.p1
-                var e2 = this.state.value.p2
-                var e3 = this.state.value.p3
-                var e4 = this.state.value.p4
-                var e5 = this.state.value.p5
-                var listy = [0,0,0,0,0]
-                listy[0] = e1
-                listy[1] = e2
-                listy[2] = e3
-                listy[3] = e4
-                listy[4] = e5
+            }
+        }
 
-                onstage = this.state.value.on_stage
+        class Registry extends PhraseTable {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                var listy = [
+                    this.state.value.p1,
+                    this.state.value.p2,
+                    this.state.value.p3,
+                    this.state.value.p4,
+                    this.state.value.p5
+                ];
+
                 var listitems = listy.map((num) => 
                     React.createElement('li', null, num)
                 );
@@ -102,7 +104,8 @@ body {
             }
         }
 
-        class Thingy extends PhraseTable {
+
+        class Stage extends PhraseTable {
             constructor() {
                 super();
             }
@@ -115,11 +118,11 @@ body {
         }
 
         ReactDOM.render(
-            React.createElement(PhraseTable),
+            React.createElement(Registry),
             document.getElementById('phrase list')
         )
         ReactDOM.render(
-            React.createElement(Thingy),
+            React.createElement(Stage),
             document.getElementById('stage')
         )
     }
