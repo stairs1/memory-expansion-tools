@@ -66,7 +66,7 @@ body {
                 console.log('constructing...');
                 super();
                 this.state = {
-                    value: {'p1': 'nothing yet', 'p2': 'nothing yet','p3': 'nothing yet', 'p4': 'nothing yet', 'p5': 'nothing yet', 'on_stage': ''}
+                    value: {'phrases': ['some philler for now'], 'on_stage': ['philler']}
                 };
             }
 
@@ -87,12 +87,13 @@ body {
             }
             
             render() {
+                console.log(this.state.value);
                 var listy = [
-                    this.state.value.p1,
-                    this.state.value.p2,
-                    this.state.value.p3,
-                    this.state.value.p4,
-                    this.state.value.p5
+                    this.state.value.phrases[0],
+                    this.state.value.phrases[1],
+                    this.state.value.phrases[2],
+                    this.state.value.phrases[3],
+                    this.state.value.phrases[4]
                 ];
 
                 var listitems = listy.map((num) => 
@@ -112,7 +113,7 @@ body {
 
             render() {
                 return(
-                    React.createElement('p', null, this.state.value.on_stage)
+                    React.createElement('p', null, this.state.value.on_stage[0])
                 );
             }
         }

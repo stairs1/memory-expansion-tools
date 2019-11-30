@@ -7,42 +7,35 @@ app = Flask(__name__)
 app.debug=True
 app._static_folder = os.path.abspath("templates/static/")
 socketio = SocketIO(app)
+server_thread = None
 
-thread=None
-def noop(*args, **kwargs): pass
-thread_fp = noop
-ss1,ss2,ss3,ss4,ss5,stage = '','','','heyyy im 4','',''
+phrases = []
+stage = []
+data_ready = False
 
-def sendit():
-    global thread_fp
-    socketio.emit('my_response', {'bar': 'Phrases', 'p1': ss1, 'p2': ss2, 'p3': ss3, 'p4': ss4, 'p5': ss5, 'on_stage': stage})
-    thread_fp = noop
+def send(_phrases, _stage):
+    global phrases, stage, data_ready
+    phrases = _phrases
+    stage = _stage
+    data_ready = True
 
-def send(ts1, ts2, ts3, ts4, ts5, tstage):
-    global ss1, ss2, ss3, ss4, ss5, stage, thread_fp
-    ss1 = ts1
-    ss2 = ts2
-    ss3 = ts3
-    ss4 = ts4
-    ss5 = ts5
-    stage = tstage
-    thread_fp = sendit
-
-def background_thread():
-    bobnum = 0
+def server_poll():
+    global data_ready
     while True:
         sleep(0.1)
-        thread_fp()
+        if data_ready:
+            socketio.emit('my_response', {'phrases': phrases, 'on_stage': stage})
+            data_ready = False
 
 @socketio.on('connect')
-def connect_fn():
-    global thread
-    emit('my_response', {'bar': 'Connected', 'p1': 'nothing so far tbh'})
-    if thread is None:
-        thread = socketio.start_background_task(background_thread)
+def on_connect():
+    global server_thread
+    emit('my_response', {'phrases': ['nothing so far tbh'], 'on_stage': ['']})
+    if server_thread is None:
+        server_thread = socketio.start_background_task(server_poll)
         
 @app.route('/')
-def basic():
+def main_page():
     return render_template('convo.html')
 
 def start():

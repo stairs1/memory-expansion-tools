@@ -25,9 +25,7 @@ class WIFIReceiver():
         while True:
             data, addr = self.sock.recvfrom(1024)
             self.handle_data(data)
-            # disabled for testing
-#            server.send(self.phrases, self.stage)
-            print('sending: ', self.phrases, self.stage)
+            server.send(self.phrases, self.stage)
 
     def handle_data(self, data):
         data_decoded = json.loads(data.decode())
