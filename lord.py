@@ -13,38 +13,37 @@ class WIFIReceiver():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((self.UDP_IP, self.UDP_port))
-        self.on = False
-        self.phrases = ['','','','','']
-        self.stage = ''
-        self.stage_vacant = True
+        self.phrases = []
+        self.stage = []
+        self.phrases_len = 10
+        self.stage_len = 8
         self.command_manager = voice_commands.SpokenCommandManager()
-#        self.command_manager.commands['davinci'] = self.set_stage
         print('receiver listening on port', self.UDP_port)
 
-    def start(self):
-        self.on = True
-        while self.on:
+    def run(self):
+        while True:
             data, addr = self.sock.recvfrom(1024)
-            print('\nreceived following message\n--------------')
-            content = json.loads(data.decode())
-            print(content)
-            index = self.command_manager.parse_command(content[0]['speech'])
-            if self.stage_vacant:
-                if index is not None:
-                    self.stage = self.phrases[index]
-                    self.stage_vacant = False
-            for i, phraseobj in enumerate(json.loads(data.decode())):
-                self.phrases[i] = phraseobj['speech']
-            server.send(self.phrases[0], self.phrases[1], self.phrases[2], self.phrases[3], self.phrases[4], self.stage)
-            time.sleep(0.01)
+            self.handle(data)
+            # disabled for testing
+#            server.send(self.phrases, self.stage)
+            print('sending: ', self.phrases, self.stage)
 
-#    def set_stage(self, message):
-##        self.stage = message
-#
-#        self.stage = self.phrases[
+    def handle_data(self, data):
+        speech = json.loads(data.decode())['speech']
+        print('updating buffers with', speech)))
+        cmd_index = self.command_manager.parse_command(speech)
+        if cmd_index is not None:
+            self.stage.insert(0, self.phrases.pop(cmd_index))
+            if len(self.stage) > self.stage_len:
+                self.stage = self.stage[:self.stage_len]
+        else:
+            self.phrases.insert(0, speech)
+            if len(self.phrases) > self.phrases_len):
+                self.phrases = self.phrases[:self.stage_len]
+
 
 receiver = WIFIReceiver()
-t1 = threading.Thread(target=receiver.start).start()
+t1 = threading.Thread(target=receiver.run).start()
 
 server.start()
 

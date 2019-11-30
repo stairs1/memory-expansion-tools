@@ -42,7 +42,7 @@ class Register():
             print("current registry: ")
             for i, reg in enumerate(self.registry):
                 print(i, ".", reg)
-            self.display_callback(self.registry)
+            self.display_callback(self.registry[0])
 
             
 class WIFITransmitter():
