@@ -28,7 +28,7 @@ class Register():
         tstart = time.time()
         speech = subprocess.run(['termux-speech-to-text'], capture_output=True)
         tfin = time.time()
-        if speech.stdout != b'':
+        if speech.stdout != ( b'' or b'\n'):
             self.registry.insert(
                 0, {'speech': speech.stdout.decode("utf-8").rstrip(), 'start': tstart, 'end': tfin}
             )
@@ -42,7 +42,8 @@ class Register():
             print("current registry: ")
             for i, reg in enumerate(self.registry):
                 print(i, ".", reg)
-            self.display_callback(self.registry[0])
+            if len(self.registry) > 0:
+                self.display_callback(self.registry[0])
 
             
 class WIFITransmitter():
@@ -53,7 +54,6 @@ class WIFITransmitter():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def send(self, message):
-        assert isinstance(message,list)
         self.sock.sendto(json.dumps(message).encode(), (self.UDP_IP, self.UDP_port))
 
 

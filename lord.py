@@ -17,28 +17,40 @@ class WIFIReceiver():
         self.stage = []
         self.phrases_len = 10
         self.stage_len = 8
+        self.ptime = None
         self.command_manager = voice_commands.SpokenCommandManager()
         print('receiver listening on port', self.UDP_port)
 
     def run(self):
         while True:
             data, addr = self.sock.recvfrom(1024)
-            self.handle(data)
+            self.handle_data(data)
             # disabled for testing
 #            server.send(self.phrases, self.stage)
             print('sending: ', self.phrases, self.stage)
 
     def handle_data(self, data):
-        speech = json.loads(data.decode())['speech']
-        print('updating buffers with', speech)))
+        data_decoded = json.loads(data.decode())
+
+        # do not accept repeats
+        if data_decoded['start'] == self.ptime:
+            return
+
+        # do not accept empty strings or whitespace
+        if data_decoded['speech'] == '' or data_decoded['speech'].isspace():
+            return
+
+        self.ptime = data_decoded['start']
+        speech = data_decoded['speech']
+        print('updating buffers with', speech)
         cmd_index = self.command_manager.parse_command(speech)
-        if cmd_index is not None:
+        if cmd_index is not None and cmd_index < len(self.phrases):
             self.stage.insert(0, self.phrases.pop(cmd_index))
             if len(self.stage) > self.stage_len:
                 self.stage = self.stage[:self.stage_len]
         else:
             self.phrases.insert(0, speech)
-            if len(self.phrases) > self.phrases_len):
+            if len(self.phrases) > self.phrases_len:
                 self.phrases = self.phrases[:self.stage_len]
 
 
