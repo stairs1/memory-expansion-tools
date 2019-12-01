@@ -23,6 +23,10 @@ body {
     background-color: #fffff8;
 }
 
+td:first-child {
+  color: #777777;
+}
+
 .split {
     height: 100%;
     width: 50%;
@@ -46,6 +50,31 @@ body {
     <div class='split left'>
         <h3>What I've been saying</h1>
         <hr>
+        <table>
+            <colgroup>
+                <col style="size: 50%;">
+            </colgroup>
+            <tr>
+                <td><font size="2">DaVinci</font></td>
+                <td id='r1'></td>
+            </tr>
+            <tr>
+                <td><font size="2">Galileo</font></td>
+                <td id='r2'</td>
+            </tr>
+            <tr>
+                <td><font size = "2">Machiavelli</td>
+                <td id='r3'></font></td>
+            </tr>
+            <tr>
+                <td><font size = "2">Noam Chomsky</td>
+                <td id='r4'</font></td>
+            </tr>
+            <tr>
+                <td><font size = "2">Inigo Montoya</font></td>
+                <td id='r5'</td>
+            </tr>
+        </table>
         <div id='phrase list'></div>
     </div>
     <div class='split right'>
@@ -61,12 +90,12 @@ body {
 <script>
     window.onload = function() {
 
-        class PhraseTable extends React.Component {
+        class SocketWrapper extends React.Component {
             constructor() {
                 console.log('constructing...');
                 super();
                 this.state = {
-                    value: {'phrases': ['some philler for now'], 'on_stage': ['philler']}
+                    value: {'phrases': ['some philler for now'], 'stage': ['philler']}
                 };
             }
 
@@ -81,21 +110,67 @@ body {
             }
         }
 
-        class Registry extends PhraseTable {
+        class R1 extends SocketWrapper {
             constructor() {
                 super();
             }
             
             render() {
-                console.log(this.state.value);
-                var listy = [
-                    this.state.value.phrases[0],
-                    this.state.value.phrases[1],
-                    this.state.value.phrases[2],
-                    this.state.value.phrases[3],
-                    this.state.value.phrases[4]
-                ];
+                return React.createElement('p', null, this.state.value.phrases[0]);
+            }
+        }
 
+        class R2 extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                return React.createElement('p', null, this.state.value.phrases[1]);
+            }
+        }
+
+        class R3 extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                return React.createElement('p', null, this.state.value.phrases[2]);
+            }
+        }
+
+        class R4 extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                return React.createElement('p', null, this.state.value.phrases[3]);
+            }
+        }
+
+        class R5 extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                return React.createElement('p', null, this.state.value.phrases[4]);
+            }
+        }
+
+
+        class Stage extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            render() {
+                var listy = [
+                    this.state.value.stage[0],
+                    this.state.value.stage[1],
+                    this.state.value.stage[2]
+                ];
                 var listitems = listy.map((num) => 
                     React.createElement('li', null, num)
                 );
@@ -105,23 +180,27 @@ body {
             }
         }
 
-
-        class Stage extends PhraseTable {
-            constructor() {
-                super();
-            }
-
-            render() {
-                return(
-                    React.createElement('p', null, this.state.value.on_stage[0])
-                );
-            }
-        }
-
         ReactDOM.render(
-            React.createElement(Registry),
-            document.getElementById('phrase list')
+            React.createElement(R1),
+            document.getElementById('r1')
         )
+        ReactDOM.render(
+            React.createElement(R2),
+            document.getElementById('r2')
+        )
+        ReactDOM.render(
+            React.createElement(R3),
+            document.getElementById('r3')
+        )
+        ReactDOM.render(
+            React.createElement(R4),
+            document.getElementById('r4')
+        )
+        ReactDOM.render(
+            React.createElement(R5),
+            document.getElementById('r5')
+        )
+
         ReactDOM.render(
             React.createElement(Stage),
             document.getElementById('stage')

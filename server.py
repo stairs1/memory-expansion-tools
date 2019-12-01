@@ -4,7 +4,7 @@ from flask_socketio import SocketIO, emit
 from time import sleep
 
 app = Flask(__name__)
-app.debug=True
+app.debug=False
 app._static_folder = os.path.abspath("templates/static/")
 socketio = SocketIO(app)
 server_thread = None
@@ -24,13 +24,13 @@ def server_poll():
     while True:
         sleep(0.1)
         if data_ready:
-            socketio.emit('my_response', {'phrases': phrases, 'on_stage': stage})
+            socketio.emit('my_response', {'phrases': phrases, 'stage': stage})
             data_ready = False
 
 @socketio.on('connect')
 def on_connect():
     global server_thread
-    emit('my_response', {'phrases': ['nothing so far tbh'], 'on_stage': ['']})
+    emit('my_response', {'phrases': ['nothing so far tbh'], 'stage': ['']})
     if server_thread is None:
         server_thread = socketio.start_background_task(server_poll)
         
@@ -39,5 +39,5 @@ def main_page():
     return render_template('convo.html')
 
 def start():
-    app.run()
+    app.run(host='0.0.0.0')
 
