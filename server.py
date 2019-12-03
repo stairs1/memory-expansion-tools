@@ -4,7 +4,7 @@ from flask_socketio import SocketIO, emit
 from time import sleep
 
 app = Flask(__name__)
-app.debug=False
+app.debug=True
 app._static_folder = os.path.abspath("templates/static/")
 socketio = SocketIO(app)
 server_thread = None
@@ -39,5 +39,5 @@ def main_page():
     return render_template('convo.html')
 
 def start():
-    app.run(host='0.0.0.0')
+    app.run()
 

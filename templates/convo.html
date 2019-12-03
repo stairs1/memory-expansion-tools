@@ -63,17 +63,30 @@ td:first-child {
                 <td id='r2'</td>
             </tr>
             <tr>
-                <td><font size = "2">Machiavelli</td>
+                <td><font size = "2">Machiavelli</font></td>
                 <td id='r3'></font></td>
             </tr>
             <tr>
-                <td><font size = "2">Noam Chomsky</td>
+                <td><font size = "2">Noam Chomsky</font></td>
                 <td id='r4'</font></td>
             </tr>
             <tr>
                 <td><font size = "2">Inigo Montoya</font></td>
                 <td id='r5'</td>
             </tr>
+            <tr>
+                <td><font size = "2">Salvador Dali</font></td>
+                <td id='r6'></font></td>
+            </tr>
+            <tr>
+                <td><font size = "2">Harry Potter</font></td>
+                <td id='r7'</font></td>
+            </tr>
+            <tr>
+                <td><font size = "2">Nicholas Flamel</font></td>
+                <td id='r8'</td>
+            </tr>
+
         </table>
         <div id='phrase list'></div>
     </div>
@@ -160,6 +173,36 @@ td:first-child {
             }
         }
 
+        class R6 extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                return React.createElement('p', null, this.state.value.phrases[5]);
+            }
+        }
+
+        class R7 extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                return React.createElement('p', null, this.state.value.phrases[6]);
+            }
+        }
+
+        class R8 extends SocketWrapper {
+            constructor() {
+                super();
+            }
+            
+            render() {
+                return React.createElement('p', null, this.state.value.phrases[7]);
+            }
+        }
+
 
         class Stage extends SocketWrapper {
             constructor() {
@@ -169,7 +212,8 @@ td:first-child {
                 var listy = [
                     this.state.value.stage[0],
                     this.state.value.stage[1],
-                    this.state.value.stage[2]
+                    this.state.value.stage[2],
+                    this.state.value.stage[3]
                 ];
                 var listitems = listy.map((num) => 
                     React.createElement('li', null, num)
@@ -199,6 +243,18 @@ td:first-child {
         ReactDOM.render(
             React.createElement(R5),
             document.getElementById('r5')
+        )
+        ReactDOM.render(
+            React.createElement(R6),
+            document.getElementById('r6')
+        )
+        ReactDOM.render(
+            React.createElement(R7),
+            document.getElementById('r7')
+        )
+        ReactDOM.render(
+            React.createElement(R8),
+            document.getElementById('r8')
         )
 
         ReactDOM.render(
