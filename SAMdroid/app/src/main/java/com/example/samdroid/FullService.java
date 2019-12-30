@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -26,6 +27,8 @@ public class FullService extends IntentService {
 
     public static final String LOG_TAG = FullService.class.getSimpleName();
 
+    private Conversation conversation;
+
     public FullService() {
         super("FullService");
         go = false;
@@ -38,6 +41,9 @@ public class FullService extends IntentService {
     @Override
     public void onCreate(){
         super.onCreate();
+
+        conversation = new Conversation();
+
 
         final Context context = this;
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
@@ -145,9 +151,18 @@ public class FullService extends IntentService {
                     else if(vrresults != STOP_ELEMENT && vrresults != null) {
                         String second = SendUDP.send(vrresults);
                         counter+=1;
+                        conversation.addPhrase(vrresults);
                         Intent intent1 = new Intent();
                         intent1.setAction("com.example.samdroid");
-                        intent1.putExtra("DATAPASSED", vrresults);
+
+                        List<String> phrases = conversation.getPhrases();
+                        String[]bobsarray = new String[0];
+                        String[] parray = phrases.toArray(bobsarray);
+                        intent1.putExtra("DATAPASSED", parray);
+
+                        String stage = conversation.getStage();
+                        intent1.putExtra("STAGE", stage);
+
                         sendBroadcast(intent1);
                     }
                 }

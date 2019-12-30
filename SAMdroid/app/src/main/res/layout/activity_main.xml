@@ -47,11 +47,40 @@
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    tools:context=".MainActivity">
+                    tools:context=".MainActivity" tools:layout_editor_absoluteY="42dp"
+                    tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+                android:text="The Important Points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/stagetitle"
+                android:textAlignment="center"
+                android:textSize="24sp"/>
+
+        <TextView
+                android:text="nothing yet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/stagetitle"
+                android:id="@+id/stagecontents"
+                android:layout_marginStart="8dp"
+                android:textSize="16dp"/>
+
+
+        <TextView
+                android:text="What's been said"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cachetitle"
+                android:layout_below="@id/stagecontents"
+                android:textAlignment="center"
+                android:textSize="24sp"/>
 
         <LinearLayout android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:id="@+id/row1"
+                      android:layout_below="@id/cachetitle"
                       android:orientation="horizontal">
             <TextView
                     android:text="DaVinci"
@@ -63,7 +92,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="nothing here yet"
+                    android:text="nothing so far"
                     android:layout_toRightOf="@id/header1"
                     android:id="@+id/text1"/>
         </LinearLayout>
@@ -81,7 +110,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hello World!"
                     android:id="@+id/text2"/>
         </LinearLayout>
         <LinearLayout android:layout_width="wrap_content"
@@ -98,7 +126,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="nothing here yet"
                     android:id="@+id/text3"/>
         </LinearLayout>
         <LinearLayout android:layout_width="wrap_content"
@@ -115,7 +142,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hello World!"
                     android:id="@+id/text4"/>
         </LinearLayout>
         <LinearLayout android:layout_width="wrap_content"
@@ -133,7 +159,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="nothing here yet"
                     android:layout_toRightOf="@id/header5"
                     android:id="@+id/text5"/>
         </LinearLayout>
@@ -151,7 +176,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hello World!"
                     android:id="@+id/text6"/>
         </LinearLayout>
         <LinearLayout android:layout_width="wrap_content"
@@ -168,7 +192,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="nothing here yet"
                     android:id="@+id/text7"/>
         </LinearLayout>
         <LinearLayout android:layout_width="wrap_content"
@@ -185,7 +208,6 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hello World!"
                     android:id="@+id/text8"/>
         </LinearLayout>
 
