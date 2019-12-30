@@ -26,7 +26,10 @@ public class MainActivity extends AppCompatActivity {
     public TextView phrase6;
     public TextView phrase7;
     public TextView phrase8;
-    public TextView stage;
+    public TextView stage1;
+    public TextView stage2;
+    public TextView stage3;
+    public TextView stage4;
     Intent FullServiceIntent;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -82,8 +85,30 @@ public class MainActivity extends AppCompatActivity {
             else {
                 phrase8.setText("");
             }
-            String sstage = intent.getStringExtra("STAGE");
-            stage.setText(sstage);
+            String[] stage = intent.getStringArrayExtra("STAGE");
+            ArrayList<String> stages = new ArrayList(Arrays.asList(stage));
+            if(stages.size()>0){
+                stage1.setText(stages.get(0));
+            }
+            if(stages.size()>1){
+                stage2.setText(stages.get(1));
+            }
+            else{
+                stage2.setText("");
+            }
+            if(stages.size()>2){
+                stage3.setText(stages.get(2));
+            }
+            else{
+                stage3.setText("");
+            }
+            if(stages.size()>3){
+                stage4.setText(stages.get(3));
+            }
+            else{
+                stage4.setText("");
+            }
+
         }
     };
 
@@ -99,7 +124,10 @@ public class MainActivity extends AppCompatActivity {
         phrase6 = findViewById(R.id.text6);
         phrase7 = findViewById(R.id.text7);
         phrase8 = findViewById(R.id.text8);
-        stage = findViewById(R.id.stagecontents);
+        stage1 = findViewById(R.id.stage1);
+        stage2 = findViewById(R.id.stage2);
+        stage3 = findViewById(R.id.stage3);
+        stage4 = findViewById(R.id.stage4);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.samdroid");
         registerReceiver(broadcastReceiver, intentFilter);

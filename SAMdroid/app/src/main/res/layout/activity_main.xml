@@ -63,7 +63,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/stagetitle"
-                android:id="@+id/stagecontents"
+                android:id="@+id/stage1"
+                android:layout_marginStart="8dp"
+                android:textSize="16dp"/>
+        <TextView
+                android:text=""
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/stage1"
+                android:id="@+id/stage2"
+                android:layout_marginStart="8dp"
+                android:textSize="16dp"/>
+        <TextView
+                android:text=""
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/stage2"
+                android:id="@+id/stage3"
+                android:layout_marginStart="8dp"
+                android:textSize="16dp"/>
+        <TextView
+                android:text=""
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/stage3"
+                android:id="@+id/stage4"
                 android:layout_marginStart="8dp"
                 android:textSize="16dp"/>
 
@@ -73,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cachetitle"
-                android:layout_below="@id/stagecontents"
+                android:layout_below="@id/stage4"
                 android:textAlignment="center"
                 android:textSize="24sp"/>
 

@@ -160,8 +160,9 @@ public class FullService extends IntentService {
                         String[] parray = phrases.toArray(bobsarray);
                         intent1.putExtra("DATAPASSED", parray);
 
-                        String stage = conversation.getStage();
-                        intent1.putExtra("STAGE", stage);
+                        List<String> stage = conversation.getStage();
+                        String[] sarray = stage.toArray(bobsarray);
+                        intent1.putExtra("STAGE", sarray);
 
                         sendBroadcast(intent1);
                     }
