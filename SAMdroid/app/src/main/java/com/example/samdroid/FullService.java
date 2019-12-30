@@ -99,9 +99,9 @@ public class FullService extends IntentService {
         }
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Enter shell command");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
         mSpeechRecognizer.startListening(recognizerIntent);
     }
 
@@ -133,11 +133,22 @@ public class FullService extends IntentService {
 //                String tester1 = SendUDP.send("test before taking from queue");
                 if(!queueu.isEmpty()){
                     vrresults = queueu.take();
-                    if(vrresults != STOP_ELEMENT && vrresults != null) {
-                        String second = SendUDP.send(vrresults);
-                    }
                     if(vrresults == STOP_ELEMENT){
+                        counter=1;
+                        Thread.sleep(100);
                         mainHandler.post(listen);
+                    }
+                    else if(counter>1){ //just take first result for now
+                        counter+=1;
+                        continue;
+                    }
+                    else if(vrresults != STOP_ELEMENT && vrresults != null) {
+                        String second = SendUDP.send(vrresults);
+                        counter+=1;
+                        Intent intent1 = new Intent();
+                        intent1.setAction("com.example.samdroid");
+                        intent1.putExtra("DATAPASSED", vrresults);
+                        sendBroadcast(intent1);
                     }
                 }
             } catch (InterruptedException e) {
@@ -146,11 +157,10 @@ public class FullService extends IntentService {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            counter++;
         }
     }
 

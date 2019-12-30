@@ -7,39 +7,189 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            android:id="@+id/text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    <Button
-            android:text="@string/button_do"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="doit"
-            android:id="@+id/button_do" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp" android:textSize="16sp" android:background="#00531313"
-    />
-    <Button
-            android:text="@string/button_start_service"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="start_service"
-            android:id="@+id/button_start_service" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp" android:background="@color/colorAccent"/>
-    <Button
-            android:text="@string/button_stop_service"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="stop_service"
-            android:id="@+id/button_stop_service" app:layout_constraintStart_toEndOf="@+id/button_start_service"
-            android:layout_marginStart="8dp" android:background="@android:color/holo_orange_dark"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"/>
+    <android.widget.LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+                android:text="@string/button_start_service"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="start_service"
+                android:id="@+id/button_start_service"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:background="#4CAF50"/>
+        <Button
+                android:text="@string/button_stop_service"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="stop_service"
+                android:id="@+id/button_stop_service"
+                android:background="#E91E63"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal" />
+        <Button
+                android:text="@string/button_do"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="doit"
+                android:id="@+id/button_do"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:textSize="16sp" android:background="#00531313"
+        />
+    </android.widget.LinearLayout>
+
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    tools:context=".MainActivity">
+
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row1"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="DaVinci"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/header1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="61dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="nothing here yet"
+                    android:layout_toRightOf="@id/header1"
+                    android:id="@+id/text1"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row2"
+                      android:layout_below="@id/row1"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="Galileo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/header2"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="66dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hello World!"
+                    android:id="@+id/text2"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row3"
+                      android:layout_below="@+id/row2"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="Machiavelli"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="38dp"
+                    android:id="@+id/header3"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="nothing here yet"
+                    android:id="@+id/text3"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row4"
+                      android:layout_below="@id/row3"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="Noam Chomsky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/header4"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="9dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hello World!"
+                    android:id="@+id/text4"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row5"
+                      android:layout_below="@id/row4"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="Inigo Montoya"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/header5"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="nothing here yet"
+                    android:layout_toRightOf="@id/header5"
+                    android:id="@+id/text5"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row6"
+                      android:layout_below="@id/row5"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="Salvador Dali"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/header6"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="27dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hello World!"
+                    android:id="@+id/text6"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row7"
+                      android:layout_below="@+id/row6"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="Harry Potter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="33dp"
+                    android:id="@+id/header7"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="nothing here yet"
+                    android:id="@+id/text7"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/row8"
+                      android:layout_below="@id/row7"
+                      android:orientation="horizontal">
+            <TextView
+                    android:text="Nicholas Flamel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/header8"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="9dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hello World!"
+                    android:id="@+id/text8"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
