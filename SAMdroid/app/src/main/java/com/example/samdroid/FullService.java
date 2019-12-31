@@ -1,6 +1,10 @@
 package com.example.samdroid;
 
 import android.app.*;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,8 +17,10 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
@@ -29,6 +35,11 @@ public class FullService extends IntentService {
     private static final String ERROR_SPEECH_TIMEOUT = "6";
     private static final String ERROR_NO_MATCH = "7";
     private static final String ERR_ELEMENT = "5439";
+
+    static BluetoothAdapter btAdapter;
+    static BluetoothHeadset btHeadset;
+    private static final String PLANTRON_MAC = "BC:F2:92:9F:A6:92";
+    private static boolean btConnected = false;
 
     public static final String LOG_TAG = FullService.class.getSimpleName();
 
@@ -48,6 +59,31 @@ public class FullService extends IntentService {
         super.onCreate();
 
         conversation = new Conversation();
+
+        //use external mic if there is one already connected
+        if(btConnected == true){
+            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+            if (pairedDevices.size() > 0) {
+                // There are paired devices. Get the name and address of each paired device.
+                for (BluetoothDevice device : pairedDevices) {
+                    Log.d(LOG_TAG, "name: " + device.getName());
+                    Log.d(LOG_TAG, "MAC: " + device.getAddress()); // MAC address
+                }
+            }
+            else{
+                Log.d(LOG_TAG, "no paired devices");
+            }
+            for (BluetoothDevice device : pairedDevices){
+                Log.d(LOG_TAG, "checking bluetooth device " + device.getName());
+                if(btHeadset.startVoiceRecognition(device)){
+                    Log.d(LOG_TAG, "started voicerec on headset");
+                    break;
+                }
+            }
+        }
+        else{
+            Log.d(LOG_TAG, "btconnected is false");
+        }
 
 
         final Context context = this;
@@ -117,6 +153,35 @@ public class FullService extends IntentService {
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
         mSpeechRecognizer.startListening(recognizerIntent);
+    }
+
+    public static void setupBluetooth(final Context context)
+    {
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        BluetoothProfile.ServiceListener mProfileListener = new BluetoothProfile.ServiceListener() {
+            public void onServiceConnected(int profile, BluetoothProfile proxy)
+            {
+                if (profile == BluetoothProfile.HEADSET)
+                {
+                    btHeadset = (BluetoothHeadset) proxy;
+                    btConnected = true;
+                    Log.d(LOG_TAG, "Headset connected");
+                    Toast toast = Toast.makeText(context, "Headset Connected", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+            public void onServiceDisconnected(int profile)
+            {
+                if (profile == BluetoothProfile.HEADSET) {
+                    btHeadset = null;
+                    btConnected = false;
+                    Log.d(LOG_TAG, "Headset disco-connected");
+                }
+            }
+        };
+
+        btAdapter.getProfileProxy(context, mProfileListener, BluetoothProfile.HEADSET);
     }
 
     Runnable listen = new Runnable() {

@@ -32,7 +32,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal" />
         <Button
-                android:text="@string/button_do"
+                android:text="@string/button_headset"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:onClick="doit"

@@ -134,9 +134,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
    public void doit(View view){
-       Log.d(LOG_TAG, "doit");
-       phrase8.setText("eggnog!");
-       SendUDP.send("eggnoggin");
+       Log.d(LOG_TAG, "headset");
+       SendUDP.send("headset connected");
+       FullService.setupBluetooth(this);
+
    }
 
    public void start_service(View view){
