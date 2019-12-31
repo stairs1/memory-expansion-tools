@@ -21,9 +21,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class FullService extends IntentService {
     private boolean go;
     Integer counter;
+    private int errcode = 0;
     private static int FOREGROUND_ID = 1;
     private static String channel_id = "sexy_channel";
     private static final String STOP_ELEMENT = "";
+    private static final String RESULTS_IN = "93939";
+    private static final String ERROR_SPEECH_TIMEOUT = "6";
+    private static final String ERROR_NO_MATCH = "7";
+    private static final String ERR_ELEMENT = "5439";
 
     public static final String LOG_TAG = FullService.class.getSimpleName();
 
@@ -75,13 +80,15 @@ public class FullService extends IntentService {
 
             @Override
             public void onError(int error) {
-                queueu.add(STOP_ELEMENT);
+                errcode = error;
+                queueu.add(ERR_ELEMENT);
             }
 
             @Override
             public void onResults(Bundle results) {
                 List<String> recognitions = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 queueu.addAll(recognitions);
+                queueu.add(RESULTS_IN);
             }
 
             @Override
@@ -102,10 +109,11 @@ public class FullService extends IntentService {
 
         if (!speechRecognitionInstalled) {
             String bob = SendUDP.send("not installed!");
+            Log.d(LOG_TAG, "not installed");
         }
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Enter shell command");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 200);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
         mSpeechRecognizer.startListening(recognizerIntent);
@@ -130,25 +138,36 @@ public class FullService extends IntentService {
         startForeground(FOREGROUND_ID, buildForegroundNotification(channel_id));
 
         go = true;
-        counter = 1;
+        counter = 0;
         Handler mainHandler = new Handler(this.getMainLooper());
         while(go){
 //            String sandy = SendUDP.send(counter.toString());
             String vrresults = null;
             try {
 //                String tester1 = SendUDP.send("test before taking from queue");
-                if(!queueu.isEmpty()){
+                if(queueu.size() > 0){
+                    Log.d(LOG_TAG, "queueu size: " + queueu.size());
                     vrresults = queueu.take();
-                    if(vrresults == STOP_ELEMENT){
-                        counter=1;
+                    Log.d(LOG_TAG, "vrresults: " + vrresults);
+                    if(vrresults == RESULTS_IN){
+                        Log.d(LOG_TAG, "end of rec encountered, restarting listener");
+                        counter=0;
+                        mainHandler.post(listen);
+                    }
+                    else if(vrresults == ERR_ELEMENT){
+                        if(errcode == 6){
+                            Log.d(LOG_TAG, "speech timeout, restarting listener");
+                        }
+                        else if(errcode == 7){
+                            Log.d(LOG_TAG, "no match, restarting");
+                        }
                         Thread.sleep(100);
                         mainHandler.post(listen);
                     }
-                    else if(counter>1){ //just take first result for now
-                        counter+=1;
-                        continue;
-                    }
                     else if(vrresults != STOP_ELEMENT && vrresults != null) {
+                        if(counter > 0){ //just take first element
+                            continue;
+                        }
                         String second = SendUDP.send(vrresults);
                         counter+=1;
                         conversation.addPhrase(vrresults);
