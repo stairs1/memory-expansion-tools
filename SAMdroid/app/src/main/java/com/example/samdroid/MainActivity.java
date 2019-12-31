@@ -32,89 +32,85 @@ public class MainActivity extends AppCompatActivity {
     public TextView stage4;
     Intent FullServiceIntent;
 
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String[] s1 = intent.getStringArrayExtra("DATAPASSED");
-            ArrayList<String> phrases = new ArrayList(Arrays.asList(s1));
-            if(phrases.size()>0) {
-                phrase1.setText(phrases.get(0));
-            }
-            else {
-                phrase1.setText("");
-            }
-            if(phrases.size()>1) {
-                phrase2.setText(phrases.get(1));
-            }
-            else {
-                phrase2.setText("");
-            }
-            if(phrases.size()>2) {
-                phrase3.setText(phrases.get(2));
-            }
-            else {
-                phrase3.setText("");
-            }
-            if(phrases.size()>3) {
-                phrase4.setText(phrases.get(3));
-            }
-            else {
-                phrase4.setText("");
-            }
-            if(phrases.size()>4) {
-                phrase5.setText(phrases.get(4));
-            }
-            else{
-                phrase5.setText("");
-            }
-            if(phrases.size()>5) {
-                phrase6.setText(phrases.get(5));
-            }
-            else {
-                phrase6.setText("");
-            }
-            if(phrases.size()>6) {
-                phrase7.setText(phrases.get(6));
-            }
-            else {
-                phrase7.setText("");
-            }
-            if(phrases.size()>7) {
-                phrase8.setText(phrases.get(7));
-            }
-            else {
-                phrase8.setText("");
-            }
-            String[] stage = intent.getStringArrayExtra("STAGE");
-            ArrayList<String> stages = new ArrayList(Arrays.asList(stage));
-            if(stages.size()>0){
-                stage1.setText(stages.get(0));
-            }
-            if(stages.size()>1){
-                stage2.setText(stages.get(1));
-            }
-            else{
-                stage2.setText("");
-            }
-            if(stages.size()>2){
-                stage3.setText(stages.get(2));
-            }
-            else{
-                stage3.setText("");
-            }
-            if(stages.size()>3){
-                stage4.setText(stages.get(3));
-            }
-            else{
-                stage4.setText("");
-            }
+    BroadcastReceiver broadcastReceiver;
 
-        }
-    };
+    void setupReceiver() {
+        Log.d(LOG_TAG, "setupReceiver");
+        this.broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String[] s1 = intent.getStringArrayExtra("DATAPASSED");
+                ArrayList<String> phrases = new ArrayList(Arrays.asList(s1));
+                if (phrases.size() > 0) {
+                    phrase1.setText(phrases.get(0));
+                } else {
+                    phrase1.setText("");
+                }
+                if (phrases.size() > 1) {
+                    phrase2.setText(phrases.get(1));
+                } else {
+                    phrase2.setText("");
+                }
+                if (phrases.size() > 2) {
+                    phrase3.setText(phrases.get(2));
+                } else {
+                    phrase3.setText("");
+                }
+                if (phrases.size() > 3) {
+                    phrase4.setText(phrases.get(3));
+                } else {
+                    phrase4.setText("");
+                }
+                if (phrases.size() > 4) {
+                    phrase5.setText(phrases.get(4));
+                } else {
+                    phrase5.setText("");
+                }
+                if (phrases.size() > 5) {
+                    phrase6.setText(phrases.get(5));
+                } else {
+                    phrase6.setText("");
+                }
+                if (phrases.size() > 6) {
+                    phrase7.setText(phrases.get(6));
+                } else {
+                    phrase7.setText("");
+                }
+                if (phrases.size() > 7) {
+                    phrase8.setText(phrases.get(7));
+                } else {
+                    phrase8.setText("");
+                }
+                String[] stage = intent.getStringArrayExtra("STAGE");
+                ArrayList<String> stages = new ArrayList(Arrays.asList(stage));
+                if (stages.size() > 0) {
+                    stage1.setText(stages.get(0));
+                }
+                if (stages.size() > 1) {
+                    stage2.setText(stages.get(1));
+                } else {
+                    stage2.setText("");
+                }
+                if (stages.size() > 2) {
+                    stage3.setText(stages.get(2));
+                } else {
+                    stage3.setText("");
+                }
+                if (stages.size() > 3) {
+                    stage4.setText(stages.get(3));
+                } else {
+                    stage4.setText("");
+                }
+
+            }
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "ONCREATE");
         super.onCreate(savedInstanceState);
+        setupReceiver();
         setContentView(R.layout.activity_main);
         phrase1 = findViewById(R.id.text1);
         phrase2 = findViewById(R.id.text2);
@@ -128,9 +124,53 @@ public class MainActivity extends AppCompatActivity {
         stage2 = findViewById(R.id.stage2);
         stage3 = findViewById(R.id.stage3);
         stage4 = findViewById(R.id.stage4);
+
+        if(savedInstanceState!=null){
+            phrase1.setText(savedInstanceState.getString("P1"));
+            phrase2.setText(savedInstanceState.getString("P2"));
+            phrase3.setText(savedInstanceState.getString("P3"));
+            phrase4.setText(savedInstanceState.getString("P4"));
+            phrase5.setText(savedInstanceState.getString("P5"));
+            phrase6.setText(savedInstanceState.getString("P6"));
+            phrase7.setText(savedInstanceState.getString("P7"));
+            phrase8.setText(savedInstanceState.getString("P8"));
+            stage1.setText(savedInstanceState.getString("S1"));
+            stage2.setText(savedInstanceState.getString("S2"));
+            stage4.setText(savedInstanceState.getString("S3"));
+            stage4.setText(savedInstanceState.getString("S4"));
+        }
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.samdroid");
         registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.samdroid");
+        registerReceiver(broadcastReceiver, intentFilter);
+
+        super.onStart();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState){
+        Log.d(LOG_TAG, "save instance state");
+        savedInstanceState.putString("P1", (String)phrase1.getText());
+        savedInstanceState.putString("P2", (String)phrase2.getText());
+        savedInstanceState.putString("P3", (String)phrase3.getText());
+        savedInstanceState.putString("P4", (String)phrase4.getText());
+        savedInstanceState.putString("P5", (String)phrase5.getText());
+        savedInstanceState.putString("P6", (String)phrase6.getText());
+        savedInstanceState.putString("P7", (String)phrase7.getText());
+        savedInstanceState.putString("P8", (String)phrase8.getText());
+        savedInstanceState.putString("S1", (String)stage1.getText());
+        savedInstanceState.putString("S2", (String)stage2.getText());
+        savedInstanceState.putString("S3", (String)stage3.getText());
+        savedInstanceState.putString("S4", (String)stage4.getText());
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
    public void doit(View view){
@@ -152,9 +192,10 @@ public class MainActivity extends AppCompatActivity {
        stopService(FullServiceIntent);
    }
 
+   @Override
    public void onStop(){
-       super.onStop();
        unregisterReceiver(broadcastReceiver);
+       super.onStop();
    }
 
 }

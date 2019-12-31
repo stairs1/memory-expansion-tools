@@ -243,6 +243,7 @@ public class FullService extends IntentService {
                         String[]bobsarray = new String[0];
                         String[] parray = phrases.toArray(bobsarray);
                         intent1.putExtra("DATAPASSED", parray);
+                        Log.d(LOG_TAG, "data[0]: " + parray[0]);
 
                         List<String> stage = conversation.getStage();
                         String[] sarray = stage.toArray(bobsarray);
