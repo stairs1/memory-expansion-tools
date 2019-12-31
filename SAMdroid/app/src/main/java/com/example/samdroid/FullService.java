@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -24,7 +25,11 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
+
 public class FullService extends IntentService {
+
+    BluetoothHelper mBluetoothHelper;
+
     private boolean go;
     Integer counter;
     private int errcode = 0;
@@ -38,6 +43,7 @@ public class FullService extends IntentService {
 
     static BluetoothAdapter btAdapter;
     static BluetoothHeadset btHeadset;
+    BluetoothDevice plantron;
     private static final String PLANTRON_MAC = "BC:F2:92:9F:A6:92";
     private static boolean btConnected = false;
 
@@ -53,30 +59,72 @@ public class FullService extends IntentService {
     protected SpeechRecognizer mSpeechRecognizer;
     final LinkedBlockingQueue<String> queueu = new LinkedBlockingQueue<>();
     Intent recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    // inner class
+    // BluetoothHeadsetUtils is an abstract class that has
+    // 4 abstracts methods that need to be implemented.
+    private class BluetoothHelper extends BluetoothHeadSetUtils
+    {
+        public BluetoothHelper(Context context)
+        {
+            super(context);
+        }
+
+        @Override
+        public void onScoAudioDisconnected()
+        {
+            // Cancel speech recognizer if desired
+        }
+
+        @Override
+        public void onScoAudioConnected()
+        {
+            Log.d(LOG_TAG, "sco audio connected");
+        }
+
+        @Override
+        public void onHeadsetDisconnected()
+        {
+
+        }
+
+        @Override
+        public void onHeadsetConnected()
+        {
+
+        }
+    }
 
     @Override
     public void onCreate(){
         super.onCreate();
-
+        mBluetoothHelper = new BluetoothHelper(this);
+        mBluetoothHelper.start();
         conversation = new Conversation();
 
         //use external mic if there is one already connected
         if(btConnected == true){
             Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-            if (pairedDevices.size() > 0) {
-                // There are paired devices. Get the name and address of each paired device.
-                for (BluetoothDevice device : pairedDevices) {
-                    Log.d(LOG_TAG, "name: " + device.getName());
-                    Log.d(LOG_TAG, "MAC: " + device.getAddress()); // MAC address
-                }
-            }
-            else{
+            if(pairedDevices.size() == 0){
                 Log.d(LOG_TAG, "no paired devices");
             }
             for (BluetoothDevice device : pairedDevices){
-                Log.d(LOG_TAG, "checking bluetooth device " + device.getName());
-                if(btHeadset.startVoiceRecognition(device)){
-                    Log.d(LOG_TAG, "started voicerec on headset");
+                Log.d(LOG_TAG, "checking bluetooth device " + device.getName() + " MAC: " + device.getAddress());
+                if(device.getAddress().equals(PLANTRON_MAC)){
+                    Log.d(LOG_TAG, "found plantron");
+                    if(btHeadset.startVoiceRecognition(device)){
+                        Log.d(LOG_TAG, "state: " + String.valueOf(btHeadset.getConnectionState(device)));
+                        if(btHeadset.isAudioConnected(device)){
+                            Log.d(LOG_TAG, "audio is connected");
+                        }
+                        else{
+                            Log.d(LOG_TAG, "audio is not connected");
+                        }
+                        Log.d(LOG_TAG, "started voicerec on plantron");
+                        plantron = device;
+                    }
+                    else{
+                        Log.d(LOG_TAG, "failed to start voicerec on plantron, using default mic");
+                    }
                     break;
                 }
             }
@@ -180,6 +228,15 @@ public class FullService extends IntentService {
                 }
             }
         };
+//        // During the active life time of the app, a user may turn on and off the headset.
+//        // So register for broadcast of connection states.
+//        mContext.registerReceiver(mHeadsetBroadcastReceiver,
+//                new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED));
+//        // Calling startVoiceRecognition does not result in immediate audio connection.
+//        // So register for broadcast of audio connection states. This broadcast will
+//        // only be sent if startVoiceRecognition returns true.
+//        mContext.registerReceiver(mHeadsetBroadcastReceiver,
+//                new IntentFilter(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED));
 
         btAdapter.getProfileProxy(context, mProfileListener, BluetoothProfile.HEADSET);
     }
@@ -270,6 +327,8 @@ public class FullService extends IntentService {
         go = false;
         Handler mainHandler = new Handler(this.getMainLooper());
         mainHandler.post(kill);
+        btHeadset.stopVoiceRecognition(plantron);
+        mBluetoothHelper.stop();
         super.onDestroy();
     }
 
