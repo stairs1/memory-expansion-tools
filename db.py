@@ -59,12 +59,16 @@ class Database:
         else:
             return True
     
-    def search(self, userId, query, timeRange=86400):
+    def search(self, userId, query, queryTime=None, timeRange=86400):
         talksCollection = self.db.talks
 
-        time, query = self.parseQuery(query)
-        startTime = time - timeRange
-        endTime = time + timeRange
+        if queryTime is None or queryTime.isspace() or not queryTime:
+            startTime = 0
+            endTime = time.time() #we can't have memories from the future... yet
+        else:    
+            startTime = time - timeRange
+            endTime = time + timeRange
+        
         resp = talksCollection.find({ "timestamp" : { "$gt" : startTime , "$lt": endTime }, "userId" : userId, "$text": {"$search" : query }} )
         
         data = list()
@@ -73,35 +77,13 @@ class Database:
         
         return data
 
-    def parseQuery(self, query):
-        query = query.split(" ", 1)
-        timestamp = datetime.strptime(query[0], "%m-%d-%Y")
-        timestamp = (timestamp - datetime(1970,1,1)).total_seconds() #convert to Unix time
-        return (timestamp, query[1:][0])
-
-
-
 def main():
     db = Database()
 #    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
     db.connect()
-    resp = db.addUser("jeremy", "jerem@whatever")
-    print(resp)
-    #resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
-    resp2 = db.search("testing")
-    for item in resp2:
-        print(item['talk'])
-    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how what the fuck is it going?", "11234.223")
-    print(resp)
-    #resp = db.search("testing")
-    #for item in resp:
-    #    print(item['talk'])
-    #resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how what the fuck is it going?", "11234.223")
-    #time, query = db.parseQuery("03-19-2019 what is up man?")
-    #print(time, query)
-    resp = db.search("5e0e6e1807cdcbd6a097708d", "01-03-2020 cayden")
+    resp = db.search("5e0e6e1807cdcbd6a097708d", "01-03-2020 jeremy")
     for item in resp:
-        print(item['talk'])
+        print(item)
 
 if __name__ == "__main__":
     main()

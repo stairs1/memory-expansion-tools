@@ -10,7 +10,12 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubunt
 
 ```
 mongo
-use main
-db.talks.createIndex( { "talk" : "text" } )
+use sam
+db.talks.createIndex( { "talk" : "text" }, { default_language: "none" } )
+```
+
+If you created the old bad index, remove it first:
+```
+db.talks.dropIndex( "talk_text" )
 ```
 
