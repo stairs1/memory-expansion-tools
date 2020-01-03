@@ -62,17 +62,16 @@ def main_page():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    temp_uid = "5e0e6e1807cdcbd6a097708d"
+    temp_uid = "5e0f73467c1ffbca9ce828b2"
     form = SearchForm()
     if form.validate_on_submit():
-        flash(f'searched for {form.search_item.data}')
         data = form.search_item.data
 
         print(data)
         r = db.search(temp_uid, data)
         for item in r:
             print(item)
-            flash(item)
+            flash(item['talk'])
 
         return redirect('/search')
         
