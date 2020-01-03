@@ -10,14 +10,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 
 public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
+    public static final String USER_ID = "5e0e6e1807cdcbd6a097708d";
     public TextView phrase1;
     public TextView phrase2;
     public TextView phrase3;
@@ -190,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
    public void stop_service(View view){
        Log.d(LOG_TAG, "top_service");
        stopService(FullServiceIntent);
+   }
+
+   public void send_data(View view){
+       Log.d(LOG_TAG, "send data");
+       SendAllPhrases sendalltask = new SendAllPhrases();
+       sendalltask.execute(getApplicationContext());
    }
 
    @Override

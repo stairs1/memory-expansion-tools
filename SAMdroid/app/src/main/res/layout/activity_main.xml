@@ -24,7 +24,7 @@
                 android:background="#4CAF50"/>
         <Button
                 android:text="@string/button_stop_service"
-                android:layout_width="0dp"
+                android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:onClick="stop_service"
                 android:id="@+id/button_stop_service"
@@ -33,14 +33,22 @@
                 android:layout_gravity="center_horizontal" />
         <Button
                 android:text="@string/button_headset"
-                android:layout_width="0dp"
+                android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:onClick="doit"
                 android:id="@+id/button_do"
                 android:layout_gravity="right"
                 android:layout_weight="1"
-                android:textSize="16sp" android:background="#00531313"
-        />
+                android:textSize="16sp" android:background="#00531313" />
+        <Button
+                android:text="Send to Server"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="send_data"
+                android:id="@+id/button_send_data"
+                android:layout_gravity="right"
+                android:layout_weight="1" />
+
     </android.widget.LinearLayout>
 
 

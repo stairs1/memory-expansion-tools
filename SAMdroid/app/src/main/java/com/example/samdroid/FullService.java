@@ -99,7 +99,7 @@ public class FullService extends IntentService {
         super.onCreate();
         mBluetoothHelper = new BluetoothHelper(this);
         mBluetoothHelper.start();
-        conversation = new Conversation();
+        conversation = new Conversation(this);
 
         //use external mic if there is one already connected
         if(btConnected == true){
@@ -327,7 +327,9 @@ public class FullService extends IntentService {
         go = false;
         Handler mainHandler = new Handler(this.getMainLooper());
         mainHandler.post(kill);
-        btHeadset.stopVoiceRecognition(plantron);
+        if(btHeadset != null){
+            btHeadset.stopVoiceRecognition(plantron);
+        }
         mBluetoothHelper.stop();
         super.onDestroy();
     }

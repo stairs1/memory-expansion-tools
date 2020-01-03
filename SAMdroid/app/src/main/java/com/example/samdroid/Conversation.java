@@ -1,8 +1,14 @@
 package com.example.samdroid;
 
+import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,8 +19,10 @@ public class Conversation {
    private ArrayList<String> stage;
    public static final String LOG_TAG = Conversation.class.getSimpleName();
    private HashMap<String, Integer> keywords;
+   public static final String PHRASE_STORAGE_FILENAME = "phrase_storage";
+   private FileOutputStream phrase_storage;
 
-   Conversation(){
+   Conversation(Context context) {
       this.phrases = new ArrayList<String>();
       this.stage = new ArrayList<String>();
       keywords = new HashMap<String, Integer>();
@@ -27,6 +35,13 @@ public class Conversation {
       keywords.put("Harry Potter", 6);
       keywords.put("Nicholas Flamel", 7);
       stage.add("nothing here yet");
+
+      try {
+         File file = new File(context.getFilesDir(), PHRASE_STORAGE_FILENAME);
+         phrase_storage = new FileOutputStream(file, true);
+      } catch (FileNotFoundException e) {
+         e.printStackTrace();
+      }
    }
 
    public List<String> getPhrases() {
@@ -49,6 +64,14 @@ public class Conversation {
          }
       }
       this.phrases.add(0, phrase);
+
+      //Add all phrases to persistence layer with timestamp
+      long unixTime = System.currentTimeMillis() / 1000;
+      try {
+         phrase_storage.write((String.valueOf(unixTime) + ":" + phrase + "\n").getBytes());
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
    }
 
    public List<String> getStage(){
