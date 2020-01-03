@@ -25,21 +25,9 @@ class WIFIReceiver():
         while True:
             data, addr = self.sock.recvfrom(1024)
             self.handle_data(data)
-            server.send(self.phrases, self.stage)
 
-    def handle_data(self, data):
-        data_decoded = json.loads(data.decode())
-
-        # do not accept repeats
-        if data_decoded['start'] == self.ptime:
-            return
-
-        # do not accept empty strings or whitespace
-        if data_decoded['speech'] == '' or data_decoded['speech'].isspace():
-            return
-
-        self.ptime = data_decoded['start']
-        speech = data_decoded['speech']
+    def handlePhrasing(self, data):
+        speech = data['phrases'][0]['speech']
         print('updating buffers with', speech)
 
         cmd_index, remove = self.command_manager.parse_command(speech)
@@ -54,6 +42,32 @@ class WIFIReceiver():
             self.phrases.insert(0, speech)
             if len(self.phrases) > self.phrases_len:
                 self.phrases = self.phrases[:self.stage_len]
+        server.send(self.phrases, self.stage)
+
+        
+    def handleMemory(self, data):
+        server.remember(data)
+        
+    def handle_data(self, data):
+        data_decoded = json.loads(data.decode())
+
+        # do not accept repeats
+        if data_decoded['phrases'][0]['timestamp'] == self.ptime:
+            print("DEBUG: repeat request")
+            return
+
+        # do not accept empty strings or whitespace
+        if data_decoded['phrases'][0]['speech'] == '' or data_decoded['phrases'][0]['speech'].isspace():
+            print("DEBUG: malformed speech string")
+            return
+        
+        self.ptime = data_decoded['phrases'][0]['timestamp']
+    
+        if data_decoded['type'] == "phrasing":
+            self.handlePhrasing(data_decoded)
+        else: #if data_decoded['type'] == "talk":
+            self.handleMemory(data_decoded)
+
 
 
 receiver = WIFIReceiver()
