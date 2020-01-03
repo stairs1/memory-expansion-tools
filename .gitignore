@@ -1,0 +1,5 @@
+#python stuffs
+
+*.pyc
+__pycache__
+venv
