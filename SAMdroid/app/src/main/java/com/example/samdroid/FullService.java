@@ -192,7 +192,6 @@ public class FullService extends IntentService {
         boolean speechRecognitionInstalled = !installedList.isEmpty();
 
         if (!speechRecognitionInstalled) {
-            String bob = SendUDP.send("not installed!");
             Log.d(LOG_TAG, "not installed");
         }
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -263,10 +262,8 @@ public class FullService extends IntentService {
         counter = 0;
         Handler mainHandler = new Handler(this.getMainLooper());
         while(go){
-//            String sandy = SendUDP.send(counter.toString());
             String vrresults = null;
             try {
-//                String tester1 = SendUDP.send("test before taking from queue");
                 if(queueu.size() > 0){
                     Log.d(LOG_TAG, "queueu size: " + queueu.size());
                     vrresults = queueu.take();
@@ -290,7 +287,7 @@ public class FullService extends IntentService {
                         if(counter > 0){ //just take first element
                             continue;
                         }
-                        String second = SendUDP.send(vrresults);
+                        SendUDP.send_phrase(vrresults);
                         counter+=1;
                         conversation.addPhrase(vrresults);
                         Intent intent1 = new Intent();

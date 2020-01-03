@@ -2,6 +2,8 @@ package com.example.samdroid;
 
 
 import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.DatagramPacket;
@@ -35,17 +37,26 @@ public class SendUDP {
         return true;
     }
 
-    public static String send(String message) {
+    public static void send_phrase(String phrase_string) {
 
         Long unixTime = System.currentTimeMillis() / 1000;
-        Double time2 = unixTime + 0.01;
-        String groomed_message = "{\"speech\": \"" + message + "\", \"start\": " + unixTime.toString() + ", \"end\": " + time2.toString() + "}";
 
+        JSONObject json = new JSONObject();
+        JSONArray phrases = new JSONArray();
+        JSONObject phrase_json = new JSONObject();
 
-        if (send_help(groomed_message) == true) {
-            return ("everything seemed to go ok");
+        try {
+            phrase_json.put("timestamp", unixTime);
+            phrase_json.put("speech", phrase_string);
+            phrases.put(phrase_json);
+            json.put("userId", MainActivity.USER_ID);
+            json.put("type", "phrasing");
+            json.put("phrases", phrases);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        else return("send failed");
+
+        send_help(json.toString());
     }
 
     public static void send_json(JSONObject json){

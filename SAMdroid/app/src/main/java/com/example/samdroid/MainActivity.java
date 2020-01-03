@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
 
    public void doit(View view){
        Log.d(LOG_TAG, "headset");
-       SendUDP.send("headset connected");
        FullService.setupBluetooth(this);
 
    }
