@@ -31,10 +31,12 @@ public class SendAllPhrases extends AsyncTask<Context, Void, Void> {
                 phrases.put(phrase_time);
             }
             JSONObject json = new JSONObject();
-            json.put("userID", MainActivity.USER_ID);
-            json.put("type", "phrasing");
+            json.put("userId", MainActivity.USER_ID);
+            json.put("type", "talk");
             json.put("phrases", phrases);
             SendUDP.send_json(json);
+            Log.d(LOG_TAG, "--------------sent the following json------------");
+            Log.d(LOG_TAG, json.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -55,7 +55,9 @@ class Database:
 
 def main():
     db = Database()
-    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
+#    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
+    db.connect()
+    resp = db.addUser("jeremy", "jerem@whatever")
     print(resp)
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
-    public static final String USER_ID = "5e0e6e1807cdcbd6a097708d";
+    public static final String USER_ID = "5e0f73467c1ffbca9ce828b2";
     public TextView phrase1;
     public TextView phrase2;
     public TextView phrase3;
