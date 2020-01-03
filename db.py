@@ -55,8 +55,14 @@ class Database:
     
     def search(self, userId, query):
         talksCollection = self.db.talks
+        print("searching for {} for {}".format(query, userId))
         resp = talksCollection.find( { "userId" : userId, "$text": { "$search": query } } )
-        return dict(resp)
+        print(resp)
+        data = list()
+        for item in resp:
+            print(item)
+            data.append(item)
+        return data
 
 
 def main():

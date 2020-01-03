@@ -5,6 +5,7 @@ from flask import request
 from time import sleep
 from db import Database
 import json
+from bson.json_util import dumps
 
 app = Flask(__name__)
 app.debug=True
@@ -64,10 +65,11 @@ def search():
             return render_template('search.html')
         elif request.method == "POST":
             data = request.json
+            print(data)
             r = db.search(data['userId'], data['query'])
             for item in r:
                 print(item)
-            return json.dumps(r).encode('utf-8')
+            return dumps(r)
     except Exception as e:
         print("error")
         print(e)
