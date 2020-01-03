@@ -1,0 +1,17 @@
+<DOCTYPE html>
+<html>
+<body>
+
+    <h1>Enter ur shit boi</h1>
+    <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+        <p>
+            {{ form.search_item.label }}<br>
+            {{ form.search_item(size=32) }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+
+</body>
+</html>
+
