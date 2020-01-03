@@ -23,7 +23,7 @@ class WIFIReceiver():
 
     def run(self):
         while True:
-            data, addr = self.sock.recvfrom(1024)
+            data, addr = self.sock.recvfrom(50024)
             self.handle_data(data)
 
     def handlePhrasing(self, data):

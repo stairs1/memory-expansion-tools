@@ -11,6 +11,18 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+    <hr/>
+    <h4>Search Results</h4>
+    <div id=results></div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
 
 </body>
 </html>

@@ -1,11 +1,12 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, redirect
 from flask_socketio import SocketIO, emit
 from flask import request
 from time import sleep
 from db import Database
 from forms import SearchForm
 import json
+from bson.json_util import dumps
 
 app = Flask(__name__)
 app.debug=True
@@ -59,19 +60,33 @@ def on_connect():
 def main_page():
     return render_template('convo.html')
 
-@app.route('/search')#, methods=['GET', 'POST'])
+@app.route('/search', methods=['GET', 'POST'])
 def search():
+    temp_uid = "5e0e6e1807cdcbd6a097708d"
     form = SearchForm()
+    if form.validate_on_submit():
+        flash(f'searched for {form.search_item.data}')
+        data = form.search_item.data
+
+        print(data)
+        r = db.search(temp_uid, data)
+        for item in r:
+            print(item)
+            flash(item)
+
+        return redirect('/search')
+        
     return render_template('search.html', title='Search for ya', form=form)
 #    try:
 #        if request.method == 'GET':
 #            return render_template('search.html')
 #        elif request.method == "POST":
 #            data = request.json
+#            print(data)
 #            r = db.search(data['userId'], data['query'])
 #            for item in r:
 #                print(item)
-#            return json.dumps(r).encode('utf-8')
+#            return dumps(r)
 #    except Exception as e:
 #        print("error")
 #        print(e)

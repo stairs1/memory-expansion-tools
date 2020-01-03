@@ -39,6 +39,11 @@ class Database:
                 "talk" : words,
                 "timestamp" : timestamp
                 }
+        
+        if talk in talksCollection.find({}, {"userId": 1, "talk": 1, "timestamp": 1, "_id" : 0}):
+            print("This talk has already been saved")
+            return -1
+
         resp = talksCollection.insert_one(talk)
         talkId = resp.inserted_id
         return talkId
@@ -55,8 +60,14 @@ class Database:
     
     def search(self, userId, query):
         talksCollection = self.db.talks
+        print("searching for {} for {}".format(query, userId))
         resp = talksCollection.find( { "userId" : userId, "$text": { "$search": query } } )
-        return dict(resp)
+        print(resp)
+        data = list()
+        for item in resp:
+            print(item)
+            data.append(item)
+        return data
 
 
 def main():
@@ -69,6 +80,11 @@ def main():
     resp2 = db.search("testing")
     for item in resp2:
         print(item['talk'])
+    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how what the fuck is it going?", "11234.223")
+    print(resp)
+    #resp = db.search("testing")
+    #for item in resp:
+    #    print(item['talk'])
 
 if __name__ == "__main__":
     main()
