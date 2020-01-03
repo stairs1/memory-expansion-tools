@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
+from datetime import datetime
 import time
 
 class Database:
@@ -60,24 +61,34 @@ class Database:
     
     def search(self, userId, query):
         talksCollection = self.db.talks
-        print("searching for {} for {}".format(query, userId))
+
+        time, query = self.parseQuery(query)
+        
         resp = talksCollection.find( { "userId" : userId, "$text": { "$search": query } } )
-        print(resp)
+        
         data = list()
         for item in resp:
-            print(item)
             data.append(item)
+        
         return data
+
+    def parseQuery(self, query):
+        query = query.split(" ", 1)
+        timestamp = datetime.strptime(query[0], "%m-%d-%Y")
+        timestamp = (timestamp - datetime(1970,1,1)).total_seconds() #convert to Unix time
+        return (timestamp, query[1:][0])
+
 
 
 def main():
     db = Database()
     db.connect()
-    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how what the fuck is it going?", "11234.223")
-    print(resp)
-    #resp = db.search("testing")
-    #for item in resp:
-    #    print(item['talk'])
+    #resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how what the fuck is it going?", "11234.223")
+    #time, query = db.parseQuery("03-19-2019 what is up man?")
+    #print(time, query)
+    resp = db.search("5e0e6e1807cdcbd6a097708d", "02-12-2099 testing")
+    for item in resp:
+        print(item['talk'])
 
 if __name__ == "__main__":
     main()

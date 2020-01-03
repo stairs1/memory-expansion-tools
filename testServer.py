@@ -6,8 +6,8 @@ from bson.json_util import loads
 talkReq = {
     "userId" : "5e0e6e1807cdcbd6a097708d",
     "type" : "talk",
-    "phrases" : [{ "timestamp" : 12344.1232435, "speech" : "this is what the person said"},
-                { "timestamp" : 123435.12324399999999, "speech" : "testing yeah testing"}]
+    "phrases" : [{ "timestamp" : 123435.1532839, "speech" : "what is up?"},
+                { "timestamp" : 123435.1532439, "speech" : "not sure dude"}]
     }
 
 phraseReq = {
@@ -26,11 +26,11 @@ def search(query):
     return resp.content.decode()
 
 def main():
-    #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #sock.sendto(json.dumps(talkReq).encode('utf-8'), 0, ('127.0.0.1', 5005)) 
-    r = search("testing")
-    r = loads(r)
-    for item in r:
-        print(item)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.sendto(json.dumps(talkReq).encode('utf-8'), 0, ('127.0.0.1', 5005)) 
+    #r = search("testing")
+    #r = loads(r)
+    #for item in r:
+    #    print(item)
 if __name__ == "__main__":
     main()
