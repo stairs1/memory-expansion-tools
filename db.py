@@ -39,6 +39,11 @@ class Database:
                 "talk" : words,
                 "timestamp" : timestamp
                 }
+        
+        if talk in talksCollection.find({}, {"userId": 1, "talk": 1, "timestamp": 1, "_id" : 0}):
+            print("This talk has already been saved")
+            return -1
+
         resp = talksCollection.insert_one(talk)
         talkId = resp.inserted_id
         return talkId
@@ -68,10 +73,11 @@ class Database:
 def main():
     db = Database()
     db.connect()
-    #resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
-    resp = db.search("testing")
-    for item in resp:
-        print(item['talk'])
+    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how what the fuck is it going?", "11234.223")
+    print(resp)
+    #resp = db.search("testing")
+    #for item in resp:
+    #    print(item['talk'])
 
 if __name__ == "__main__":
     main()
