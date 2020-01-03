@@ -59,12 +59,13 @@ class Database:
         else:
             return True
     
-    def search(self, userId, query):
+    def search(self, userId, query, timeRange=86400):
         talksCollection = self.db.talks
 
         time, query = self.parseQuery(query)
-        
-        resp = talksCollection.find( { "userId" : userId, "$text": { "$search": query } } )
+        startTime = time - timeRange
+        endTime = time + timeRange
+        resp = talksCollection.find({ "timestamp" : { "$gt" : startTime , "$lt": endTime }, "userId" : userId, "$text": {"$search" : query }} )
         
         data = list()
         for item in resp:
@@ -86,7 +87,7 @@ def main():
     #resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how what the fuck is it going?", "11234.223")
     #time, query = db.parseQuery("03-19-2019 what is up man?")
     #print(time, query)
-    resp = db.search("5e0e6e1807cdcbd6a097708d", "02-12-2099 testing")
+    resp = db.search("5e0e6e1807cdcbd6a097708d", "01-03-2020 cayden")
     for item in resp:
         print(item['talk'])
 

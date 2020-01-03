@@ -2,12 +2,14 @@ import socket
 import json
 import requests
 from bson.json_util import loads
+import time
 
 talkReq = {
     "userId" : "5e0e6e1807cdcbd6a097708d",
     "type" : "talk",
-    "phrases" : [{ "timestamp" : 123435.1532839, "speech" : "what is up?"},
-                { "timestamp" : 123435.1532439, "speech" : "not sure dude"}]
+    "phrases" : [
+                { "timestamp" : time.time(), "speech" : "cayden also likes potatoes"},
+                { "timestamp" : time.time(), "speech" : "don't do drugs kids"}]
     }
 
 phraseReq = {
