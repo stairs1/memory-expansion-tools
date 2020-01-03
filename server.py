@@ -1,8 +1,10 @@
 import os
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+from flask import request
 from time import sleep
 from db import Database
+import json
 
 app = Flask(__name__)
 app.debug=True
@@ -54,6 +56,22 @@ def on_connect():
 @app.route('/')
 def main_page():
     return render_template('convo.html')
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    try:
+        if request.method == 'GET':
+            return render_template('search.html')
+        elif request.method == "POST":
+            data = request.json
+            r = db.search(data['userId'], data['query'])
+            for item in r:
+                print(item)
+            return json.dumps(r).encode('utf-8')
+    except Exception as e:
+        print("error")
+        print(e)
+        return render_template('search.html')
 
 def start():
     db.connect()

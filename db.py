@@ -52,11 +52,20 @@ class Database:
             return False
         else:
             return True
+    
+    def search(self, userId, query):
+        talksCollection = self.db.talks
+        resp = talksCollection.find( { "userId" : userId, "$text": { "$search": query } } )
+        return dict(resp)
+
 
 def main():
     db = Database()
-    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
-    print(resp)
+    db.connect()
+    #resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
+    resp = db.search("testing")
+    for item in resp:
+        print(item['talk'])
 
 if __name__ == "__main__":
     main()
