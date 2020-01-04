@@ -66,9 +66,9 @@ class Database:
             startTime = 0
             endTime = time.time() #we can't have memories from the future... yet
         else:    
-            startTime = time - timeRange
-            endTime = time + timeRange
-        
+            startTime = queryTime - timeRange
+            endTime = queryTime + timeRange
+
         resp = talksCollection.find({ "timestamp" : { "$gt" : startTime , "$lt": endTime }, "userId" : userId, "$text": {"$search" : query }} )
         
         data = list()

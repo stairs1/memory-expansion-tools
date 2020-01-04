@@ -62,6 +62,17 @@ def main_page():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
+
+#    if request.method == "POST":
+#        data = request.json
+#        if(data):
+#            print(data)
+#            r = db.search(data['userId'], data['query'])
+#            for item in r:
+#                print(item)
+#            return dumps(r)
+
+
     temp_uid = "5e0f73467c1ffbca9ce828b2"
     form = SearchForm()
     if form.validate_on_submit():
@@ -76,20 +87,6 @@ def search():
         return redirect('/search')
         
     return render_template('search.html', title='Search for ya', form=form)
-#    try:
-#        if request.method == 'GET':
-#            return render_template('search.html')
-#        elif request.method == "POST":
-#            data = request.json
-#            print(data)
-#            r = db.search(data['userId'], data['query'])
-#            for item in r:
-#                print(item)
-#            return dumps(r)
-#    except Exception as e:
-#        print("error")
-#        print(e)
-#        return render_template('search.html')
 
 def start():
     db.connect()

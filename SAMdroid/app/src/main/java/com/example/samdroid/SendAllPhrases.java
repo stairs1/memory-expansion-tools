@@ -25,8 +25,9 @@ public class SendAllPhrases extends AsyncTask<Context, Void, Void> {
             while ((line = br.readLine()) != null) {
                 String[] stuff = line.split(":", 2);
                 phrase_time_pairs.put(stuff[0], stuff[1]);
+                long timestamp = Long.parseLong(stuff[0]);
                 JSONObject phrase_time = new JSONObject();
-                phrase_time.put("timestamp", stuff[0]);
+                phrase_time.put("timestamp", timestamp);
                 phrase_time.put("speech", stuff[1]);
                 phrases.put(phrase_time);
             }
