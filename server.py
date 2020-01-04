@@ -1,17 +1,27 @@
-import os
-from flask import Flask, render_template, flash, redirect
+#flask
+from flask import Flask, render_template, flash, redirect, jsonify
 from flask_socketio import SocketIO, emit
 from flask import request
+from flask_restful import Api
+from bson.json_util import dumps
+
+#regular stuff
+import json
 from time import sleep
+import os
+
+#custom stuff
 from db import Database
 from forms import SearchForm
-import json
-from bson.json_util import dumps
+from api.SearchEndpoint import SearchPage
 
 app = Flask(__name__)
 app.debug=True
 app._static_folder = os.path.abspath("templates/static/")
 app.config['SECRET_KEY'] = 'super special secret'
+
+api = Api(app) #flask_restful
+
 socketio = SocketIO(app)
 server_thread = None
 
@@ -60,8 +70,20 @@ def on_connect():
 def main_page():
     return render_template('convo.html')
 
+"""
 @app.route('/search', methods=['GET', 'POST'])
 def search():
+
+#    if request.method == "POST":
+#        data = request.json
+#        if(data):
+#            print(data)
+#            r = db.search(data['userId'], data['query'])
+#            for item in r:
+#                print(item)
+#            return dumps(r)
+
+
     temp_uid = "5e0f73467c1ffbca9ce828b2"
     form = SearchForm()
     if form.validate_on_submit():
@@ -76,22 +98,12 @@ def search():
         return redirect('/search')
         
     return render_template('search.html', title='Search for ya', form=form)
-#    try:
-#        if request.method == 'GET':
-#            return render_template('search.html')
-#        elif request.method == "POST":
-#            data = request.json
-#            print(data)
-#            r = db.search(data['userId'], data['query'])
-#            for item in r:
-#                print(item)
-#            return dumps(r)
-#    except Exception as e:
-#        print("error")
-#        print(e)
-#        return render_template('search.html')
+"""
 
 def start():
     db.connect()
+    api.add_resource(SearchPage, '/search')
     app.run()
 
+if __name__ == "__main__":
+    start()
