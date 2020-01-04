@@ -1,0 +1,6 @@
+flask
+flask-restful
+requests
+pymongo
+flask_socketio
+flask_wtf #maybe don't need

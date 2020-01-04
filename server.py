@@ -1,17 +1,27 @@
-import os
-from flask import Flask, render_template, flash, redirect
+#flask
+from flask import Flask, render_template, flash, redirect, jsonify
 from flask_socketio import SocketIO, emit
 from flask import request
+from flask_restful import Api
+from bson.json_util import dumps
+
+#regular stuff
+import json
 from time import sleep
+import os
+
+#custom stuff
 from db import Database
 from forms import SearchForm
-import json
-from bson.json_util import dumps
+from api.SearchEndpoint import SearchPage
 
 app = Flask(__name__)
 app.debug=True
 app._static_folder = os.path.abspath("templates/static/")
 app.config['SECRET_KEY'] = 'super special secret'
+
+api = Api(app) #flask_restful
+
 socketio = SocketIO(app)
 server_thread = None
 
@@ -60,6 +70,7 @@ def on_connect():
 def main_page():
     return render_template('convo.html')
 
+"""
 @app.route('/search', methods=['GET', 'POST'])
 def search():
 
@@ -87,8 +98,14 @@ def search():
         return redirect('/search')
         
     return render_template('search.html', title='Search for ya', form=form)
+<<<<<<< HEAD
+=======
+"""
 
 def start():
     db.connect()
+    api.add_resource(SearchPage, '/search')
     app.run()
 
+if __name__ == "__main__":
+    start()

@@ -62,13 +62,13 @@ class Database:
     def search(self, userId, query, queryTime=None, timeRange=86400):
         talksCollection = self.db.talks
 
-        if queryTime is None or queryTime.isspace() or not queryTime:
+        if queryTime is None:
             startTime = 0
             endTime = time.time() #we can't have memories from the future... yet
         else:    
             startTime = queryTime - timeRange
             endTime = queryTime + timeRange
-
+        
         resp = talksCollection.find({ "timestamp" : { "$gt" : startTime , "$lt": endTime }, "userId" : userId, "$text": {"$search" : query }} )
         
         data = list()
@@ -81,7 +81,7 @@ def main():
     db = Database()
 #    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
     db.connect()
-    resp = db.search("5e0e6e1807cdcbd6a097708d", "01-03-2020 jeremy")
+    resp = db.search("5e0e6e1807cdcbd6a097708d", "jeremy", time.time()-100)
     for item in resp:
         print(item)
 
