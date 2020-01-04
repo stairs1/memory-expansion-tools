@@ -1,0 +1,6 @@
+1. Our ideas need to be in one place on github so we can get to them later and not forget
+
+2. priority levels to circular buffer
+3. multiple stages, on the fly creation of them.
+4. in general, inputs that don't require entirety of attention, ie audio, bluetooth ring.
+5. 
