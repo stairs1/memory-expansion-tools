@@ -4,3 +4,13 @@
 3. multiple stages, on the fly creation of them.
 4. in general, inputs that don't require entirety of attention, ie audio, bluetooth ring.
 5. Give audio to server from phone, as fast as possible
+
+
+
+
+3 levels
+L1: short term, size: 12 phrases
+L2: current day: next starts at 4am
+L3: current week: last week can be found in history
+
+Streaming the voicerec so there aren't pauses
