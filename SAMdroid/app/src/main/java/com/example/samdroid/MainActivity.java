@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public TextView voicerec_state;
     public TextView server_state;
     Intent FullServiceIntent;
+    boolean full_service_running = false;
 
     BroadcastReceiver broadcastReceiver;
 
@@ -120,9 +121,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 String started = intent.getStringExtra("STARTED");
                 if(started!=null && started.equalsIgnoreCase("on")){
+                    full_service_running = true;
                     voicerec_state.setText("Voice Recognition ON");
+                    headset_state.setText("Using built-in mic");
                 }
                 else if(started != null && started.equalsIgnoreCase("off")){
+                    full_service_running = false;
                     voicerec_state.setText("Voice Recognition OFF");
                     headset_state.setText("");
                 }
@@ -134,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "ONCREATE");
         super.onCreate(savedInstanceState);
+        FullServiceIntent = new Intent(this, FullService.class);
         setupReceiver();
         setContentView(R.layout.activity_main);
         phrase1 = findViewById(R.id.text1);
@@ -211,16 +216,21 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-   public void start_service(View view){
-       Log.d(LOG_TAG, "start_service");
-       FullServiceIntent = new Intent(this, FullService.class);
+    public void start_service(){
+        Log.d(LOG_TAG, "start_service");
 
-       startService(FullServiceIntent);
+        startService(FullServiceIntent);
+    }
+
+   public void start_service_button_handle(View view){
+        start_service();
    }
 
    public void stop_service(View view){
        Log.d(LOG_TAG, "top_service");
-       stopService(FullServiceIntent);
+       if(FullServiceIntent != null){
+           stopService(FullServiceIntent);
+       }
    }
 
    public void send_data(View view){
