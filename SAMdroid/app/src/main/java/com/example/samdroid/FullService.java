@@ -31,9 +31,9 @@ public class FullService extends IntentService {
     BluetoothHelper mBluetoothHelper;
 
     private boolean go;
+    Context context;
     Integer counter;
     private int errcode = 0;
-    private boolean create = true;
     private static int FOREGROUND_ID = 1;
     private static String channel_id = "sexy_channel";
     private static final String STOP_ELEMENT = "";
@@ -78,31 +78,34 @@ public class FullService extends IntentService {
         public void onHeadsetDisconnected()
         {
             Log.d(LOG_TAG, "utils -- headset disconnected");
+
+            Intent intent_disco = new Intent();
+            intent_disco.setAction("com.example.samdroid");
+            intent_disco.putExtra("WITH_HEADSET", "Using built-in mic");
+            sendBroadcast(intent_disco);
         }
 
         @Override
         public void onHeadsetConnected()
         {
             Log.d(LOG_TAG, "utils -- headset connected");
-            if(create){
-                Intent intent1 = new Intent();
-                intent1.setAction("com.example.samdroid");
-                intent1.putExtra("WITH_HEADSET", "Using headset");
 
-                sendBroadcast(intent1);
-            }
+            Intent intent1 = new Intent();
+            intent1.setAction("com.example.samdroid");
+            intent1.putExtra("WITH_HEADSET", "Using headset");
+
+            sendBroadcast(intent1);
         }
     }
 
     @Override
     public void onCreate(){
         super.onCreate();
-        create = true;
-        mBluetoothHelper = new BluetoothHelper(this);
+        context = this;
+        conversation = new Conversation(context);
+        mBluetoothHelper = new BluetoothHelper(context);
         mBluetoothHelper.start();
-        conversation = new Conversation(this);
 
-        final Context context = this;
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
         mSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
@@ -143,15 +146,10 @@ public class FullService extends IntentService {
 
             @Override
             public void onEvent(int eventType, Bundle params) {}
+
+
         });
 
-        PackageManager pm = context.getPackageManager();
-        List<ResolveInfo> installedList = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
-        boolean speechRecognitionInstalled = !installedList.isEmpty();
-
-        if (!speechRecognitionInstalled) {
-            Log.d(LOG_TAG, "not installed");
-        }
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 200);
@@ -249,7 +247,6 @@ public class FullService extends IntentService {
     @Override
     public void onDestroy(){
         Log.d(LOG_TAG, "On Destroy");
-        create = false;
         go = false;
         Handler mainHandler = new Handler(this.getMainLooper());
         mainHandler.post(kill);

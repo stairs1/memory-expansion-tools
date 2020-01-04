@@ -122,12 +122,12 @@ public class MainActivity extends AppCompatActivity {
                 String started = intent.getStringExtra("STARTED");
                 if(started!=null && started.equalsIgnoreCase("on")){
                     full_service_running = true;
-                    voicerec_state.setText("Voice Recognition ON");
-                    headset_state.setText("Using built-in mic");
+                    voicerec_state.setText(R.string.voice_recognition_on);
+                    headset_state.setText(R.string.use_built_in_mic);
                 }
                 else if(started != null && started.equalsIgnoreCase("off")){
                     full_service_running = false;
-                    voicerec_state.setText("Voice Recognition OFF");
+                    voicerec_state.setText(R.string.voice_recognition_off);
                     headset_state.setText("");
                 }
             }

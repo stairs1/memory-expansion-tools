@@ -3,4 +3,7 @@
     <string name="button_headset">Connect Headset</string>
     <string name="button_start_service">Start</string>
     <string name="button_stop_service">STOP</string>
+    <string name="voice_recognition_off">Voice Recognition OFF</string>
+    <string name="use_built_in_mic">Using built-in mic</string>
+    <string name="voice_recognition_on">Voice Recognition ON</string>
 </resources>

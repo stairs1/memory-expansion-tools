@@ -54,7 +54,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transcription off"
+                android:text="@string/voice_recognition_off"
                 android:id="@+id/network_info"/>
 
         <TextView
