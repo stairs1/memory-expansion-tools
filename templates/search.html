@@ -15,12 +15,14 @@
     <div id=results></div>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <p>Results</p>
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
+        <p><b>Results</b></p>
+        <table>
+          {% for message in messages %}
+          <tr>
+            <td>{{ message }}</td>
+          </tr>
+          {% endfor %}
+        </table>
         {% endif %}
     {% endwith %}
 

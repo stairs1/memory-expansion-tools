@@ -14,6 +14,9 @@ import os
 from db import Database
 from forms import SearchForm
 from api.SearchEndpoint import SearchPage
+import json
+from bson.json_util import dumps
+from datetime import datetime
 
 app = Flask(__name__)
 app.debug=True
@@ -70,7 +73,7 @@ def on_connect():
 def main_page():
     return render_template('convo.html')
 
-"""
+
 @app.route('/search', methods=['GET', 'POST'])
 def search():
 
@@ -93,14 +96,19 @@ def search():
         r = db.search(temp_uid, data)
         for item in r:
             print(item)
-            flash(item['talk'])
+            pretty_time = datetime.fromtimestamp(item['timestamp']).strftime("%a, %b %-d %-I:%-M %p")
+            flash(f"{item['talk']}   {pretty_time}")
+
+        results = [{
+           'words': item['talk'],
+           'time': datetime.fromtimestamp(item['timestamp']).strftime("%a, %b %-d %-I:%-M %p")
+        } for item in r]
+
 
         return redirect('/search')
         
     return render_template('search.html', title='Search for ya', form=form)
-<<<<<<< HEAD
-=======
-"""
+
 
 def start():
     db.connect()
