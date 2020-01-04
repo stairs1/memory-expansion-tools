@@ -33,6 +33,7 @@ public class FullService extends IntentService {
     private boolean go;
     Integer counter;
     private int errcode = 0;
+    private boolean create = true;
     private static int FOREGROUND_ID = 1;
     private static String channel_id = "sexy_channel";
     private static final String STOP_ELEMENT = "";
@@ -40,12 +41,6 @@ public class FullService extends IntentService {
     private static final String ERROR_SPEECH_TIMEOUT = "6";
     private static final String ERROR_NO_MATCH = "7";
     private static final String ERR_ELEMENT = "5439";
-
-    static BluetoothAdapter btAdapter;
-    static BluetoothHeadset btHeadset;
-    BluetoothDevice plantron;
-    private static final String PLANTRON_MAC = "BC:F2:92:9F:A6:92";
-    private static boolean btConnected = false;
 
     public static final String LOG_TAG = FullService.class.getSimpleName();
 
@@ -59,9 +54,7 @@ public class FullService extends IntentService {
     protected SpeechRecognizer mSpeechRecognizer;
     final LinkedBlockingQueue<String> queueu = new LinkedBlockingQueue<>();
     Intent recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-    // inner class
-    // BluetoothHeadsetUtils is an abstract class that has
-    // 4 abstracts methods that need to be implemented.
+
     private class BluetoothHelper extends BluetoothHeadSetUtils
     {
         public BluetoothHelper(Context context)
@@ -72,7 +65,7 @@ public class FullService extends IntentService {
         @Override
         public void onScoAudioDisconnected()
         {
-            // Cancel speech recognizer if desired
+            Log.d(LOG_TAG, "sco audio disconnected");
         }
 
         @Override
@@ -84,78 +77,45 @@ public class FullService extends IntentService {
         @Override
         public void onHeadsetDisconnected()
         {
-
+            Log.d(LOG_TAG, "utils -- headset disconnected");
         }
 
         @Override
         public void onHeadsetConnected()
         {
+            Log.d(LOG_TAG, "utils -- headset connected");
+            if(create){
+                Intent intent1 = new Intent();
+                intent1.setAction("com.example.samdroid");
+                intent1.putExtra("WITH_HEADSET", "Using headset");
 
+                sendBroadcast(intent1);
+            }
         }
     }
 
     @Override
     public void onCreate(){
         super.onCreate();
+        create = true;
         mBluetoothHelper = new BluetoothHelper(this);
         mBluetoothHelper.start();
         conversation = new Conversation(this);
-
-        //use external mic if there is one already connected
-        if(btConnected == true){
-            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-            if(pairedDevices.size() == 0){
-                Log.d(LOG_TAG, "no paired devices");
-            }
-            for (BluetoothDevice device : pairedDevices){
-                Log.d(LOG_TAG, "checking bluetooth device " + device.getName() + " MAC: " + device.getAddress());
-                if(device.getAddress().equals(PLANTRON_MAC)){
-                    Log.d(LOG_TAG, "found plantron");
-                    if(btHeadset.startVoiceRecognition(device)){
-                        Log.d(LOG_TAG, "state: " + String.valueOf(btHeadset.getConnectionState(device)));
-                        if(btHeadset.isAudioConnected(device)){
-                            Log.d(LOG_TAG, "audio is connected");
-                        }
-                        else{
-                            Log.d(LOG_TAG, "audio is not connected");
-                        }
-                        Log.d(LOG_TAG, "started voicerec on plantron");
-                        plantron = device;
-                    }
-                    else{
-                        Log.d(LOG_TAG, "failed to start voicerec on plantron, using default mic");
-                    }
-                    break;
-                }
-            }
-        }
-        else{
-            Log.d(LOG_TAG, "btconnected is false");
-        }
-
 
         final Context context = this;
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
         mSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
-            public void onReadyForSpeech(Bundle params) {
-
-            }
+            public void onReadyForSpeech(Bundle params) {}
 
             @Override
-            public void onBeginningOfSpeech() {
-
-            }
+            public void onBeginningOfSpeech() {}
 
             @Override
-            public void onRmsChanged(float rmsdB) {
-
-            }
+            public void onRmsChanged(float rmsdB) {}
 
             @Override
-            public void onBufferReceived(byte[] buffer) {
-
-            }
+            public void onBufferReceived(byte[] buffer) {}
 
             @Override
             public void onEndOfSpeech() {
@@ -182,9 +142,7 @@ public class FullService extends IntentService {
             }
 
             @Override
-            public void onEvent(int eventType, Bundle params) {
-
-            }
+            public void onEvent(int eventType, Bundle params) {}
         });
 
         PackageManager pm = context.getPackageManager();
@@ -202,43 +160,7 @@ public class FullService extends IntentService {
         mSpeechRecognizer.startListening(recognizerIntent);
     }
 
-    public static void setupBluetooth(final Context context)
-    {
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        BluetoothProfile.ServiceListener mProfileListener = new BluetoothProfile.ServiceListener() {
-            public void onServiceConnected(int profile, BluetoothProfile proxy)
-            {
-                if (profile == BluetoothProfile.HEADSET)
-                {
-                    btHeadset = (BluetoothHeadset) proxy;
-                    btConnected = true;
-                    Log.d(LOG_TAG, "Headset connected");
-                    Toast toast = Toast.makeText(context, "Headset Connected", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-            public void onServiceDisconnected(int profile)
-            {
-                if (profile == BluetoothProfile.HEADSET) {
-                    btHeadset = null;
-                    btConnected = false;
-                    Log.d(LOG_TAG, "Headset disco-connected");
-                }
-            }
-        };
-//        // During the active life time of the app, a user may turn on and off the headset.
-//        // So register for broadcast of connection states.
-//        mContext.registerReceiver(mHeadsetBroadcastReceiver,
-//                new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED));
-//        // Calling startVoiceRecognition does not result in immediate audio connection.
-//        // So register for broadcast of audio connection states. This broadcast will
-//        // only be sent if startVoiceRecognition returns true.
-//        mContext.registerReceiver(mHeadsetBroadcastReceiver,
-//                new IntentFilter(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED));
-
-        btAdapter.getProfileProxy(context, mProfileListener, BluetoothProfile.HEADSET);
-    }
 
     Runnable listen = new Runnable() {
         @Override
@@ -256,6 +178,11 @@ public class FullService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Intent intent_started = new Intent();
+        intent_started.setAction("com.example.samdroid");
+        intent_started.putExtra("STARTED", "on");
+        sendBroadcast(intent_started);
+
         startForeground(FOREGROUND_ID, buildForegroundNotification(channel_id));
 
         go = true;
@@ -321,13 +248,16 @@ public class FullService extends IntentService {
 
     @Override
     public void onDestroy(){
+        Log.d(LOG_TAG, "On Destroy");
+        create = false;
         go = false;
         Handler mainHandler = new Handler(this.getMainLooper());
         mainHandler.post(kill);
-        if(btHeadset != null){
-            btHeadset.stopVoiceRecognition(plantron);
-        }
         mBluetoothHelper.stop();
+        Intent intent_started = new Intent();
+        intent_started.setAction("com.example.samdroid");
+        intent_started.putExtra("STARTED", "off");
+        sendBroadcast(intent_started);
         super.onDestroy();
     }
 

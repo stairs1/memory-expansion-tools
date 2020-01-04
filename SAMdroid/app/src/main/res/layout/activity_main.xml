@@ -10,6 +10,7 @@
     <android.widget.LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/linearbottom"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -31,15 +32,7 @@
                 android:background="#E91E63"
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal" />
-        <Button
-                android:text="@string/button_headset"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:onClick="doit"
-                android:id="@+id/button_do"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:textSize="16sp" android:background="#00531313" />
+
         <Button
                 android:text="Send to Server"
                 android:layout_width="10dp"
@@ -50,6 +43,34 @@
                 android:layout_weight="1" />
 
     </android.widget.LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/info_box"
+            app:layout_constraintBottom_toTopOf="@+id/linearbottom" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" android:layout_marginBottom="16dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transcription off"
+                android:id="@+id/network_info"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/network_info"
+                android:id="@+id/headset_info"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Server at ?"
+                android:layout_below="@id/headset_info"
+                android:id="@+id/server_info"/>
+
+    </RelativeLayout>
 
 
     <RelativeLayout android:layout_width="match_parent"

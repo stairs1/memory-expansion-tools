@@ -1,5 +1,6 @@
 package com.example.samdroid;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 
@@ -33,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     public TextView stage2;
     public TextView stage3;
     public TextView stage4;
+    public TextView headset_state;
+    public TextView voicerec_state;
+    public TextView server_state;
     Intent FullServiceIntent;
 
     BroadcastReceiver broadcastReceiver;
@@ -43,68 +49,83 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String[] s1 = intent.getStringArrayExtra("DATAPASSED");
-                ArrayList<String> phrases = new ArrayList(Arrays.asList(s1));
-                if (phrases.size() > 0) {
-                    phrase1.setText(phrases.get(0));
-                } else {
-                    phrase1.setText("");
-                }
-                if (phrases.size() > 1) {
-                    phrase2.setText(phrases.get(1));
-                } else {
-                    phrase2.setText("");
-                }
-                if (phrases.size() > 2) {
-                    phrase3.setText(phrases.get(2));
-                } else {
-                    phrase3.setText("");
-                }
-                if (phrases.size() > 3) {
-                    phrase4.setText(phrases.get(3));
-                } else {
-                    phrase4.setText("");
-                }
-                if (phrases.size() > 4) {
-                    phrase5.setText(phrases.get(4));
-                } else {
-                    phrase5.setText("");
-                }
-                if (phrases.size() > 5) {
-                    phrase6.setText(phrases.get(5));
-                } else {
-                    phrase6.setText("");
-                }
-                if (phrases.size() > 6) {
-                    phrase7.setText(phrases.get(6));
-                } else {
-                    phrase7.setText("");
-                }
-                if (phrases.size() > 7) {
-                    phrase8.setText(phrases.get(7));
-                } else {
-                    phrase8.setText("");
+                if(s1 != null) {
+                    ArrayList<String> phrases = new ArrayList(Arrays.asList(s1));
+                    if (phrases.size() > 0) {
+                        phrase1.setText(phrases.get(0));
+                    } else {
+                        phrase1.setText("");
+                    }
+                    if (phrases.size() > 1) {
+                        phrase2.setText(phrases.get(1));
+                    } else {
+                        phrase2.setText("");
+                    }
+                    if (phrases.size() > 2) {
+                        phrase3.setText(phrases.get(2));
+                    } else {
+                        phrase3.setText("");
+                    }
+                    if (phrases.size() > 3) {
+                        phrase4.setText(phrases.get(3));
+                    } else {
+                        phrase4.setText("");
+                    }
+                    if (phrases.size() > 4) {
+                        phrase5.setText(phrases.get(4));
+                    } else {
+                        phrase5.setText("");
+                    }
+                    if (phrases.size() > 5) {
+                        phrase6.setText(phrases.get(5));
+                    } else {
+                        phrase6.setText("");
+                    }
+                    if (phrases.size() > 6) {
+                        phrase7.setText(phrases.get(6));
+                    } else {
+                        phrase7.setText("");
+                    }
+                    if (phrases.size() > 7) {
+                        phrase8.setText(phrases.get(7));
+                    } else {
+                        phrase8.setText("");
+                    }
                 }
                 String[] stage = intent.getStringArrayExtra("STAGE");
-                ArrayList<String> stages = new ArrayList(Arrays.asList(stage));
-                if (stages.size() > 0) {
-                    stage1.setText(stages.get(0));
+                if(stage != null) {
+                    ArrayList<String> stages = new ArrayList(Arrays.asList(stage));
+                    if (stages.size() > 0) {
+                        stage1.setText(stages.get(0));
+                    }
+                    if (stages.size() > 1) {
+                        stage2.setText(stages.get(1));
+                    } else {
+                        stage2.setText("");
+                    }
+                    if (stages.size() > 2) {
+                        stage3.setText(stages.get(2));
+                    } else {
+                        stage3.setText("");
+                    }
+                    if (stages.size() > 3) {
+                        stage4.setText(stages.get(3));
+                    } else {
+                        stage4.setText("");
+                    }
                 }
-                if (stages.size() > 1) {
-                    stage2.setText(stages.get(1));
-                } else {
-                    stage2.setText("");
+                String headset = intent.getStringExtra("WITH_HEADSET");
+                if (headset != null){
+                    headset_state.setText(headset);
                 }
-                if (stages.size() > 2) {
-                    stage3.setText(stages.get(2));
-                } else {
-                    stage3.setText("");
+                String started = intent.getStringExtra("STARTED");
+                if(started!=null && started.equalsIgnoreCase("on")){
+                    voicerec_state.setText("Voice Recognition ON");
                 }
-                if (stages.size() > 3) {
-                    stage4.setText(stages.get(3));
-                } else {
-                    stage4.setText("");
+                else if(started != null && started.equalsIgnoreCase("off")){
+                    voicerec_state.setText("Voice Recognition OFF");
+                    headset_state.setText("");
                 }
-
             }
         };
     }
@@ -127,6 +148,9 @@ public class MainActivity extends AppCompatActivity {
         stage2 = findViewById(R.id.stage2);
         stage3 = findViewById(R.id.stage3);
         stage4 = findViewById(R.id.stage4);
+        headset_state = findViewById(R.id.headset_info);
+        voicerec_state = findViewById(R.id.network_info);
+        server_state = findViewById(R.id.server_info);
 
         if(savedInstanceState!=null){
             phrase1.setText(savedInstanceState.getString("P1"));
@@ -141,6 +165,9 @@ public class MainActivity extends AppCompatActivity {
             stage2.setText(savedInstanceState.getString("S2"));
             stage4.setText(savedInstanceState.getString("S3"));
             stage4.setText(savedInstanceState.getString("S4"));
+            voicerec_state.setText(savedInstanceState.getString("vstate"));
+            headset_state.setText(savedInstanceState.getString("hstate"));
+            server_state.setText(savedInstanceState.getString("sstate"));
         }
 
         IntentFilter intentFilter = new IntentFilter();
@@ -153,6 +180,11 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.samdroid");
         registerReceiver(broadcastReceiver, intentFilter);
+        try {
+            server_state.setText("Server at " + InetAddress.getByAddress(SendUDP.address).toString().substring(1));
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
 
         super.onStart();
     }
@@ -172,15 +204,12 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putString("S2", (String)stage2.getText());
         savedInstanceState.putString("S3", (String)stage3.getText());
         savedInstanceState.putString("S4", (String)stage4.getText());
+        savedInstanceState.putString("vstate", (String)voicerec_state.getText());
+        savedInstanceState.putString("hstate", (String)headset_state.getText());
+        savedInstanceState.putString("sstate", (String)server_state.getText());
 
         super.onSaveInstanceState(savedInstanceState);
     }
-
-   public void doit(View view){
-       Log.d(LOG_TAG, "headset");
-       FullService.setupBluetooth(this);
-
-   }
 
    public void start_service(View view){
        Log.d(LOG_TAG, "start_service");

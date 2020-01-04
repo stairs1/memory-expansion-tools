@@ -5,6 +5,8 @@
 4. in general, inputs that don't require entirety of attention, ie audio, bluetooth ring.
 5. Give audio to server from phone, as fast as possible
 
+add audio and gpx parsers to github
+
 
 
 

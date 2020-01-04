@@ -13,7 +13,7 @@ import java.net.InetAddress;
 public class SendUDP {
     public static final int SERVER_PORT = 5005;
     public static InetAddress inet_addr;
-    public static byte[] address = {(byte) 192, (byte) 168, (byte) 0, (byte) 22};
+    public static byte[] address = {(byte) 192, (byte) 168, (byte) 0, (byte) 19};
     public static final String LOG_TAG = SendUDP.class.getSimpleName();
 
     private static boolean send_help(String to_send){
