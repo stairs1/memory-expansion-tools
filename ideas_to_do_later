@@ -3,4 +3,4 @@
 2. priority levels to circular buffer
 3. multiple stages, on the fly creation of them.
 4. in general, inputs that don't require entirety of attention, ie audio, bluetooth ring.
-5. 
+5. Give audio to server from phone, as fast as possible
