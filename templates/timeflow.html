@@ -1,0 +1,32 @@
+<DOCTYPE html>
+<html>
+	<head>
+		<script type='text/javascript' src='static/timeflow.js'></script>
+	</head>
+<body>
+	<h1>Surf through your memories</h1>
+	
+	<form id="searchForm">
+		<input name="timeFrame" type="text" placeholder="Time frame to see (seconds)..."></br>
+		<input type="button" id="submitButton" value="Search"><br/>
+	</form>
+	<hr/>
+	<div id="results">
+		<p>Results</p>
+		<ul id="resultsList">
+			{% for talk in talks %}
+				{% if talk['_id']|string == mainTalkId %}
+					<li><b>{{ talk['talk'] }}, {{ talk['timestamp'] }}</b></li>
+				{% else %}
+					<li>{{ talk['talk'] }}, {{ talk['timestamp'] }}</li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+</body>
+
+
+
+</body>
+</html>
+

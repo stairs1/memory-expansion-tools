@@ -49,6 +49,16 @@ class Database:
         talkId = resp.inserted_id
         return talkId
 
+    def talkExists(self, talkId: str): 
+        talksCollection = self.db.talks
+        talkId = ObjectId(talkId)
+        resp = talksCollection.find_one({ "_id" : talkId })
+
+        if resp is None:
+            return False
+        else:
+            return True
+    
     def userExists(self, userId: str): 
         usersCollection = self.db.users
         userId = ObjectId(userId)
@@ -77,13 +87,57 @@ class Database:
         
         return data
 
+    def getMostRecent(self, userId):
+        talksCollection = self.db.talks
+
+        resp = talksCollection.aggregate( [ {"$match" : { "userId" : "5e0e6e1807cdcbd6a097708d" }}, { "$sort" : { "timestamp" : -1 } }, { "$limit" : 1 } ] )
+        resp = talksCollection.find({ "userId" : userId }).sort( [ ("timestamp", -1) ]) #.limit(1)
+
+        for item in resp: #little weird b/c resp is a pymongo-cursor
+            return item
+
+    def timeFlow(self, userId, talkId=None, timeFrame=None):
+        talksCollection = self.db.talks
+        
+        if not self.userExists(userId):
+            return None
+        if talkId is None: #if no talkId is give, use the most recent talk
+            mostRecent = self.getMostRecent(userId)
+            talkId = str(mostRecent['_id'])
+            reqTime = mostRecent['timestamp']
+            print("sex {} {}".format(talkId, timeFrame))
+        elif not self.talkExists(talkId): #if talkId is given, only proceed if it actually exists in database
+            return None
+        else: #if talksId is given to us AND it exists, get its time
+            reqTime = talksCollection.find_one( { "_id" : ObjectId(talkId) }, { "timestamp" : 1, "_id" : 0 })['timestamp']
+
+        if timeFrame is None:
+            timeFrame = 30
+
+
+        
+        startTime = reqTime - timeFrame
+        endTime = reqTime + timeFrame
+        
+        resp = talksCollection.find({ "timestamp" : { "$gt" : startTime , "$lt": endTime }, "userId" : userId } ).sort( [("timestamp", 1)] )
+        
+        data = list()
+        for item in resp:
+            data.append(item)
+        
+        return data, talkId
+
+        
+
 def main():
     db = Database()
 #    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
     db.connect()
-    resp = db.search("5e0e6e1807cdcbd6a097708d", "jeremy", time.time()-100)
+    #resp = db.search("5e0e6e1807cdcbd6a097708d", "jeremy", time.time()-100)
+    #resp = db.timeFlow("5e0e6e1807cdcbd6a097708d", time.time(), 10000000)
+    resp = db.timeFlow("5e0e6e1807cdcbd6a097708d")
     for item in resp:
-        print(item)
+        print(resp)
 
 if __name__ == "__main__":
     main()

@@ -14,6 +14,7 @@ import os
 from db import Database
 from forms import SearchForm
 from api.SearchEndpoint import SearchPage
+from api.TimeFlowEndpoint import TimeFlow
 
 app = Flask(__name__)
 app.debug=True
@@ -70,41 +71,10 @@ def on_connect():
 def main_page():
     return render_template('convo.html')
 
-"""
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-
-#    if request.method == "POST":
-#        data = request.json
-#        if(data):
-#            print(data)
-#            r = db.search(data['userId'], data['query'])
-#            for item in r:
-#                print(item)
-#            return dumps(r)
-
-
-    temp_uid = "5e0f73467c1ffbca9ce828b2"
-    form = SearchForm()
-    if form.validate_on_submit():
-        data = form.search_item.data
-
-        print(data)
-        r = db.search(temp_uid, data)
-        for item in r:
-            print(item)
-            flash(item['talk'])
-
-        return redirect('/search')
-        
-    return render_template('search.html', title='Search for ya', form=form)
-<<<<<<< HEAD
-=======
-"""
-
 def start():
     db.connect()
     api.add_resource(SearchPage, '/search')
+    api.add_resource(TimeFlow, '/timeflow')
     app.run()
 
 if __name__ == "__main__":

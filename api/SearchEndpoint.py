@@ -1,3 +1,4 @@
+from flask import render_template, make_response
 from flask_restful import Resource, reqparse, fields, marshal_with
 from db import Database
 
@@ -6,6 +7,7 @@ class SearchPage(Resource):
             'userId' : fields.String,
             'talk' : fields.String(default='Anonymous User'),
             'timestamp' : fields.Float,
+            '_id' : fields.String
             }
     
     def __init__(self):
@@ -17,8 +19,8 @@ class SearchPage(Resource):
         self.db.connect()
     
     def get(self):
-        form = SearchForm()
-        return render_template('search.html', title='Search for ya', form=form)
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template('searchbasic.html'), 200, headers)
 
     @marshal_with(talk_marshaller)
     def post(self):
