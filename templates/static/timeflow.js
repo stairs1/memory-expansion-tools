@@ -3,13 +3,16 @@ window.onload = function(){ //runs main when the window has loaded
 }
 
 function main() {
-	var searchButton = document.getElementById("submitButton")
+	var timeForm = document.getElementById("timeForm")
+	var searchButton = document.getElementById("searchButton")
+	timeForm.addEventListener("submit", submit);
 	searchButton.addEventListener("click", search);
 }
 
-async function search(event) {
+async function submit(event) {
+	event.preventDefault();
 	console.log("Shit");
-	var form = document.getElementById("searchForm");
+	var form = document.getElementById("timeForm");
 	var timeFrame = form['timeFrame'].value
 	var urlParams = new URLSearchParams(window.location.search);
 	var talkId = urlParams.get('talkId');
@@ -31,12 +34,17 @@ async function search(event) {
 			var item = document.createElement("li");
 			var talk = document.createElement("p");
 			if (data[i]['_id'] == talkId){
-				talk.innerHTML = "<b>" + data[i]['talk'] + ", " + data[i]['timestamp'] + "</b>"
+				talk.innerHTML = "<b>" + data[i]['talk'] + ", " + data[i]['prettyTime'] + "</b>"
 			} else {
-				talk.innerHTML = data[i]['talk'] + ", " + data[i]['timestamp']
+				talk.innerHTML = data[i]['talk'] + ", " + data[i]['prettyTime']
 			}
 			item.appendChild(talk)
 			results.appendChild(item);
 		}
 		});
+}
+
+
+async function search(event) {
+	window.location = "/search"
 }

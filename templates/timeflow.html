@@ -6,19 +6,28 @@
 <body>
 	<h1>Surf through your memories</h1>
 	
-	<form id="searchForm">
-		<input name="timeFrame" type="text" placeholder="Time frame to see (seconds)..."></br>
-		<input type="button" id="submitButton" value="Search"><br/>
-	</form>
+	<table>
+		<tr>
+			<td width="25%">
+				<form id="timeForm">
+					<input name="timeFrame" id="timeFrame" type="text" placeholder="Time frame to see (seconds)..."></br>
+					<input type="submit" id="submitButton" value="Search"><br/>
+				</form>
+			</td>
+			<td width="75%">
+				<input id="searchButton" value="Search something else" type="submit">
+			</td>
+		</tr>
+	</table>
 	<hr/>
 	<div id="results">
 		<p>Results</p>
 		<ul id="resultsList">
 			{% for talk in talks %}
 				{% if talk['_id']|string == mainTalkId %}
-					<li><b>{{ talk['talk'] }}, {{ talk['timestamp'] }}</b></li>
+					<li><p><b>{{ talk['talk'] }}, {{ talk['prettyTime'] }}</b></p></li>
 				{% else %}
-					<li>{{ talk['talk'] }}, {{ talk['timestamp'] }}</li>
+					<li><p>{{ talk['talk'] }}, {{ talk['prettyTime'] }}</p></li>
 				{% endif %}
 			{% endfor %}
 		</ul>

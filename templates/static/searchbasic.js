@@ -3,14 +3,15 @@ window.onload = function(){ //runs main when the window has loaded
 }
 
 function main() {
-	var searchButton = document.getElementById("submitButton")
+	var searchForm = document.getElementById("searchForm")
 	var recentButton = document.getElementById("recent");
 
-	searchButton.addEventListener("click", search);
+	searchForm.addEventListener("submit", search);
 	recentButton.addEventListener("click", recent);
 }
 
 async function search(event) {
+	event.preventDefault();
 	var form = document.getElementById("searchForm");
 	var query = form['query'].value
 	var time = form['time'].value
@@ -22,7 +23,7 @@ async function search(event) {
 		'Accept': 'application/json',
 		'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({ "phrases" : [ {"speech" : query} ]})
+		body: JSON.stringify({ "time" : time, "phrases" : [ {"speech" : query} ]})
 		}).then((response) => response.json())
 		.then((data) => {
 		console.log('Success:', data);
@@ -31,7 +32,7 @@ async function search(event) {
 		for (var i = 0; i < data.length; i++){
 			var item = document.createElement("li");
 			var talk = document.createElement("p");
-			talk.innerHTML = "<a href=\"/timeflow?talkId=" + data[i]['_id'] + "&userId=" + data[i]['userId'] + "\">" + data[i]['talk'] + "</a>, " + data[i]['timestamp']
+			talk.innerHTML = "<a href=\"/timeflow?talkId=" + data[i]['_id'] + "&userId=" + data[i]['userId'] + "\">" + data[i]['talk'] + "</a>, " + data[i]['prettyTime']
 			//talk.innerHTML = data[i]['talk'] + ", " + data[i]['timestamp']
 			item.appendChild(talk)
 			results.appendChild(item);

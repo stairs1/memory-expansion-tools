@@ -90,7 +90,7 @@ class Database:
     def getMostRecent(self, userId):
         talksCollection = self.db.talks
 
-        resp = talksCollection.aggregate( [ {"$match" : { "userId" : "5e0e6e1807cdcbd6a097708d" }}, { "$sort" : { "timestamp" : -1 } }, { "$limit" : 1 } ] )
+        resp = talksCollection.aggregate( [ {"$match" : { "userId" : userId }}, { "$sort" : { "timestamp" : -1 } }, { "$limit" : 1 } ] )
         resp = talksCollection.find({ "userId" : userId }).sort( [ ("timestamp", -1) ]) #.limit(1)
 
         for item in resp: #little weird b/c resp is a pymongo-cursor
@@ -105,7 +105,6 @@ class Database:
             mostRecent = self.getMostRecent(userId)
             talkId = str(mostRecent['_id'])
             reqTime = mostRecent['timestamp']
-            print("sex {} {}".format(talkId, timeFrame))
         elif not self.talkExists(talkId): #if talkId is given, only proceed if it actually exists in database
             return None
         else: #if talksId is given to us AND it exists, get its time

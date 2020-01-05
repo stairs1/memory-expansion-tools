@@ -1,13 +1,15 @@
 from flask import render_template, make_response
 from flask_restful import Resource, reqparse, fields, marshal_with
 from db import Database
+from datetime import datetime
 
 class TimeFlow(Resource):
     talk_marshaller = {
             'userId' : fields.String,
             'talk' : fields.String(default='Anonymous User'),
             'timestamp' : fields.Float,
-            '_id' : fields.String
+            '_id' : fields.String,
+            'prettyTime' : fields.String
             }
     
     def __init__(self):
@@ -23,15 +25,13 @@ class TimeFlow(Resource):
         talkId = args['talkId']
         userId = args['userId']
         
-        print(talkId, userId)
-        print(type(talkId), userId)
-
         talks, talkId = self.db.timeFlow(userId, talkId, 30) #default value to pass is 86400 seconds in day
         if talks is None: talks = [] #TODO make this cleaner
-        
-        print(talkId, userId)
-        print(type(talkId), userId)
 
+        for talk in talks:
+            talk['prettyTime'] = datetime.fromtimestamp(talk['timestamp']).strftime("%a, %b %-d %-I:%-M %p")
+            
+        
         headers = {'Content-Type': 'text/html'}
         return make_response(render_template('timeflow.html', talks=talks, mainTalkId=talkId), 200, headers)
 
@@ -48,7 +48,10 @@ class TimeFlow(Resource):
         talkId = args['talkId']
         timeFrame = args['timeFrame']
 
-        result, talkId = self.db.timeFlow(temp_uid, talkId, timeFrame)
+        results, talkId = self.db.timeFlow(temp_uid, talkId, timeFrame)
+
+        for result in results:
+            result['prettyTime'] = datetime.fromtimestamp(result['timestamp']).strftime("%a, %b %-d %-I:%-M %p")
         
-        return result
+        return results
 
