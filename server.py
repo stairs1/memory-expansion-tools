@@ -9,14 +9,12 @@ from bson.json_util import dumps
 import json
 from time import sleep
 import os
+from datetime import datetime
 
 #custom stuff
 from db import Database
 from forms import SearchForm
 from api.SearchEndpoint import SearchPage
-import json
-from bson.json_util import dumps
-from datetime import datetime
 
 app = Flask(__name__)
 app.debug=True
@@ -73,46 +71,10 @@ def on_connect():
 def main_page():
     return render_template('convo.html')
 
-
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-
-#    if request.method == "POST":
-#        data = request.json
-#        if(data):
-#            print(data)
-#            r = db.search(data['userId'], data['query'])
-#            for item in r:
-#                print(item)
-#            return dumps(r)
-
-
-    temp_uid = "5e0f73467c1ffbca9ce828b2"
-    form = SearchForm()
-    if form.validate_on_submit():
-        data = form.search_item.data
-
-        print(data)
-        r = db.search(temp_uid, data)
-        for item in r:
-            print(item)
-            pretty_time = datetime.fromtimestamp(item['timestamp']).strftime("%a, %b %-d %-I:%-M %p")
-            flash(f"{item['talk']}   {pretty_time}")
-
-        results = [{
-           'words': item['talk'],
-           'time': datetime.fromtimestamp(item['timestamp']).strftime("%a, %b %-d %-I:%-M %p")
-        } for item in r]
-
-
-        return redirect('/search')
-        
-    return render_template('search.html', title='Search for ya', form=form)
-
-
 def start():
     db.connect()
     api.add_resource(SearchPage, '/search')
+    api.add_resource(TimeFlow, '/timeflow')
     app.run()
 
 if __name__ == "__main__":
