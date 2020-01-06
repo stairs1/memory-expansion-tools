@@ -15,6 +15,7 @@ from datetime import datetime
 from db import Database
 from forms import SearchForm
 from api.SearchEndpoint import SearchPage
+from api.TimeFlowEndpoint import TimeFlow
 
 app = Flask(__name__)
 app.debug=True
@@ -50,6 +51,10 @@ def remember(data):
             resp = db.addTalk(userId, speech, timestamp)
             print(resp)
 
+@app.route('/remember', methods=['GET', 'POST', 'PUT'])
+def test_remember():
+    print("I remember!")
+    return render_template('convo.html')
 
 def server_poll():
     global data_ready, db
@@ -75,7 +80,7 @@ def start():
     db.connect()
     api.add_resource(SearchPage, '/search')
     api.add_resource(TimeFlow, '/timeflow')
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
 
 if __name__ == "__main__":
     start()

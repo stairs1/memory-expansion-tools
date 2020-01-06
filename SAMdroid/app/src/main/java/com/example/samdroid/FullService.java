@@ -213,6 +213,7 @@ public class FullService extends IntentService {
                             continue;
                         }
                         SendUDP.send_phrase(vrresults);
+                        SendHTTP.send_phrase(vrresults);
                         counter+=1;
                         conversation.addPhrase(vrresults);
                         Intent intent1 = new Intent();
