@@ -14,3 +14,4 @@ L2: current day: next starts at 4am
 L3: current week: last week can be found in history
 
 Streaming the voicerec so there aren't pauses
+-socketio.on('disconnect') is a thing? will clean up socket when no one is connected
