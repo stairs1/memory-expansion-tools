@@ -12,7 +12,6 @@ import threading
 
 #custom stuff
 from db import Database
-from forms import SearchForm
 from api.SearchEndpoint import SearchPage
 from api.TimeFlowEndpoint import TimeFlow
 from api.MainEndpoint import Main
