@@ -2,16 +2,18 @@ from flask import render_template, make_response
 from flask_restful import Resource, reqparse, fields, marshal_with
 from db import Database
 from datetime import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class Remember(Resource):
     success_marshaller = {
             'success' : fields.Integer,
             }
     
-    def __init__(self, app, cache):
+    def __init__(self, app, cache, jwt):
         self.db = Database()
         self.db.connect()
         self.cache = cache
+        self.jwt = jwt
  
     def remember(self, userId, phraseList): 
         for phrase in phraseList:
@@ -29,23 +31,22 @@ class Remember(Resource):
             return True
 
     @marshal_with(success_marshaller)
+    @jwt_required
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('userId', type=str)
         parser.add_argument('type', type=type)
         parser.add_argument('phrases', type = list, location='json')
-        
-        temp_uid = "5e0e6e1807cdcbd6a097708d"
-        
         args = parser.parse_args()
         
-        userId = args['userId']
+        username = get_jwt_identity()
+        userId = str(self.db.nameToId(username))
+
         memType = args['type']
         phrases = args['phrases']
 
         self.cache.speech = phrases[0]['speech']
         self.cache.dataReady = True
         
-        self.remember(temp_uid, phrases)
+        self.remember(userId, phrases)
 
         return { "success" : 1 }

@@ -29,7 +29,27 @@ class Database:
         resp = usersCollection.insert_one(user)
         userId = resp.inserted_id
         return userId
-        
+    
+    def nameToId(self, username):
+        usersCollection = self.db.users
+        _id = usersCollection.find_one( { "username" : username } )
+        if not _id:
+            return False
+        return _id['_id']
+
+    def getPass(self, username):
+        userId = self.nameToId(username)
+
+        if not userId:
+            return None
+
+        if not self.userExists(userId):
+            return None
+        else:
+            usersCollection = self.db.users
+            apass = usersCollection.find_one( { "_id" : ObjectId(userId) } )['password']
+            return apass
+
     def addTalk(self, userId, words, timestamp):
         if not self.userExists(userId):
             return "No such user exists, exiting" #TODO throw error
@@ -61,8 +81,10 @@ class Database:
     
     def userExists(self, userId: str): 
         usersCollection = self.db.users
-        userId = ObjectId(userId)
-        resp = usersCollection.find_one({ "_id" : userId })
+        try:
+            resp = usersCollection.find_one({ "_id" : ObjectId(userId) })
+        except Exception as e: #almost certainly means the userid is not a valid "ObjectId" bson type
+            return False
 
         if resp is None:
             return False
@@ -78,13 +100,12 @@ class Database:
         else:    
             startTime = queryTime - timeRange
             endTime = queryTime + timeRange
-        
+
         resp = talksCollection.find({ "timestamp" : { "$gt" : startTime , "$lt": endTime }, "userId" : userId, "$text": {"$search" : query }} )
         
         data = list()
         for item in resp:
             data.append(item)
-        
         return data
 
     def getMostRecent(self, userId):
@@ -100,21 +121,19 @@ class Database:
         talksCollection = self.db.talks
         
         if not self.userExists(userId):
-            return None
+            return None, None
         if talkId is None: #if no talkId is give, use the most recent talk
             mostRecent = self.getMostRecent(userId)
             talkId = str(mostRecent['_id'])
             reqTime = mostRecent['timestamp']
         elif not self.talkExists(talkId): #if talkId is given, only proceed if it actually exists in database
-            return None
+            return None, None
         else: #if talksId is given to us AND it exists, get its time
             reqTime = talksCollection.find_one( { "_id" : ObjectId(talkId) }, { "timestamp" : 1, "_id" : 0 })['timestamp']
 
-        if timeFrame is None:
+        if timeFrame is None or timeFrame == -1:
             timeFrame = 30
 
-
-        
         startTime = reqTime - timeFrame
         endTime = reqTime + timeFrame
         

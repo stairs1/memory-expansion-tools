@@ -14,6 +14,9 @@
 					<input type="submit" id="submitButton" value="Search"><br/>
 				</form>
 			</td>
+			<td>
+				<input id="recent" value="See Most Recent" type="submit">
+			</td>
 			<td width="75%">
 				<input id="searchButton" value="Search something else" type="submit">
 			</td>
@@ -23,13 +26,6 @@
 	<div id="results">
 		<p>Results</p>
 		<ul id="resultsList">
-			{% for talk in talks %}
-				{% if talk['_id']|string == mainTalkId %}
-					<li><p><b>{{ talk['talk'] }}, {{ talk['prettyTime'] }}</b></p></li>
-				{% else %}
-					<li><p>{{ talk['talk'] }}, {{ talk['prettyTime'] }}</p></li>
-				{% endif %}
-			{% endfor %}
 		</ul>
 	</div>
 </body>
