@@ -31,16 +31,17 @@ api = Api(app) #flask_restful
 jwt = JWTManager(app) #flask_jwt_extended
 bcrypt = Bcrypt(app) #bcrypt password hashing
 
+cache = Cache()
+phraseSock = PhraseSocket(app, cache)
+
+#api.add_resource(Main, '/')
+api.add_resource(Login, '/', resource_class_args=[bcrypt, jwt])
+api.add_resource(SearchPage, '/search', resource_class_args=[jwt])
+api.add_resource(TimeFlow, '/timeflow', resource_class_args=[jwt])
+api.add_resource(Remember, '/remember', resource_class_args=[app, jwt, cache])
+
 def start():
-    cache = Cache()
-    phraseSock = PhraseSocket(app, cache)
-    
-    #api.add_resource(Main, '/')
-    api.add_resource(Login, '/', resource_class_args=[bcrypt, jwt])
-    api.add_resource(SearchPage, '/search', resource_class_args=[jwt])
-    api.add_resource(TimeFlow, '/timeflow', resource_class_args=[jwt])
-    api.add_resource(Remember, '/remember', resource_class_args=[app, jwt, cache])
-    app.run()
+        app.run()
 
 if __name__ == "__main__":
     start()
