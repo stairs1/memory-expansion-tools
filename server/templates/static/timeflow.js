@@ -27,7 +27,7 @@ async function submit() {
 	var urlParams = new URLSearchParams(window.location.search);
 	var talkId = urlParams.get('talkId');
 	var userId = urlParams.get('userId');
-	var token = getCookie("samcookie");
+	var token = getCookie("access_token_cookie");
 	console.log(talkId, userId);
 	fetch('/timeflow', {
 		method: 'POST',
@@ -65,7 +65,7 @@ async function seeRecent() {
 	}
 	var urlParams = new URLSearchParams(window.location.search);
 	var userId = urlParams.get('userId');
-	var token = getCookie("samcookie");
+	var token = getCookie("access_token_cookie");
 	fetch('/timeflow', {
 		method: 'POST',
 		headers: {

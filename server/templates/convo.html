@@ -100,6 +100,7 @@ td:first-child {
 <script src="static/js/react.js"></script>
 <script src="static/js/react-dom.js"></script>
 <script src="static/js/socket.io-1.0.0.js"></script>
+<script src="static/js/js.cookie.js"></script>
 <script>
     window.onload = function() {
 
@@ -108,21 +109,26 @@ td:first-child {
                 console.log('constructing...');
                 super();
                 this.state = {
-                    value: {'phrases': ['some philler for now'], 'stage': ['philler']}
+                    value: {'phrases': [''], 'stage': ['']}
                 };
+		this.connectSock()
             }
 
             componentDidMount() {
                 console.log('component did in fact mount...')
-                const socket = io();
-                socket.on("my_response", data => this.setState({value: data}));
-		socket.emit("join", { "userId":  "5e0f73467c1ffbca9ce828b2" });
             }
 
             render() {
                 console.log('rendering...');
             }
-        }
+ 
+		connectSock() {
+			const socket = io();
+			socket.on("my_response", data => this.setState({value: data}));
+			socket.emit("join", {data : "dgs"});
+			console.log("sock connected, room joined");
+		}
+	}
 
         class R1 extends SocketWrapper {
             constructor() {
@@ -219,11 +225,12 @@ td:first-child {
                     this.state.value.stage[2],
                     this.state.value.stage[3]
                 ];
-                var listitems = listy.map((num) => 
-                    React.createElement('li', {key : num}, num)
-                );
+		var listitems = listy.map((child, i) => 
+			React.createElement('li', {key : i}, child)
+		    );
+
                 return (
-                    React.createElement('ol', {key : "test1"}, listitems)
+                    React.createElement('ol', {key : "stage"}, listitems)
                 );
             }
         }
@@ -265,7 +272,9 @@ td:first-child {
             React.createElement(Stage),
             document.getElementById('stage')
         )
+
     }
+
 </script>
 
 </html>

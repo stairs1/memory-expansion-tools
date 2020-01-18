@@ -15,7 +15,7 @@ async function search(event) {
 	var form = document.getElementById("searchForm");
 	var query = form['query'].value
 	var time = form['time'].value
-	var token = getCookie("samcookie");
+	var token = getCookie("access_token_cookie");
 	console.log(form, query, time);
 	console.log(event);
 	fetch('/search', {

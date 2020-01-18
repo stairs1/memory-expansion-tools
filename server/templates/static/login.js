@@ -26,7 +26,7 @@ async function search(event) {
 		.then((data) => {
 			console.log('Success:', data);
 			if (data['success'] == 1){
-				setCookie('samcookie', data['token'], 1);
+				setCookie('access_token_cookie', data['token'], 1);
 				window.location = "search";
 			}
 			else {

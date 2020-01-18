@@ -15,6 +15,7 @@ class Remember(Resource):
         self.db.connect()
         self.jwt = jwt
         self.PhraseManager = PhraseManager
+        self.l1size = 4 #size of l1 cache
         self.command_manager = voice_commands.SpokenCommandManager()
  
     def remember(self, userId, phraseList): 
@@ -32,12 +33,14 @@ class Remember(Resource):
         else:
             return True
     
-    def handleCommands(self, userId, speech, stage, phrases):
+    def handleCommands(self, userId, speech, stage, phrasesPass):
         cmd_index, remove = self.command_manager.parse_command(speech)
+        phrases = phrasesPass.copy()
+
         if cmd_index is not None and remove is not None:
-            stage_len = len(stage)
+            stage_len = self.l1size #L1 stage size
             if remove is True and cmd_index < len(stage):
-                stage[cmd_index] = ""
+                stage.pop(cmd_index)
             elif remove is False and cmd_index < len(phrases):
                 stage.insert(0, phrases.pop(cmd_index))
                 if len(stage) > stage_len:

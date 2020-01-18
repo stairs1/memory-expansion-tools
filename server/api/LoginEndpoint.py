@@ -4,12 +4,12 @@ from db import Database
 from datetime import datetime
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, set_access_cookies
 
 class Login(Resource):
     login_marshaller = {
             'success' : fields.Integer,
-            'token' : fields.String, 
+            'token' : fields.String,
             'message' : fields.String
         }
 

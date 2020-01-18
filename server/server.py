@@ -30,6 +30,8 @@ api = Api(app) #flask_restful
 jwt = JWTManager(app) #flask_jwt_extended
 bcrypt = Bcrypt(app) #bcrypt password hashing
 
+app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
+
 phraseSock = PhraseSocket(app)
 api.add_resource(Login, '/', resource_class_args=[bcrypt, jwt])
 api.add_resource(L1, '/L1', resource_class_args=[jwt])

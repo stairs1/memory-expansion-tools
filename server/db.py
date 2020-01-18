@@ -13,6 +13,7 @@ class Database:
         mongo = MongoClient(self.mongoAddress)
         db = mongo.sam
         self.db = db
+        self.l1size = 4
 
     def getStatus(self):
         # Issue the serverStatus command and print the results
@@ -123,6 +124,9 @@ class Database:
         return recents
 
     def getPhrases(self, userId):
+        if not self.userExists(userId):
+            return Non
+        
         talks = self.getMostRecent(userId, 10)
         phrases = list()
         for item in talks:
@@ -134,6 +138,9 @@ class Database:
             return None
 
         stagesCollection = self.db.l1stages
+
+        for item in range(len(stage), self.l1size): #last
+            stage.append(None)
 
         stagesCollection.update( { "userId" : ObjectId(userId)}, { "$set" : { "stage" : {"1" : stage[0], "2" : stage[1], "3" : stage[2], "4" : stage[3]}}} )
    
