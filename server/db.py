@@ -108,14 +108,36 @@ class Database:
             data.append(item)
         return data
 
-    def getMostRecent(self, userId):
+    def getMostRecent(self, userId, num=1):
+        if not self.userExists(userId):
+            return None
+        
         talksCollection = self.db.talks
 
         resp = talksCollection.aggregate( [ {"$match" : { "userId" : userId }}, { "$sort" : { "timestamp" : -1 } }, { "$limit" : 1 } ] )
-        resp = talksCollection.find({ "userId" : userId }).sort( [ ("timestamp", -1) ]) #.limit(1)
-
+        resp = talksCollection.find({ "userId" : userId }).sort( [ ("timestamp", -1) ]).limit(num)
+    
+        recents = list()
         for item in resp: #little weird b/c resp is a pymongo-cursor
-            return item
+            recents.append(item)
+        return recents
+
+    def getPhrases(self, userId):
+        talks = self.getMostRecent(userId, 10)
+        phrases = list()
+        for item in talks:
+            phrases.append(item['talk'])
+        return phrases
+
+    def saveL1Stage(self, userId, stage):
+        if not self.userExists(userId):
+            return None
+
+        stagesCollection = self.db.l1stages
+
+        stagesCollection.update( { "userId" : ObjectId(userId)}, { "$set" : { "stage" : {"1" : stage[0], "2" : stage[1], "3" : stage[2], "4" : stage[3]}}} )
+   
+        return 1
 
     def timeFlow(self, userId, talkId=None, timeFrame=None):
         talksCollection = self.db.talks
@@ -124,8 +146,8 @@ class Database:
             return None, None
         if talkId is None: #if no talkId is give, use the most recent talk
             mostRecent = self.getMostRecent(userId)
-            talkId = str(mostRecent['_id'])
-            reqTime = mostRecent['timestamp']
+            talkId = str(mostRecent[0]['_id'])
+            reqTime = mostRecent[0]['timestamp']
         elif not self.talkExists(talkId): #if talkId is given, only proceed if it actually exists in database
             return None, None
         else: #if talksId is given to us AND it exists, get its time
@@ -145,17 +167,35 @@ class Database:
         
         return data, talkId
 
-        
+    def getL1Stage(self, userId):
+        if not self.userExists(userId):
+            return None
 
+        stagesCollection = self.db.l1stages
+
+        stageCur = stagesCollection.find_one( { "userId" : ObjectId(userId) } )
+        if stageCur is None:
+            return None
+        
+        stageCur = stageCur['stage']
+        stage = list()
+        for _, item in stageCur.items():
+            stage.append(item)
+
+        return stage
+        
 def main():
     db = Database()
 #    resp = db.addTalk("5e0e6e1807cdcbd6a097708d", "Hello, how is it going?", time.time())
     db.connect()
     #resp = db.search("5e0e6e1807cdcbd6a097708d", "jeremy", time.time()-100)
     #resp = db.timeFlow("5e0e6e1807cdcbd6a097708d", time.time(), 10000000)
-    resp = db.timeFlow("5e0e6e1807cdcbd6a097708d")
-    for item in resp:
-        print(resp)
+    #resp = db.timeFlow("5e0e6e1807cdcbd6a097708d")
+    #for item in resp:
+    #    print(resp)
+    a = db.getMostRecent("5e0e6e1807cdcbd6a097708d", 5)
+    print(a)
+
 
 if __name__ == "__main__":
     main()

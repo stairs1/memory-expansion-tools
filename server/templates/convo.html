@@ -116,6 +116,7 @@ td:first-child {
                 console.log('component did in fact mount...')
                 const socket = io();
                 socket.on("my_response", data => this.setState({value: data}));
+		socket.emit("join", { "userId":  "5e0f73467c1ffbca9ce828b2" });
             }
 
             render() {
@@ -209,6 +210,9 @@ td:first-child {
                 super();
             }
             render() {
+
+		const key = "emex";
+
                 var listy = [
                     this.state.value.stage[0],
                     this.state.value.stage[1],
@@ -216,10 +220,10 @@ td:first-child {
                     this.state.value.stage[3]
                 ];
                 var listitems = listy.map((num) => 
-                    React.createElement('li', null, num)
+                    React.createElement('li', {key : num}, num)
                 );
                 return (
-                    React.createElement('ol', null, listitems)
+                    React.createElement('ol', {key : "test1"}, listitems)
                 );
             }
         }

@@ -3,17 +3,19 @@ from flask_restful import Resource, reqparse, fields, marshal_with
 from db import Database
 from datetime import datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import voice_commands
 
 class Remember(Resource):
     success_marshaller = {
             'success' : fields.Integer,
             }
     
-    def __init__(self, app, cache, jwt):
+    def __init__(self, app, jwt, PhraseManager):
         self.db = Database()
         self.db.connect()
-        self.cache = cache
         self.jwt = jwt
+        self.PhraseManager = PhraseManager
+        self.command_manager = voice_commands.SpokenCommandManager()
  
     def remember(self, userId, phraseList): 
         for phrase in phraseList:
@@ -29,6 +31,19 @@ class Remember(Resource):
             return False
         else:
             return True
+    
+    def handleCommands(self, userId, speech, stage, phrases):
+        cmd_index, remove = self.command_manager.parse_command(speech)
+        if cmd_index is not None and remove is not None:
+            stage_len = len(stage)
+            if remove is True and cmd_index < len(stage):
+                stage[cmd_index] = ""
+            elif remove is False and cmd_index < len(phrases):
+                stage.insert(0, phrases.pop(cmd_index))
+                if len(stage) > stage_len:
+                    stage = stage[:stage_len]
+        self.db.saveL1Stage(userId, stage)
+        return stage
 
     @marshal_with(success_marshaller)
     @jwt_required
@@ -42,11 +57,14 @@ class Remember(Resource):
         userId = str(self.db.nameToId(username))
 
         memType = args['type']
-        phrases = args['phrases']
+        sentPhrases = args['phrases']
 
-        self.cache.speech = phrases[0]['speech']
-        self.cache.dataReady = True
+        self.remember(userId, sentPhrases)
         
-        self.remember(userId, phrases)
+        phrases = self.db.getPhrases(userId)
+        stage = self.db.getL1Stage(userId)
+        
+        stage = self.handleCommands(userId, sentPhrases[0]['speech'], stage, phrases)
+        self.PhraseManager.ping(userId, phrases, stage)
 
         return { "success" : 1 }

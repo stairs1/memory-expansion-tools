@@ -16,11 +16,10 @@ import threading
 from db import Database
 from api.SearchEndpoint import SearchPage
 from api.TimeFlowEndpoint import TimeFlow
-from api.MainEndpoint import Main
+from api.L1Endpoint import L1
 from api.RememberEndpoint import Remember
-from api.PhraseSocket import PhraseSocket
+from api.PhraseUpdate import PhraseSocket
 from api.LoginEndpoint import Login
-from Cache import Cache
 
 app = Flask(__name__)
 app.debug=True
@@ -31,17 +30,15 @@ api = Api(app) #flask_restful
 jwt = JWTManager(app) #flask_jwt_extended
 bcrypt = Bcrypt(app) #bcrypt password hashing
 
-cache = Cache()
-phraseSock = PhraseSocket(app, cache)
-
-#api.add_resource(Main, '/')
+phraseSock = PhraseSocket(app)
 api.add_resource(Login, '/', resource_class_args=[bcrypt, jwt])
+api.add_resource(L1, '/L1', resource_class_args=[jwt])
 api.add_resource(SearchPage, '/search', resource_class_args=[jwt])
 api.add_resource(TimeFlow, '/timeflow', resource_class_args=[jwt])
-api.add_resource(Remember, '/remember', resource_class_args=[app, jwt, cache])
+api.add_resource(Remember, '/remember', resource_class_args=[app, jwt, phraseSock])
 
 def start():
-        app.run()
+    app.run()
 
 if __name__ == "__main__":
     start()
