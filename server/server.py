@@ -18,9 +18,11 @@ from api.SearchEndpoint import SearchPage
 from api.TimeFlowEndpoint import TimeFlow
 from api.L1Endpoint import L1
 from api.RememberEndpoint import Remember
-from api.PhraseUpdate import PhraseSocket
 from api.LoginEndpoint import Login
+from api.RefreshTokenEndpoint import Refresh
+from api.PhraseUpdate import PhraseSocket
 
+#app setup 
 app = Flask(__name__)
 app.debug=True
 app._static_folder = os.path.abspath("templates/static/")
@@ -32,15 +34,18 @@ bcrypt = Bcrypt(app) #bcrypt password hashing
 
 app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
 
+#start/attach everything
 phraseSock = PhraseSocket(app)
 api.add_resource(Login, '/', resource_class_args=[bcrypt, jwt])
-api.add_resource(L1, '/L1', resource_class_args=[jwt])
+api.add_resource(L1, '/lone', resource_class_args=[jwt])
 api.add_resource(SearchPage, '/search', resource_class_args=[jwt])
 api.add_resource(TimeFlow, '/timeflow', resource_class_args=[jwt])
 api.add_resource(Remember, '/remember', resource_class_args=[app, jwt, phraseSock])
+api.add_resource(Refresh, '/refresh', resource_class_args=[jwt])
 
+#for dev
 def start():
-    app.run()
+    app.run(debug=True,host='0.0.0.0')
 
 if __name__ == "__main__":
     start()

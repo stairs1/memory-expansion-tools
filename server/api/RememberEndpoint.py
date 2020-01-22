@@ -38,6 +38,7 @@ class Remember(Resource):
         phrases = phrasesPass.copy()
 
         if cmd_index is not None and remove is not None:
+            cmd = True
             stage_len = self.l1size #L1 stage size
             if remove is True and cmd_index < len(stage):
                 stage.pop(cmd_index)
@@ -45,8 +46,11 @@ class Remember(Resource):
                 stage.insert(0, phrases.pop(cmd_index))
                 if len(stage) > stage_len:
                     stage = stage[:stage_len]
+        else:
+            cmd = False #this var represent whether or not this was a command
+
         self.db.saveL1Stage(userId, stage)
-        return stage
+        return stage, cmd
 
     @marshal_with(success_marshaller)
     @jwt_required
@@ -62,12 +66,15 @@ class Remember(Resource):
         memType = args['type']
         sentPhrases = args['phrases']
 
-        self.remember(userId, sentPhrases)
-        
         phrases = self.db.getPhrases(userId)
         stage = self.db.getL1Stage(userId)
         
-        stage = self.handleCommands(userId, sentPhrases[0]['speech'], stage, phrases)
+        stage, cmd = self.handleCommands(userId, sentPhrases[0]['speech'], stage, phrases)
+        if not cmd: 
+            self.remember(userId, sentPhrases)
+            phrases.insert(0, sentPhrases[0]['speech'])
+            phrases = phrases[:-1]
+
         self.PhraseManager.ping(userId, phrases, stage)
 
         return { "success" : 1 }

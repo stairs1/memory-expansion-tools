@@ -21,6 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -153,7 +154,7 @@ public class FullService extends IntentService {
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 200);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US.toString());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
         mSpeechRecognizer.startListening(recognizerIntent);
     }
@@ -212,8 +213,7 @@ public class FullService extends IntentService {
                         if(counter > 0){ //just take first element
                             continue;
                         }
-                        SendUDP.send_phrase(vrresults);
-                        SendHTTP.send_phrase(vrresults);
+                        SendHTTP.send_phrase(vrresults, this);
                         counter+=1;
                         conversation.addPhrase(vrresults);
                         Intent intent1 = new Intent();
