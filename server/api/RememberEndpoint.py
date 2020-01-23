@@ -53,9 +53,10 @@ class Remember(Resource):
         return stage, cmd
 
     def handleCacheCommands(self, phrasePass, userId):
-        cmd_index = self.command_manager.parse_cache_command(phrasePass['speech'])
-        if cmd_index == 2:
-            self.db.addTalk(userId, phrasePass['speech'], phrasePass['timestamp'], cache=2)
+        cmd_index, phrase = self.command_manager.parse_cache_command(phrasePass['speech'])
+        if cmd_index:
+            self.db.addTalk(userId, phrase, phrasePass['timestamp'], cache=cmd_index)
+        return phrase
 
 
     @marshal_with(success_marshaller)
@@ -74,16 +75,21 @@ class Remember(Resource):
 
         phrases = self.db.getPhrases(userId)
         stage = self.db.getL1Stage(userId)
-        
+       
+        #check if it is a command for our working memory (L1) stage
         stage, cmd = self.handleStageCommands(userId, sentPhrases[0]['speech'], stage, phrases)
 
+        #if not a stage command, check if it's a L2, L3, or annotation command
         if not cmd: 
-            self.remember(userId, sentPhrases)
+            phraseTmp = self.handleCacheCommands(sentPhrases[0], userId)
+            if phraseTmp is not None: #if it is a command, take the parsed phrase and use that instead
+                sentPhrases[0]['speech'] = phraseTmp
+            self.remember(userId, sentPhrases) #remember this in our talks database
+            #logic to move the phrases around so we don't have to query db again
             phrases.insert(0, sentPhrases[0]['speech'])
             phrases = phrases[:-1]
 
-        self.handleCacheCommands(sentPhrases[0], userId)
-        
+        #notify the PhraseManager so it can update the frontend if need be
         self.PhraseManager.ping(userId, phrases, stage)
 
         return { "success" : 1 }

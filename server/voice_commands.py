@@ -21,8 +21,16 @@ class SpokenCommandManager():
         self.cacheIndices = {
                 'level two cache' : 2,
                 'level 2 cache' : 2,
+                'level to cache' : 2,
                 'level two cash' : 2,
-                'level 2 cash' : 2
+                'level 2 cash' : 2,
+                'level to cash' : 2,
+                'level three cache' : 3,
+                'level 3 cache' : 3,
+                'level three cash' : 3,
+                'level 3 cash' : 3,
+                'annotation' : -1,
+                'havana station' : -1
                 }
  
         self.remove_command = 'vaseline'
@@ -37,7 +45,9 @@ class SpokenCommandManager():
     def parse_cache_command(self, text):
         for command in self.cacheIndices:
                 if command in text.lower():
-                    return self.cacheIndices[command]
-        return None
+                    last = command.split()[-1:][0]
+                    print(text, last)
+                    return self.cacheIndices[command], text[text.find(last)+len(last)+1:]
+        return None, None
 
             

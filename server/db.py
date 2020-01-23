@@ -57,6 +57,10 @@ class Database:
 
         if cache == 2:
             talksCollection = self.db.ltwotalks
+        elif cache == 3:
+            talksCollection = self.db.lthreetalks
+        elif cache == -1:
+            talksCollection = self.db.annotate
         else:
             talksCollection = self.db.talks
 
