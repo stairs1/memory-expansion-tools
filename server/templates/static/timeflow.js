@@ -7,7 +7,7 @@ function main() {
 	var searchButton = document.getElementById("searchButton")
 	var recentButton = document.getElementById("recent")
 	timeForm.addEventListener("submit", loadSubmit);
-	searchButton.addEventListener("click", search);
+	//searchButton.addEventListener("click", search);
 	recentButton.addEventListener("click", seeRecent);
 	submit();
 }

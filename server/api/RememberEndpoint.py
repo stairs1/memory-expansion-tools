@@ -33,8 +33,8 @@ class Remember(Resource):
         else:
             return True
     
-    def handleCommands(self, userId, speech, stage, phrasesPass):
-        cmd_index, remove = self.command_manager.parse_command(speech)
+    def handleStageCommands(self, userId, speech, stage, phrasesPass):
+        cmd_index, remove = self.command_manager.parse_stage_command(speech)
         phrases = phrasesPass.copy()
 
         if cmd_index is not None and remove is not None:
@@ -51,6 +51,12 @@ class Remember(Resource):
 
         self.db.saveL1Stage(userId, stage)
         return stage, cmd
+
+    def handleCacheCommands(self, phrasePass, userId):
+        cmd_index = self.command_manager.parse_cache_command(phrasePass['speech'])
+        if cmd_index == 2:
+            self.db.addTalk(userId, phrasePass['speech'], phrasePass['timestamp'], cache=2)
+
 
     @marshal_with(success_marshaller)
     @jwt_required
@@ -69,12 +75,15 @@ class Remember(Resource):
         phrases = self.db.getPhrases(userId)
         stage = self.db.getL1Stage(userId)
         
-        stage, cmd = self.handleCommands(userId, sentPhrases[0]['speech'], stage, phrases)
+        stage, cmd = self.handleStageCommands(userId, sentPhrases[0]['speech'], stage, phrases)
+
         if not cmd: 
             self.remember(userId, sentPhrases)
             phrases.insert(0, sentPhrases[0]['speech'])
             phrases = phrases[:-1]
 
+        self.handleCacheCommands(sentPhrases[0], userId)
+        
         self.PhraseManager.ping(userId, phrases, stage)
 
         return { "success" : 1 }

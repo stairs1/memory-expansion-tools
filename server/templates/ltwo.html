@@ -1,0 +1,32 @@
+<DOCTYPE html>
+<html>
+	<head>
+
+        <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div class="topnav">
+        <a href="lone">WorkingMem</a>
+        <a href="ltwo">L2 (day) Cache</a>
+        <a href="search">Search</a>
+        <a href="timeflow">Timeflow</a>
+        <a href="/">Login</a>
+    </div>
+	</head>
+	<h1>L2 Cache</h1>
+	
+	<hr/>
+	<div id="results">
+		<ul id="resultsList">
+            {% for item in data %}
+                <li>{{ item }}</li>
+            {% endfor %}
+		</ul>
+	</div>
+</body>
+
+
+
+</body>
+</html>
+

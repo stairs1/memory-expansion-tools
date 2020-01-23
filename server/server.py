@@ -20,6 +20,7 @@ from api.L1Endpoint import L1
 from api.RememberEndpoint import Remember
 from api.LoginEndpoint import Login
 from api.RefreshTokenEndpoint import Refresh
+from api.L2Endpoint import L2
 from api.PhraseUpdate import PhraseSocket
 
 #app setup 
@@ -41,6 +42,7 @@ api.add_resource(L1, '/lone', resource_class_args=[jwt])
 api.add_resource(SearchPage, '/search', resource_class_args=[jwt])
 api.add_resource(TimeFlow, '/timeflow', resource_class_args=[jwt])
 api.add_resource(Remember, '/remember', resource_class_args=[app, jwt, phraseSock])
+api.add_resource(L2, '/ltwo')
 api.add_resource(Refresh, '/refresh', resource_class_args=[jwt])
 
 #for dev

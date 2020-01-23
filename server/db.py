@@ -51,11 +51,15 @@ class Database:
             apass = usersCollection.find_one( { "_id" : ObjectId(userId) } )['password']
             return apass
 
-    def addTalk(self, userId, words, timestamp):
+    def addTalk(self, userId, words, timestamp, cache=0):
         if not self.userExists(userId):
             return "No such user exists, exiting" #TODO throw error
 
-        talksCollection = self.db.talks
+        if cache == 2:
+            talksCollection = self.db.ltwotalks
+        else:
+            talksCollection = self.db.talks
+
         talk = {
                 "userId" : userId,
                 "talk" : words,
@@ -145,6 +149,21 @@ class Database:
         stagesCollection.update( { "userId" : ObjectId(userId)}, { "$set" : { "stage" : {"1" : stage[0], "2" : stage[1], "3" : stage[2], "4" : stage[3]}}} )
    
         return 1
+
+    def getL2(self, userId, timestamp):
+        if not self.userExists(userId):
+            return None
+        
+        startTime = timestamp - 86400 #L2 lasts one day
+        ltwo = self.db.ltwotalks
+        print(startTime, userId)
+        resp = ltwo.find({ "timestamp" : { "$gt" : startTime }, "userId" : str(userId) } )
+
+        result = list()
+        for item in resp:
+            result.append(item['talk'])
+        return result
+
 
     def timeFlow(self, userId, talkId=None, timeFrame=None):
         talksCollection = self.db.talks
