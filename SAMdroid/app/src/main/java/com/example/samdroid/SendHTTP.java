@@ -113,23 +113,26 @@ public class SendHTTP {
             if ((code == 401) && (endpoint != "refresh")){
                 refresh(mContext);
                 Log.d(LOG_TAG, "********************************refresh run here************");
+                return sendPost(data, mContext, endpoint); //we have to make the request again after jwt token has refreshed
             }
+            else {
 
-            String result = new String();
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                result += inputLine;
-            }
-            Log.d(LOG_TAG, result);
-            try {
-                JSONObject resp = new JSONObject(result);
-                return resp;
-            } catch (JSONException e){
-                Log.d(LOG_TAG, e.toString());
-            }
+                String result = new String();
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    result += inputLine;
+                }
+                Log.d(LOG_TAG, result);
+                try {
+                    JSONObject resp = new JSONObject(result);
+                    return resp;
+                } catch (JSONException e) {
+                    Log.d(LOG_TAG, e.toString());
+                }
 
-            return null;
+                return null;
+            }
 
 		}
     

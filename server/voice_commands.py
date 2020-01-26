@@ -36,7 +36,8 @@ class SpokenCommandManager():
                 'l3 cash' : 3,
                 'l3 cache' : 3,
                 'annotation' : -1,
-                'havana station' : -1
+                'havana station' : -1, 
+                'to do cache' : -2
                 }
  
         self.remove_command = 'vaseline'

@@ -61,6 +61,8 @@ class Database:
             talksCollection = self.db.lthreetalks
         elif cache == -1:
             talksCollection = self.db.annotate
+        elif cache == -2:
+            talksCollection = self.db.todo
         else:
             talksCollection = self.db.talks
 
@@ -157,11 +159,15 @@ class Database:
         if not self.userExists(userId):
             return None
         
-        startTime = timestamp - 86400 #L2 lasts one day
         if level == 3:
             l = self.db.lthreetalks
+            startTime = timestamp - (86400 * 7) #L3 lasts one (week)
+        elif level == -2:
+            l = self.db.todo
+            startTime = 0 #todo lasts forever, until we remove item
         else:
             l = self.db.ltwotalks
+            startTime = timestamp - 86400 #L2 lasts one day
         
         print(startTime, userId)
         resp = l.find({ "timestamp" : { "$gt" : startTime }, "userId" : str(userId) } ).sort( [("timestamp", -1)] )

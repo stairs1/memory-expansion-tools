@@ -22,6 +22,7 @@ from api.LoginEndpoint import Login
 from api.RefreshTokenEndpoint import Refresh
 from api.L2Endpoint import L2
 from api.L3Endpoint import L3
+from api.ToDoEndpoint import ToDo
 from api.PhraseUpdate import PhraseSocket
 
 #app setup 
@@ -45,11 +46,12 @@ api.add_resource(TimeFlow, '/timeflow', resource_class_args=[jwt])
 api.add_resource(Remember, '/remember', resource_class_args=[app, jwt, phraseSock])
 api.add_resource(L2, '/ltwo')
 api.add_resource(L3, '/lthree')
+api.add_resource(ToDo, '/todo')
 api.add_resource(Refresh, '/refresh', resource_class_args=[jwt])
 
 #for dev
 def start():
-    app.run(debug=True,host='0.0.0.0')
+    app.run(debug=True)
 
 if __name__ == "__main__":
     start()

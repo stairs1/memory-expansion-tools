@@ -15,6 +15,5 @@ class L3(Resource):
         username = get_jwt_identity()
         userId = self.db.nameToId(username)
         cache = self.db.getL(userId, time.time(), level=3)
-        print(cache)
         headers = {'Content-Type': 'text/html'}
         return make_response(render_template('lthree.html', data=cache), 200, headers)

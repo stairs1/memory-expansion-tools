@@ -5,7 +5,7 @@ from datetime import datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import time
 
-class L2(Resource):
+class ToDo(Resource):
     def __init__(self):
         self.db = Database()
         self.db.connect()
@@ -14,6 +14,6 @@ class L2(Resource):
     def get(self):
         username = get_jwt_identity()
         userId = self.db.nameToId(username)
-        cache = self.db.getL(userId, time.time(), level=2)
+        cache = self.db.getL(userId, time.time(), level=-2)
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('ltwo.html', data=cache), 200, headers)
+        return make_response(render_template('todo.html', data=cache), 200, headers)
