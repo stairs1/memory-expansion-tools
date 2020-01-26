@@ -9,6 +9,8 @@ class SpokenCommandManager():
             'level 1 cache' : 0,
             'level one cash' : 0,
             'level 1 cash' : 0,
+            'l1 cash' : 0,
+            'l1 cache' : 0,
             'galileo': 1,
             'machiavelli': 2,
             'noam chomsky': 3,
@@ -25,10 +27,14 @@ class SpokenCommandManager():
                 'level two cash' : 2,
                 'level 2 cash' : 2,
                 'level to cash' : 2,
+                'l2 cash' : 2,
+                'l2 cache' : 2,
                 'level three cache' : 3,
                 'level 3 cache' : 3,
                 'level three cash' : 3,
                 'level 3 cash' : 3,
+                'l3 cash' : 3,
+                'l3 cache' : 3,
                 'annotation' : -1,
                 'havana station' : -1
                 }

@@ -123,7 +123,6 @@ class Database:
         
         talksCollection = self.db.talks
 
-        resp = talksCollection.aggregate( [ {"$match" : { "userId" : userId }}, { "$sort" : { "timestamp" : -1 } }, { "$limit" : 1 } ] )
         resp = talksCollection.find({ "userId" : userId }).sort( [ ("timestamp", -1) ]).limit(num)
     
         recents = list()
@@ -154,14 +153,18 @@ class Database:
    
         return 1
 
-    def getL2(self, userId, timestamp):
+    def getL(self, userId, timestamp, level=2):
         if not self.userExists(userId):
             return None
         
         startTime = timestamp - 86400 #L2 lasts one day
-        ltwo = self.db.ltwotalks
+        if level == 3:
+            l = self.db.lthreetalks
+        else:
+            l = self.db.ltwotalks
+        
         print(startTime, userId)
-        resp = ltwo.find({ "timestamp" : { "$gt" : startTime }, "userId" : str(userId) } )
+        resp = l.find({ "timestamp" : { "$gt" : startTime }, "userId" : str(userId) } ).sort( [("timestamp", -1)] )
 
         result = list()
         for item in resp:

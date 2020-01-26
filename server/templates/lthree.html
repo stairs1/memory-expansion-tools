@@ -1,7 +1,6 @@
 <DOCTYPE html>
 <html>
 	<head>
-		<script type='text/javascript' src='static/timeflow.js'></script>
 
         <link rel="stylesheet" href="static/styles.css">
 </head>
@@ -15,24 +14,14 @@
         <a href="/">Login</a>
     </div>
 	</head>
-	<h1>Surf through your memories</h1>
+	<h1>L3 Cache</h1>
 	
-	<table>
-		<tr>
-			<td width="25%">
-				<form id="timeForm">
-					<input name="timeFrame" id="timeFrame" type="text" placeholder="Time frame to see (seconds)..."></br>
-					<input type="submit" id="submitButton" value="Search"><br/>
-				</form>
-			</td>
-			<td>
-				<input id="recent" value="See Most Recent" type="submit">
-		</tr>
-	</table>
 	<hr/>
 	<div id="results">
-		<p>Results</p>
 		<ul id="resultsList">
+            {% for item in data %}
+                <li>{{ item }}</li>
+            {% endfor %}
 		</ul>
 	</div>
 </body>
