@@ -37,15 +37,20 @@ class SpokenCommandManager():
                 'l3 cache' : 3,
                 'annotation' : -1,
                 'havana station' : -1, 
-                'to do cache' : -2
+                'to do cache' : -2,
+                'to do cash' : -2
                 }
  
-        self.remove_command = 'vaseline'
+        self.remove_commands = ['vaseline', 'remove']
 
     def parse_stage_command(self, text):
+        remove = False
+        for rmCmd in self.remove_commands:
+            if rmCmd in text.lower():
+                remove = True
         for command in self.stageIndices:
             if command in text.lower():
-                return (self.stageIndices[command], self.remove_command in text.lower())
+                return (self.stageIndices[command], remove)
 
         return (None, None)
     
