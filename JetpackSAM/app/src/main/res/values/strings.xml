@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">JetpackSAM</string>
-    <string name="hint_phrase">Phrase...</string>
-    <string name="button_save">Save</string>
-    <string name="empty_not_saved">Phrase not saved because it is empty.</string>
-    <string name="title_activity_view_phrase">ViewPhraseActivity</string>
-</resources>
