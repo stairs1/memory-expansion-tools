@@ -4,50 +4,57 @@ from db import Database
 from datetime import datetime
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, set_access_cookies, create_refresh_token
+from flask_jwt_extended import (
+    JWTManager,
+    jwt_required,
+    create_access_token,
+    get_jwt_identity,
+    set_access_cookies,
+    create_refresh_token,
+)
+
 
 class Login(Resource):
     login_marshaller = {
-            'success' : fields.Integer,
-            'token' : fields.String,
-            'refreshToken' : fields.String,
-            'message' : fields.String
-        }
+        "success": fields.Integer,
+        "token": fields.String,
+        "refreshToken": fields.String,
+        "message": fields.String,
+    }
 
     def __init__(self, bcrypt, jwt):
         self.db = Database()
         self.db.connect()
         self.bcrypt = bcrypt
         self.jwt = jwt
-    
+
     def get(self):
-        headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('login.html'), 200, headers)
+        headers = {"Content-Type": "text/html"}
+        return make_response(render_template("login.html"), 200, headers)
 
     @marshal_with(login_marshaller)
-    def post(self): #NOTE that this is actually using username and not userId...
-        #define args to accepts from post
+    def post(self):  # NOTE that this is actually using username and not userId...
+        # define args to accepts from post
         parser = reqparse.RequestParser()
-        parser.add_argument('userId', type=str)
-        parser.add_argument('password', type=str)
+        parser.add_argument("userId", type=str)
+        parser.add_argument("password", type=str)
         args = parser.parse_args()
-        print(args)
-        #check if user exists and verify their password
-        userId = args['userId']
-        password = args['password']
-        
+        # check if user exists and verify their password
+        userId = args["userId"]
+        password = args["password"]
+
         apass = self.db.getPass(userId)
-       
+
         hashword = self.bcrypt.generate_password_hash(password)
         resp = dict()
-        
-        if not apass is None and self.bcrypt.check_password_hash(apass, password):
-            resp['success'] = 1
-            resp['token'] = create_access_token(identity=userId)
-            resp['refreshToken'] = create_refresh_token(identity=userId)
-            return resp
-        
-        resp['success'] = 0
-        resp['message'] = "Those credentials don't look right."
 
-        return resp #something went wrong
+        if not apass is None and self.bcrypt.check_password_hash(apass, password):
+            resp["success"] = 1
+            resp["token"] = create_access_token(identity=userId)
+            resp["refreshToken"] = create_refresh_token(identity=userId)
+            return resp
+
+        resp["success"] = 0
+        resp["message"] = "Those credentials don't look right."
+
+        return resp  # something went wrong

@@ -8,8 +8,7 @@ def noop(*args, **kwargs):
     pass
 
 
-class Register():
-    
+class Register:
     def __init__(self, display_callback=noop):
         self.on = False
         self.registry = []
@@ -26,14 +25,19 @@ class Register():
         Ensures registry does not exceed max length
         """
         tstart = time.time()
-        speech = subprocess.run(['termux-speech-to-text'], capture_output=True)
+        speech = subprocess.run(["termux-speech-to-text"], capture_output=True)
         tfin = time.time()
-        if speech.stdout != ( b'' or b'\n'):
+        if speech.stdout != (b"" or b"\n"):
             self.registry.insert(
-                0, {'speech': speech.stdout.decode("utf-8").rstrip(), 'start': tstart, 'end': tfin}
+                0,
+                {
+                    "speech": speech.stdout.decode("utf-8").rstrip(),
+                    "start": tstart,
+                    "end": tfin,
+                },
             )
         if len(self.registry) > self.registry_len:
-            self.registry = self.registry[:self.registry_len]
+            self.registry = self.registry[: self.registry_len]
 
     def record_loop(self):
         while self.on:
@@ -45,11 +49,10 @@ class Register():
             if len(self.registry) > 0:
                 self.display_callback(self.registry[0])
 
-            
-class WIFITransmitter():
 
+class WIFITransmitter:
     def __init__(self):
-        self.UDP_IP = '192.168.0.22'
+        self.UDP_IP = "192.168.0.22"
         self.UDP_port = 5005
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
