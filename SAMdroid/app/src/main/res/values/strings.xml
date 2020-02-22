@@ -6,4 +6,5 @@
     <string name="voice_recognition_off">Voice Recognition OFF</string>
     <string name="use_built_in_mic">Using built-in mic</string>
     <string name="voice_recognition_on">Voice Recognition ON</string>
+    <string name="default_server">https://sam.caydenpierce.com/</string>
 </resources>

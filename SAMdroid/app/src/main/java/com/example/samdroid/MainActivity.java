@@ -261,6 +261,8 @@ public class MainActivity extends AppCompatActivity {
                 .findViewById(R.id.username);
         final EditText password = (EditText) promptsView
                 .findViewById(R.id.password);
+        final EditText customServer = (EditText) promptsView
+                .findViewById(R.id.customServer);
 
         // set dialog message
         alertDialogBuilder
@@ -269,10 +271,12 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 // get user input and set it to result
-                                // edit text
-                                Log.d(LOG_TAG, "GANNNNNNNNNNNNNNNNNNNNNNNNNNGGGGGGGGGGGGGGGGGGG" +username.getText().toString() + password.getText().toString());
                                 Log.d(LOG_TAG, "login");
-                                Login loginTask = new Login(context, username.getText().toString(), password.getText().toString());
+                                Login loginTask = new Login(
+                                        context, username.getText().toString(),
+                                        password.getText().toString(),
+                                        customServer.getText().toString()
+                                );
                                 loginTask.execute(getApplicationContext());
                             }
                         })
@@ -290,12 +294,6 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
 
         }
-
-    /*public void login(View view){
-        Log.d(LOG_TAG, "login");
-        Login logintask = new Login(this);
-        logintask.execute(getApplicationContext());
-    }*/
 
    @Override
    public void onStop(){
