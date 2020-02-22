@@ -3,6 +3,7 @@ package com.example.samdroid;
 import android.content.Context;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
 import org.json.JSONArray;
@@ -23,42 +24,13 @@ import javax.net.ssl.SSLContext;
 public class SendHTTP {
 
     public static final String LOG_TAG = SendHTTP.class.getSimpleName();
-    public static String urlString = "https://sam.caydenpierce.com/"; //our backend server, for now
-    //public static String urlString = "http://192.168.0.17:5000/";
-    public static String un = "vimdaddy";
-   //
-//    public static String urlString = "http://wearcam.org/";
     public static OutputStream out = null;
-    public static InputStream in = null;
+    public static String urlString = "";
 
-    public static void send_help(String data, String endpoint) {
-        try {
-            URL url = null;
-            url = new URL(urlString);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//            out = new BufferedOutputStream(urlConnection.getOutputStream());
-//
-//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
-//            writer.write(data);
-//            writer.flush();
-//            writer.close();
-//            out.close();
-
-            in = new BufferedInputStream(urlConnection.getInputStream());
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            String stuff = reader.readLine();
-            Log.d(LOG_TAG, stuff);
-            reader.close();
-            in.close(); //            urlConnection.connect(); } catch (Exception e) { Log.d(LOG_TAG, e.toString());
-            //System.out.println(e.getMessage());
-        } catch (IOException e) {
-            Log.d(LOG_TAG, e.toString());
-        }
-    }
 
 	private static JSONObject sendPost(String data, Context mContext, String endpoint) throws IOException
 		{
+
 			URL url = new URL(urlString + endpoint);
 			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
@@ -71,19 +43,6 @@ public class SendHTTP {
             else {
                 token = getToken(mContext, true);
             }
-
-
-			/*try {
-                // Create the SSL connection
-                SSLContext sc;
-                sc = SSLContext.getInstance("TLS");
-                sc.init(null, null, new java.security.SecureRandom());
-                conn.setSSLSocketFactory(sc.getSocketFactory());
-            } catch (NoSuchAlgorithmException e) {
-			    Log.d(LOG_TAG, e.toString());
-            } catch (KeyManagementException e){
-			    Log.d(LOG_TAG, e.toString());
-            }*/
 
 			// JWT authentication header
 			String jwtToken = "Bearer " + token;

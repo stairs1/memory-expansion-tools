@@ -38,6 +38,7 @@ public class Conversation {
 
       try {
          File file = new File(context.getFilesDir(), PHRASE_STORAGE_FILENAME);
+         Log.d(LOG_TAG, "file dir: " + context.getFilesDir().toString());
          phrase_storage = new FileOutputStream(file, true);
       } catch (FileNotFoundException e) {
          e.printStackTrace();
@@ -68,6 +69,7 @@ public class Conversation {
       //Add all phrases to persistence layer with timestamp
       long unixTime = System.currentTimeMillis() / 1000;
       try {
+         Log.d(LOG_TAG, "writing to storage: " + phrase);
          phrase_storage.write((String.valueOf(unixTime) + ":" + phrase + "\n").getBytes());
       } catch (IOException e) {
          e.printStackTrace();
