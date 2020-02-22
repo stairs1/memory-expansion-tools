@@ -39,8 +39,18 @@
                 android:layout_height="wrap_content"
                 android:onClick="send_data"
                 android:id="@+id/button_send_data"
+                android:background="#42cbf5"
                 android:layout_gravity="right"
                 android:layout_weight="1" />
+        <Button
+            android:text="Login"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:onClick="login_dialog"
+            android:id="@+id/button_login"
+            android:background="#f5ec42"
+            android:layout_gravity="right"
+            android:layout_weight="1" />
 
     </android.widget.LinearLayout>
 

@@ -13,7 +13,11 @@ import java.util.Map;
 
 public class SendAllPhrases extends AsyncTask<Context, Void, Void> {
     public static final String LOG_TAG = SendAllPhrases.class.getSimpleName();
+    private Context mContext;
 
+    public SendAllPhrases(Context context){
+        mContext = context;
+    }
     @Override
     protected Void doInBackground(Context... contexts) {
         Map<String, String> phrase_time_pairs = new HashMap<String, String>();
@@ -32,10 +36,9 @@ public class SendAllPhrases extends AsyncTask<Context, Void, Void> {
                 phrases.put(phrase_time);
             }
             JSONObject json = new JSONObject();
-            json.put("userId", MainActivity.USER_ID);
             json.put("type", "talk");
             json.put("phrases", phrases);
-            SendUDP.send_json(json);
+            SendHTTP.send_phrase(json.toString(), mContext);
             Log.d(LOG_TAG, "--------------sent the following json------------");
             Log.d(LOG_TAG, json.toString());
         } catch (FileNotFoundException e) {

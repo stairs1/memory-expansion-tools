@@ -2,8 +2,20 @@
 <html>
 	<head>
 		<script type='text/javascript' src='static/timeflow.js'></script>
-	</head>
+
+        <link rel="stylesheet" href="static/styles.css">
+</head>
 <body>
+    <div class="topnav">
+        <a href="lone">WorkingMem</a>
+        <a href="ltwo">L2 (day) Cache</a>
+        <a href="lthree">L3 (week) Cache</a>
+        <a href="todo">ToDo Cache</a>
+        <a href="search">Search</a>
+        <a href="timeflow">Timeflow</a>
+        <a href="/">Login</a>
+    </div>
+	</head>
 	<h1>Surf through your memories</h1>
 	
 	<table>
@@ -14,22 +26,14 @@
 					<input type="submit" id="submitButton" value="Search"><br/>
 				</form>
 			</td>
-			<td width="75%">
-				<input id="searchButton" value="Search something else" type="submit">
-			</td>
+			<td>
+				<input id="recent" value="See Most Recent" type="submit">
 		</tr>
 	</table>
 	<hr/>
 	<div id="results">
 		<p>Results</p>
 		<ul id="resultsList">
-			{% for talk in talks %}
-				{% if talk['_id']|string == mainTalkId %}
-					<li><p><b>{{ talk['talk'] }}, {{ talk['prettyTime'] }}</b></p></li>
-				{% else %}
-					<li><p>{{ talk['talk'] }}, {{ talk['prettyTime'] }}</p></li>
-				{% endif %}
-			{% endfor %}
 		</ul>
 	</div>
 </body>

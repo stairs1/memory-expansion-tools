@@ -1,12 +1,17 @@
 package com.example.samdroid;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +28,8 @@ import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
-    public static final String USER_ID = "5e0f73467c1ffbca9ce828b2";
+    //public static final String USER_ID = "5e0f73467c1ffbca9ce828b2";
+    public static String token;
     public TextView phrase1;
     public TextView phrase2;
     public TextView phrase3;
@@ -185,11 +191,11 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.samdroid");
         registerReceiver(broadcastReceiver, intentFilter);
-        try {
-            server_state.setText("Server at " + InetAddress.getByAddress(SendUDP.address).toString().substring(1));
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        //try {
+        //    server_state.setText("Server at " + InetAddress.getByAddress(SendHTTP.urlString).toString().substring(1));
+        //} catch (UnknownHostException e) {
+         //   e.printStackTrace();
+        //}
 
         super.onStart();
     }
@@ -235,9 +241,61 @@ public class MainActivity extends AppCompatActivity {
 
    public void send_data(View view){
        Log.d(LOG_TAG, "send data");
-       SendAllPhrases sendalltask = new SendAllPhrases();
+       SendAllPhrases sendalltask = new SendAllPhrases(this);
        sendalltask.execute(getApplicationContext());
    }
+
+    public void login_dialog(View view){
+        // get prompts.xml view
+        final Context context = this;
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.login_layout, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText username = (EditText) promptsView
+                .findViewById(R.id.username);
+        final EditText password = (EditText) promptsView
+                .findViewById(R.id.password);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // get user input and set it to result
+                                // edit text
+                                Log.d(LOG_TAG, "GANNNNNNNNNNNNNNNNNNNNNNNNNNGGGGGGGGGGGGGGGGGGG" +username.getText().toString() + password.getText().toString());
+                                Log.d(LOG_TAG, "login");
+                                Login loginTask = new Login(context, username.getText().toString(), password.getText().toString());
+                                loginTask.execute(getApplicationContext());
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+        }
+
+    /*public void login(View view){
+        Log.d(LOG_TAG, "login");
+        Login logintask = new Login(this);
+        logintask.execute(getApplicationContext());
+    }*/
 
    @Override
    public void onStop(){

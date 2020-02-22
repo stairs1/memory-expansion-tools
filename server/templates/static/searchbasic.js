@@ -15,13 +15,15 @@ async function search(event) {
 	var form = document.getElementById("searchForm");
 	var query = form['query'].value
 	var time = form['time'].value
+	var token = getCookie("access_token_cookie");
 	console.log(form, query, time);
 	console.log(event);
 	fetch('/search', {
 		method: 'POST',
 		headers: {
 		'Accept': 'application/json',
-		'Content-Type': 'application/json'
+		'Content-Type': 'application/json',
+		'Authorization': "Bearer " + token
 		},
 		body: JSON.stringify({ "time" : time, "phrases" : [ {"speech" : query} ]})
 		}).then((response) => response.json())
@@ -40,7 +42,17 @@ async function search(event) {
 		});
 }
 
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
 
 async function recent(event) {
-	window.location = "/timeflow?userId=5e0e6e1807cdcbd6a097708d"
+	window.location = "/timeflow"
 }

@@ -31,7 +31,6 @@ td:first-child {
     height: 100%;
     width: 50%;
     position: fixed;
-    top: 0;
 }
 
 .left {
@@ -45,8 +44,19 @@ td:first-child {
 
 <head>
     <title>Hey guys</title>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
+    <div class="topnav">
+        <a href="lone">WorkingMem</a>
+        <a href="ltwo">L2 (day) Cache</a>
+        <a href="lthree">L3 (week) Cache</a>
+        <a href="todo">ToDo Cache</a>
+        <a href="search">Search</a>
+        <a href="timeflow">Timeflow</a>
+        <a href="/">Login</a>
+    </div>
+        <br />
     <div class='split left'>
         <h3>What I've been saying</h1>
         <hr>
@@ -100,6 +110,7 @@ td:first-child {
 <script src="static/js/react.js"></script>
 <script src="static/js/react-dom.js"></script>
 <script src="static/js/socket.io-1.0.0.js"></script>
+<script src="static/js/js.cookie.js"></script>
 <script>
     window.onload = function() {
 
@@ -108,20 +119,26 @@ td:first-child {
                 console.log('constructing...');
                 super();
                 this.state = {
-                    value: {'phrases': ['some philler for now'], 'stage': ['philler']}
+                    value: {'phrases': [''], 'stage': ['']}
                 };
+		this.connectSock()
             }
 
             componentDidMount() {
                 console.log('component did in fact mount...')
-                const socket = io();
-                socket.on("my_response", data => this.setState({value: data}));
             }
 
             render() {
                 console.log('rendering...');
             }
-        }
+ 
+		connectSock() {
+			const socket = io();
+			socket.on("my_response", data => this.setState({value: data}));
+			socket.emit("join", {data : "dgs"});
+			console.log("sock connected, room joined");
+		}
+	}
 
         class R1 extends SocketWrapper {
             constructor() {
@@ -209,17 +226,21 @@ td:first-child {
                 super();
             }
             render() {
+
+		const key = "emex";
+
                 var listy = [
                     this.state.value.stage[0],
                     this.state.value.stage[1],
                     this.state.value.stage[2],
                     this.state.value.stage[3]
                 ];
-                var listitems = listy.map((num) => 
-                    React.createElement('li', null, num)
-                );
+		var listitems = listy.map((child, i) => 
+			React.createElement('li', {key : i}, child)
+		    );
+
                 return (
-                    React.createElement('ol', null, listitems)
+                    React.createElement('ol', {key : "stage"}, listitems)
                 );
             }
         }
@@ -261,7 +282,9 @@ td:first-child {
             React.createElement(Stage),
             document.getElementById('stage')
         )
+
     }
+
 </script>
 
 </html>
