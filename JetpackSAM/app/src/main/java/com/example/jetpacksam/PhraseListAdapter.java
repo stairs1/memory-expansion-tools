@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PhraseListAdapter extends RecyclerView.Adapter<PhraseListAdapter.PhraseViewHolder> {
@@ -51,8 +54,9 @@ public class PhraseListAdapter extends RecyclerView.Adapter<PhraseListAdapter.Ph
     public void onBindViewHolder(PhraseViewHolder holder, int position) {
         if (mPhrases != null) {
             Phrase current = mPhrases.get(position);
-//            holder.bind(current, itemClickListener);
-            holder.phraseItemView.setText(String.valueOf(Instant.parse(current.getTimestamp()).getEpochSecond()) + ": " + current.getPhrase());
+            Instant stamp = Instant.parse(current.getTimestamp());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma").withZone(ZoneId.systemDefault());
+            holder.phraseItemView.setText(formatter.format(stamp) + " - " + current.getPhrase());
         } else {
             // Covers the case of data not being ready yet.
             holder.phraseItemView.setText("No Phrase");
