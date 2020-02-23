@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         // Get a new or existing ViewModel from the ViewModelProvider.
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
-        // The onChanged() method fires when the observed data changes and the activity is
-        // in the foreground.
         mPhraseViewModel.getAllPhrases().observe(this, new Observer<List<Phrase>>() {
             @Override
             public void onChanged(@Nullable final List<Phrase> phrases) {

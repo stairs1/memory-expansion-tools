@@ -15,10 +15,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 public class ViewPhraseActivity extends AppCompatActivity {
     public static final String LOG_TAG = ViewPhraseActivity.class.getName();
     private PhraseViewModel mPhraseViewModel;
     private TextView phraseholder;
+    private TextView dateholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,25 +36,20 @@ public class ViewPhraseActivity extends AppCompatActivity {
 
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
 
-        phraseholder = findViewById(R.id.textView2);
+        phraseholder = findViewById(R.id.phraseDetailPhrase);
+        dateholder = findViewById(R.id.phraseDetailDate);
 
         mPhraseViewModel.getPhrase(phraseID).observe(this, new Observer<Phrase>() {
             @Override
             public void onChanged(@Nullable final Phrase phrase) {
+                Instant stamp = Instant.parse(phrase.getTimestamp());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("- EEE, MMM d u. h:mm:ss a").withZone(ZoneId.systemDefault());
+                dateholder.setText(formatter.format(stamp));
                 phraseholder.setText(phrase.getPhrase());
             }
         });
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                finish();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
