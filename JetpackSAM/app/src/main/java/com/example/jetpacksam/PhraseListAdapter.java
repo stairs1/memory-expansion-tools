@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class PhraseListAdapter extends RecyclerView.Adapter<PhraseListAdapter.PhraseViewHolder> {
@@ -52,9 +50,9 @@ public class PhraseListAdapter extends RecyclerView.Adapter<PhraseListAdapter.Ph
     public void onBindViewHolder(PhraseViewHolder holder, int position) {
         if (mPhrases != null) {
             Phrase current = mPhrases.get(position);
-            Instant stamp = Instant.parse(current.getTimestamp());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("L-d hh:mma").withZone(ZoneId.systemDefault());
-            holder.phraseItemView.setText(formatter.format(stamp) + " - " + current.getPhrase());
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("L-d hh:mma").withZone(ZoneId.systemDefault());
+            SimpleDateFormat formatski = new SimpleDateFormat("L-d hh:mma");
+            holder.phraseItemView.setText(formatski.format(current.getTimestamp()) + " - " + current.getPhrase());
         } else {
             // Covers the case of data not being ready yet.
             holder.phraseItemView.setText("No Phrase");

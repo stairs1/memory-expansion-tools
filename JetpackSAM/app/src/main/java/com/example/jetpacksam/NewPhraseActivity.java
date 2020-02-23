@@ -8,7 +8,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.time.Instant;
+import java.util.Date;
 
 public class NewPhraseActivity extends AppCompatActivity {
 
@@ -30,10 +30,9 @@ public class NewPhraseActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(mEditPhraseView.getText())) {
                     setResult(RESULT_CANCELED, replyIntent);
                 } else {
-                    String word = mEditPhraseView.getText().toString();
-                    String time = Instant.now().toString();
-                    replyIntent.putExtra(EXTRA_WORD, word);
-                    replyIntent.putExtra(EXTRA_TIME, time);
+                    replyIntent.putExtra(EXTRA_WORD, mEditPhraseView.getText().toString());
+                    Date time = new Date();
+                    replyIntent.putExtra(EXTRA_TIME, time.getTime());
                     setResult(RESULT_OK, replyIntent);
                 }
                 finish();

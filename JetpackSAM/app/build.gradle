@@ -46,4 +46,10 @@ dependencies {
 
     // Testing
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
+
+    // Gson for serializing objects to database
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Play services
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 }

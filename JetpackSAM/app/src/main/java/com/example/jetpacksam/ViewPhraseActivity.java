@@ -1,9 +1,7 @@
 package com.example.jetpacksam;
 
+import android.location.Location;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,18 +10,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ViewPhraseActivity extends AppCompatActivity {
     public static final String LOG_TAG = ViewPhraseActivity.class.getName();
     private PhraseViewModel mPhraseViewModel;
     private TextView phraseholder;
     private TextView dateholder;
+    private TextView latitudeholder;
+    private TextView longitudeholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +34,22 @@ public class ViewPhraseActivity extends AppCompatActivity {
 
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
 
-        phraseholder = findViewById(R.id.phraseDetailPhrase);
-        dateholder = findViewById(R.id.phraseDetailDate);
+        phraseholder = findViewById(R.id.phrase_detail_phrase);
+        dateholder = findViewById(R.id.phrase_detail_date);
+        latitudeholder = findViewById(R.id.latitude_textfield);
+        longitudeholder = findViewById(R.id.longitude_textview);
 
         mPhraseViewModel.getPhrase(phraseID).observe(this, new Observer<Phrase>() {
             @Override
             public void onChanged(@Nullable final Phrase phrase) {
-                Instant stamp = Instant.parse(phrase.getTimestamp());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("- EEE, MMM d u. h:mm:ss a").withZone(ZoneId.systemDefault());
+                Date stamp = phrase.getTimestamp();
+                Location location = phrase.getLocation();
+                Log.d(LOG_TAG, "lon: " + String.valueOf(location.getLongitude()));
+                SimpleDateFormat formatter = new SimpleDateFormat("- EEE, MMM d u. h:mm:ss a");
                 dateholder.setText(formatter.format(stamp));
                 phraseholder.setText(phrase.getPhrase());
+                latitudeholder.setText(String.valueOf(location.getLatitude()));
+                longitudeholder.setText(String.valueOf(location.getLongitude()));
             }
         });
 

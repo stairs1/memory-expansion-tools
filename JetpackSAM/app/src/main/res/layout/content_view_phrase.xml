@@ -9,17 +9,17 @@
     tools:showIn="@layout/activity_view_phrase">
 
     <TextView
-        android:id="@+id/phraseDetailDate"
+        android:id="@+id/phrase_detail_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:text="The time"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phraseDetailPhrase" />
+        app:layout_constraintTop_toBottomOf="@+id/phrase_detail_phrase" />
 
     <TextView
-        android:id="@+id/phraseDetailPhrase"
+        android:id="@+id/phrase_detail_phrase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -29,4 +29,24 @@
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/latitude_textfield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Latitude"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phrase_detail_date" />
+
+    <TextView
+        android:id="@+id/longitude_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Longitude"
+        app:layout_constraintStart_toEndOf="@+id/latitude_textfield"
+        app:layout_constraintTop_toBottomOf="@+id/phrase_detail_date" />
 </androidx.constraintlayout.widget.ConstraintLayout>

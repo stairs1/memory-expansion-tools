@@ -6,12 +6,16 @@ import androidx.room.Dao;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Phrase.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class PhraseRoomDatabase extends RoomDatabase {
 
     public abstract PhraseDao phraseDao();
@@ -45,12 +49,12 @@ public abstract class PhraseRoomDatabase extends RoomDatabase {
 //                PhraseDao dao = INSTANCE.phraseDao();
 //                dao.deleteAll();
 //
-//                Phrase phrase = new Phrase("Hey hunny");
+//                Phrase phrase = new Phrase("Hey hunny", new Date());
 //                dao.insert(phrase);
-//                Phrase phrase_2 = new Phrase("wan sum fuk?");
+//                Phrase phrase_2 = new Phrase("wan sum fuk?", new Date());
 //                dao.insert(phrase_2);
 //            });
-            String bob = "hey";
+//            String bob = "hey";
         }
     };
 }

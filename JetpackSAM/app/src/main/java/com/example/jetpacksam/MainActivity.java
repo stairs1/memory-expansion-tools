@@ -1,6 +1,7 @@
 package com.example.jetpacksam;
 
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -8,12 +9,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public static final String LOG_TAG = MainActivity.class.getName();
 
     private PhraseViewModel mPhraseViewModel;
+    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     public void onClick(View view, Phrase phrase){
@@ -39,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final PhraseListAdapter adapter = new PhraseListAdapter(this);
@@ -73,10 +81,18 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (requestCode == NEW_PHRASE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 String words = data.getStringExtra(NewPhraseActivity.EXTRA_WORD);
-                String time = data.getStringExtra(NewPhraseActivity.EXTRA_TIME);
-                Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time);
-                Phrase phrase = new Phrase(words, time);
-                mPhraseViewModel.insert(phrase);
+                Date time = new Date(data.getLongExtra(NewPhraseActivity.EXTRA_TIME, 0));
+
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                Phrase phrase = new Phrase(words, time, location);
+                                Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time + " lat: " + location.getLatitude() + " lon: " + location.getLongitude());
+                                mPhraseViewModel.insert(phrase);
+                            }
+                        });
+
             } else {
                 Toast.makeText(
                         getApplicationContext(),
