@@ -15,8 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.List;
-
 public class ViewPhraseActivity extends AppCompatActivity {
     public static final String LOG_TAG = ViewPhraseActivity.class.getName();
     private PhraseViewModel mPhraseViewModel;
@@ -26,7 +24,7 @@ public class ViewPhraseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_phrase);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.view_phrase_toolbar);
         setSupportActionBar(toolbar);
         int phraseID = getIntent().getIntExtra("phrase", 0);
         Log.d(LOG_TAG, "Got id in other activity: " + phraseID);

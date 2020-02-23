@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="buttonLabel">#d3d3d3</color>
+    <color name="colorPrimary">#9fa8da</color>
+    <color name="colorPrimaryDark">#6f79a8</color>
+    <color name="colorAccent">#3d5afe</color>
+    <color name="buttonLabel">#eeff41</color>
+    <color name="colorPhraseBackground">#d1d9ff</color>
+    <color name="colorMainBackground">#e8eaf6</color>
 </resources>
