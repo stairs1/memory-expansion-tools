@@ -17,8 +17,8 @@ public interface PhraseDao {
     @Query("DELETE FROM PhraseTable")
     void deleteAll();
 
-    @Query("SELECT * from PhraseTable ORDER BY Phrase ASC")
-    LiveData<List<Phrase>> getAlphabetizedPhrases();
+    @Query("SELECT * from PhraseTable ORDER BY timestamp DESC")
+    LiveData<List<Phrase>> getAllPhrases();
 
     @Query("SELECT * FROM PhraseTable WHERE ID = :id")
     LiveData<Phrase> get_by_id(int id);

@@ -55,7 +55,7 @@ public class PhraseListAdapter extends RecyclerView.Adapter<PhraseListAdapter.Ph
         if (mPhrases != null) {
             Phrase current = mPhrases.get(position);
             Instant stamp = Instant.parse(current.getTimestamp());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma").withZone(ZoneId.systemDefault());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("L-d-hh:mma").withZone(ZoneId.systemDefault());
             holder.phraseItemView.setText(formatter.format(stamp) + " - " + current.getPhrase());
         } else {
             // Covers the case of data not being ready yet.

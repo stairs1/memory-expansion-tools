@@ -13,7 +13,7 @@ public class PhraseRepository {
     PhraseRepository(Application application) {
         PhraseRoomDatabase db = PhraseRoomDatabase.getDatabase(application);
         mPhraseDao = db.phraseDao();
-        mAllPhrases = mPhraseDao.getAlphabetizedPhrases();
+        mAllPhrases = mPhraseDao.getAllPhrases();
     }
 
     LiveData<List<Phrase>> getmAllPhrases() {
