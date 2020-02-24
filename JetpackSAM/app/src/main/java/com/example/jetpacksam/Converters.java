@@ -1,5 +1,6 @@
 package com.example.jetpacksam;
 
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
 
@@ -10,6 +11,7 @@ import com.google.gson.Gson;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Locale;
 
 public class Converters {
 
@@ -43,5 +45,15 @@ public class Converters {
         Gson gson = new Gson();
         return location == null ? null : gson.toJson(stash);
     }
+
+//    @TypeConverter
+//    public static Address fromAddress(String value){
+//        return value == null ? null : new Address(Locale.getDefault());
+//    }
+//
+//    @TypeConverter
+//    public static String toAddress(Address address){
+//        return address == null ? null : address.getAddressLine(0);
+//    }
 
 }

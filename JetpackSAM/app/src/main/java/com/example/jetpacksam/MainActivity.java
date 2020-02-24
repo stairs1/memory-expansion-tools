@@ -1,6 +1,8 @@
 package com.example.jetpacksam;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
@@ -18,9 +20,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener{
@@ -82,13 +85,21 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             if (resultCode == RESULT_OK) {
                 String words = data.getStringExtra(NewPhraseActivity.EXTRA_WORD);
                 Date time = new Date(data.getLongExtra(NewPhraseActivity.EXTRA_TIME, 0));
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-                                Phrase phrase = new Phrase(words, time, location);
-                                Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time + " lat: " + location.getLatitude() + " lon: " + location.getLongitude());
+                                List<Address> addresses = null;
+                                try {
+                                    addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                String address = addresses.get(0).getAddressLine(0);
+                                Phrase phrase = new Phrase(words, time, location, address);
+                                Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time + " lat: " + location.getLatitude() + " lon: " + location.getLongitude() + " address: " + phrase.getAddress());
                                 mPhraseViewModel.insert(phrase);
                             }
                         });

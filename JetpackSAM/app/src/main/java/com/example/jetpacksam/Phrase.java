@@ -1,5 +1,6 @@
 package com.example.jetpacksam;
 
+import android.location.Address;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -27,15 +28,20 @@ public class Phrase {
     @ColumnInfo(name = "location")
     private Location mLocation;
 
-    public Phrase(@NonNull String phrase, @NonNull Date timestamp, Location location) {
+    @ColumnInfo(name = "address")
+    private String mAddress;
+
+    public Phrase(@NonNull String phrase, @NonNull Date timestamp, Location location, String address) {
         this.mPhrase = phrase;
         this.mTimestamp = timestamp;
         this.mLocation = location;
+        this.mAddress = address;
     }
 
     public String getPhrase(){return this.mPhrase;}
     public Date getTimestamp(){return this.mTimestamp;}
     public Location getLocation(){return this.mLocation;}
+    public String getAddress(){return this.mAddress;}
     public int getID(){return this.mID;}
     public void setID(int id){this.mID = id;}
 }

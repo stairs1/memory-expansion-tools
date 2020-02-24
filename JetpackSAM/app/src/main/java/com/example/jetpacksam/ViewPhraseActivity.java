@@ -22,6 +22,7 @@ public class ViewPhraseActivity extends AppCompatActivity {
     private TextView dateholder;
     private TextView latitudeholder;
     private TextView longitudeholder;
+    private TextView addressholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +39,20 @@ public class ViewPhraseActivity extends AppCompatActivity {
         dateholder = findViewById(R.id.phrase_detail_date);
         latitudeholder = findViewById(R.id.latitude_textfield);
         longitudeholder = findViewById(R.id.longitude_textview);
+        addressholder = findViewById(R.id.address_textfield);
 
         mPhraseViewModel.getPhrase(phraseID).observe(this, new Observer<Phrase>() {
             @Override
             public void onChanged(@Nullable final Phrase phrase) {
                 Date stamp = phrase.getTimestamp();
                 Location location = phrase.getLocation();
-                Log.d(LOG_TAG, "lon: " + String.valueOf(location.getLongitude()));
-                SimpleDateFormat formatter = new SimpleDateFormat("- EEE, MMM d u. h:mm:ss a");
+                Log.d(LOG_TAG, "address: " + phrase.getAddress());
+                SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM d yyyy. h:mm:ss a");
                 dateholder.setText(formatter.format(stamp));
                 phraseholder.setText(phrase.getPhrase());
-                latitudeholder.setText(String.valueOf(location.getLatitude()));
-                longitudeholder.setText(String.valueOf(location.getLongitude()));
+                latitudeholder.setText("lat: " + String.valueOf(location.getLatitude()));
+                longitudeholder.setText("lon: " + String.valueOf(location.getLongitude()));
+                addressholder.setText(phrase.getAddress());
             }
         });
 
