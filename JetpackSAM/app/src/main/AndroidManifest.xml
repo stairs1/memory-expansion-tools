@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jetpacksam">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jetpacksam.MainActivity" />
+        </activity>
+        <activity
             android:name=".ViewPhraseActivity"
             android:label="@string/title_activity_view_phrase"
             android:parentActivityName=".MainActivity"
@@ -21,7 +29,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.jetpacksam.MainActivity" />
         </activity>
-        <activity android:name=".NewPhraseActivity"></activity>
+        <activity android:name=".NewPhraseActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -5,11 +5,15 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.appcompat.widget.Toolbar;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     public static final int NEW_PHRASE_ACTIVITY_REQUEST_CODE = 1;
     public static final int VIEW_PHRASE_ACTIVITY_REQUEST_CODE = 2;
+    public static final int SETTINGS_ACTIVITY_REQUEST_CODE = 2;
     public static final String LOG_TAG = MainActivity.class.getName();
 
     private PhraseViewModel mPhraseViewModel;
@@ -43,11 +48,31 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         startActivityForResult(intent, VIEW_PHRASE_ACTIVITY_REQUEST_CODE);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.main_actionbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch(item.getItemId()){
+            case R.id.action_settings:
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST_CODE);
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
