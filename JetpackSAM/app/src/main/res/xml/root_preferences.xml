@@ -18,6 +18,10 @@
 
     <PreferenceCategory app:title="@string/messages_header">
 
+        <SwitchPreference
+            app:key="record_audio"
+            app:title="@string/record_audio"/>
+
         <EditTextPreference
             app:key="signature"
             app:title="@string/signature_title"
