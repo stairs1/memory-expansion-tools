@@ -12,19 +12,22 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class RecordAudioIntentService extends IntentService {
     public static final String LOG_TAG = RecordAudioIntentService.class.getName();
     public static final String DIRNAME = "audio_logs";
-    private MediaRecorder recorder = null;
     public static String fileName = null;
+    private MediaRecorder recorder = null;
+    private boolean recording = false;
     File directory = null;
 
     @Override
     public void onCreate(){
         super.onCreate();
-        File directory = new File(getExternalFilesDir(null), "audio_logs");
+        directory = new File(getExternalFilesDir(null), DIRNAME);
         if(!directory.exists()){
             directory.mkdirs();
         }
@@ -39,7 +42,7 @@ public class RecordAudioIntentService extends IntentService {
         Log.d(LOG_TAG, "starting record audio service");
 
         // start in foreground
-        NotificationChannel channel = new NotificationChannel("13", "recording channel", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel("13", "recording channel", NotificationManager.IMPORTANCE_LOW);
         NotificationManager man = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         man.createNotificationChannel(channel);
         Notification notification = new Notification.Builder(this, "13")
@@ -49,22 +52,42 @@ public class RecordAudioIntentService extends IntentService {
                 .setOngoing(true)
                 .build();
 
-        //sleep for now so that it ends at some point
         startForeground(1, notification);
         startRecording();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        //save audio to file hourly, poll every minute
+        Instant ptime = Instant.now();
+        while(true){
+            Instant ntime = Instant.now();
+            if(!recording){
+               break;
+            }
+            if(ChronoUnit.MINUTES.between(ptime, ntime) >= 60){
+                Log.d(LOG_TAG, "creating new log file after time: " + ChronoUnit.MINUTES.between(ptime, ntime));
+                ptime = ntime;
+                stopRecording();
+                startRecording();
+            }
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public void onDestroy(){
         Log.d(LOG_TAG, "ending record audio service");
         stopRecording();
         stopForeground(Service.STOP_FOREGROUND_REMOVE);
-        stopSelf();
+        super.onDestroy();
     }
 
-
     private void startRecording() {
+        Date time = new Date();
+        fileName = directory.getAbsolutePath() + "/" + time.getTime() + ".3gp";
+
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -79,15 +102,27 @@ public class RecordAudioIntentService extends IntentService {
             Log.e(LOG_TAG, "prepare() failed");
         }
 
-        Date time = new Date();
-        fileName = directory.getAbsolutePath() + "/" + time.getTime() + ".3gp";
 
         recorder.start();
+        recording = true;
+        Log.d(LOG_TAG, "recording started");
     }
 
     private void stopRecording() {
-        recorder.stop();
-        recorder.release();
-        recorder = null;
+        Log.d(LOG_TAG, "stopRecording");
+        if(recording){
+            recording = false;
+            try{
+                recorder.stop();
+                recorder.release();
+            }
+            catch (java.lang.RuntimeException e){
+                Log.e(LOG_TAG, e.getMessage());
+
+                //stop called right after start. Clean up useless file
+                File file = new File(fileName);
+                file.delete();
+            }
+        }
     }
 }

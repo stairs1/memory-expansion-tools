@@ -47,6 +47,11 @@ public class SettingsActivity extends AppCompatActivity {
                         Intent intent = new Intent(getContext(), RecordAudioIntentService.class);
                         getContext().startService(intent);
                     }
+                    else if(newValue.toString().equals("false")){
+                        Log.d(LOG_TAG, "recording setting turned off, stopping");
+                        Intent intent = new Intent(getContext(), RecordAudioIntentService.class);
+                        getContext().stopService(intent);
+                    }
                     return true;
                 });
             }
