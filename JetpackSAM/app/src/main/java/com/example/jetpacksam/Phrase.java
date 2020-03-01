@@ -25,27 +25,34 @@ public class Phrase {
     @ColumnInfo(name = "timestamp")
     private Date timestamp;
 
+    @NonNull
+    @ColumnInfo(name = "medium")
+    private String medium;
+
     @ColumnInfo(name = "location")
     private Location location;
 
     @ColumnInfo(name = "address")
     private String address;
 
-    public Phrase(@NonNull String phrase, @NonNull Date timestamp, Location location, String address) {
+    public Phrase(@NonNull String phrase, @NonNull Date timestamp, @NonNull String medium, Location location, String address) {
         this.phrase = phrase;
         this.timestamp = timestamp;
+        this.medium = medium;
         this.location = location;
         this.address = address;
     }
 
     @Ignore
-     public Phrase(@NonNull String phrase, @NonNull Date timestamp){
+     public Phrase(@NonNull String phrase, @NonNull Date timestamp, @NonNull String medium){
         this.phrase = phrase;
         this.timestamp = timestamp;
+        this.medium = medium;
      }
 
     public String getPhrase(){return this.phrase;}
     public Date getTimestamp(){return this.timestamp;}
+    public String getMedium(){return this.medium;}
     public Location getLocation(){return this.location;}
     public void setLocation(Location location){this.location = location;}
     public String getAddress(){return this.address;}

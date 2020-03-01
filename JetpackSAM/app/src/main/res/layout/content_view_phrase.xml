@@ -10,17 +10,17 @@
     tools:showIn="@layout/activity_view_phrase">
 
     <TextView
-        android:id="@+id/phrase_detail_date"
+        android:id="@+id/date_textfield"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="The time"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phrase_detail_phrase" />
+        app:layout_constraintTop_toBottomOf="@+id/phrase_textfield" />
 
     <TextView
-        android:id="@+id/phrase_detail_phrase"
+        android:id="@+id/phrase_textfield"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The phrase"
@@ -55,6 +55,15 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phrase_detail_date" />
+        app:layout_constraintTop_toBottomOf="@+id/medium_textfield" />
+
+    <TextView
+        android:id="@+id/medium_textfield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_textfield" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

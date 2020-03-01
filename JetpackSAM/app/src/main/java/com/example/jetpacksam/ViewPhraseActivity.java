@@ -20,6 +20,7 @@ public class ViewPhraseActivity extends AppCompatActivity {
     private PhraseViewModel mPhraseViewModel;
     private TextView phraseholder;
     private TextView dateholder;
+    private TextView mediumholder;
     private TextView latitudeholder;
     private TextView longitudeholder;
     private TextView addressholder;
@@ -35,8 +36,9 @@ public class ViewPhraseActivity extends AppCompatActivity {
 
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
 
-        phraseholder = findViewById(R.id.phrase_detail_phrase);
-        dateholder = findViewById(R.id.phrase_detail_date);
+        phraseholder = findViewById(R.id.phrase_textfield);
+        dateholder = findViewById(R.id.date_textfield);
+        mediumholder = findViewById(R.id.medium_textfield);
         latitudeholder = findViewById(R.id.latitude_textfield);
         longitudeholder = findViewById(R.id.longitude_textview);
         addressholder = findViewById(R.id.address_textfield);
@@ -50,6 +52,7 @@ public class ViewPhraseActivity extends AppCompatActivity {
                 SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM d yyyy. h:mm:ss a");
                 dateholder.setText(formatter.format(stamp));
                 phraseholder.setText(phrase.getPhrase());
+                mediumholder.setText("Input medium: " + phrase.getMedium());
                 if(location != null) {
                     latitudeholder.setText("lat: " + location.getLatitude());
                     longitudeholder.setText("lon: " + location.getLongitude());
@@ -57,7 +60,6 @@ public class ViewPhraseActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

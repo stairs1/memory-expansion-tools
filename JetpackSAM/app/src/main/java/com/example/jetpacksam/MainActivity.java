@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (requestCode == NEW_PHRASE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 String words = data.getStringExtra(NewPhraseActivity.EXTRA_WORD);
-                mPhraseViewModel.addPhrase(words);
+                mPhraseViewModel.addPhrase(words, getString(R.string.medium_text));
             }
         }
     }

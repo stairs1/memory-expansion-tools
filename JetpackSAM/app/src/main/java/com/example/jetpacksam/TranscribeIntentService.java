@@ -174,16 +174,14 @@ public class TranscribeIntentService extends IntentService {
             public void onResults(Bundle results) {
                 //create phrase with the first (most likely) result only
                 List<String> sentences = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                PhraseCreator.create(sentences.get(0), getApplicationContext(), repo);
+                PhraseCreator.create(sentences.get(0), getString(R.string.medium_spoken), getApplicationContext(), repo);
 
                 Log.d(LOG_TAG, "got results and created phrase, calling startTranscription");
                 startTranscription();
             }
 
             @Override
-            public void onPartialResults(Bundle partialResults) {
-
-            }
+            public void onPartialResults(Bundle partialResults) { }
 
             @Override
             public void onEvent(int eventType, Bundle params) { }

@@ -18,11 +18,11 @@ import java.util.Locale;
 public class PhraseCreator {
     public static final String LOG_TAG = PhraseCreator.class.getName();
 
-    public static void create(String words, Context context, PhraseRepository repo) {
+    public static void create(String words, String medium, Context context, PhraseRepository repo) {
 
         Date time = new Date();
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        Phrase phrase = new Phrase(words, time);
+        Phrase phrase = new Phrase(words, time, medium);
 
         // Using getLastLocation is not always totally accurate. Good to update this at some point.
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);

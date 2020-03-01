@@ -6,6 +6,8 @@
     <string name="title_activity_view_phrase">ViewPhraseActivity</string>
     <string name="action_settings">settings</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="medium_text">text</string>
+    <string name="medium_spoken">spoken</string>
 
     <!-- Preference Titles -->
     <string name="data_streams_header">Data Streams</string>
