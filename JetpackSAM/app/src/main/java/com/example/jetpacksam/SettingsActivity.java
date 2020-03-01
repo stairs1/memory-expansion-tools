@@ -63,12 +63,13 @@ public class SettingsActivity extends AppCompatActivity {
                 transcriptionSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     if(newValue.toString().equals("true")){
                         Log.d(LOG_TAG, "transcription turned on, starting foreground service");
-//                        Intent intent = new Intent(context)
-
+                        Intent intent = new Intent(context, TranscribeIntentService.class);
+                        context.startService(intent);
                     }
                     else if(newValue.toString().equals("false")){
-                        Log.d(LOG_TAG, "transcription turned on, stopping foreground service");
-
+                        Log.d(LOG_TAG, "transcription turned off, stopping foreground service");
+                        Intent intent = new Intent(context, TranscribeIntentService.class);
+                        context.stopService(intent);
                     }
                     return true;
                 });
