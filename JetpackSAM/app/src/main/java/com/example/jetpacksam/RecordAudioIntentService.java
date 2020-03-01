@@ -94,7 +94,7 @@ public class RecordAudioIntentService extends IntentService {
         recorder.setOutputFile(fileName);
         recorder.setAudioSamplingRate(16000);
         recorder.setAudioChannels(1);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
 
         try {
             recorder.prepare();

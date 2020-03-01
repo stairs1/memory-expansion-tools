@@ -11,16 +11,12 @@
     <string name="data_streams_header">Data Streams</string>
     <string name="server_header">Server</string>
 
-    <!-- Messages Preferences -->
+    <!-- Data Stream Preferences -->
     <string name="record_audio">Record Audio</string>
     <string name="transcribe">Live Transcription</string>
 
-    <!-- Sync Preferences -->
+    <!-- Server Preferences -->
     <string name="sync_title">Paired Remote Server</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="server_address">Server Address</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="default_server_address">https://sam.caydenpierce.com</string>
 </resources>
