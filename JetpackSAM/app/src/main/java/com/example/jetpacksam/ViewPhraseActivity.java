@@ -46,13 +46,15 @@ public class ViewPhraseActivity extends AppCompatActivity {
             public void onChanged(@Nullable final Phrase phrase) {
                 Date stamp = phrase.getTimestamp();
                 Location location = phrase.getLocation();
-                Log.d(LOG_TAG, "address: " + phrase.getAddress());
+                Log.d(LOG_TAG, "address: " + phrase.getAddress() + "location: " + location);
                 SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM d yyyy. h:mm:ss a");
                 dateholder.setText(formatter.format(stamp));
                 phraseholder.setText(phrase.getPhrase());
-                latitudeholder.setText("lat: " + String.valueOf(location.getLatitude()));
-                longitudeholder.setText("lon: " + String.valueOf(location.getLongitude()));
-                addressholder.setText(phrase.getAddress());
+                if(location != null) {
+                    latitudeholder.setText("lat: " + location.getLatitude());
+                    longitudeholder.setText("lon: " + location.getLongitude());
+                    addressholder.setText(phrase.getAddress());
+                }
             }
         });
 

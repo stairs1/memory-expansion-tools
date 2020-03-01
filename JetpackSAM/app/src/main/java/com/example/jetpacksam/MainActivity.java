@@ -1,14 +1,9 @@
 package com.example.jetpacksam;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,15 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener{
@@ -38,13 +27,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public static final String LOG_TAG = MainActivity.class.getName();
 
     private PhraseViewModel mPhraseViewModel;
-    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     public void onClick(View view, Phrase phrase){
-        Log.d(LOG_TAG, "we got a click! This is what the phrase was: " + phrase.getPhrase() + " ---Primary key: " + phrase.getID());
         Intent intent = new Intent(MainActivity.this, ViewPhraseActivity.class);
-        intent.putExtra("phrase", phrase.getID());
+        intent.putExtra("phrase", phrase.getId());
         startActivityForResult(intent, VIEW_PHRASE_ACTIVITY_REQUEST_CODE);
     }
 
@@ -73,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final PhraseListAdapter adapter = new PhraseListAdapter(this);
@@ -109,31 +94,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (requestCode == NEW_PHRASE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 String words = data.getStringExtra(NewPhraseActivity.EXTRA_WORD);
-                Date time = new Date(data.getLongExtra(NewPhraseActivity.EXTRA_TIME, 0));
-                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                List<Address> addresses = null;
-                                try {
-                                    addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                String address = addresses.get(0).getAddressLine(0);
-                                Phrase phrase = new Phrase(words, time, location, address);
-                                Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time + " lat: " + location.getLatitude() + " lon: " + location.getLongitude() + " address: " + phrase.getAddress());
-                                mPhraseViewModel.insert(phrase);
-                            }
-                        });
-
-            } else {
-                Toast.makeText(
-                        getApplicationContext(),
-                        R.string.empty_not_saved,
-                        Toast.LENGTH_LONG).show();
+                mPhraseViewModel.addPhrase(words);
             }
         }
     }

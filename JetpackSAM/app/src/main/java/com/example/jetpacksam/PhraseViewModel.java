@@ -21,5 +21,7 @@ public class PhraseViewModel extends AndroidViewModel {
     LiveData<List<Phrase>> getAllPhrases() {return mAllPhrases;}
     LiveData<Phrase> getPhrase(int id) {return mRepository.getPhrase(id);}
 
-    public void insert(Phrase phrase) { mRepository.insert(phrase);}
+    public void addPhrase(String word) {
+        PhraseCreator.create(word, getApplication().getApplicationContext(), mRepository);
+    }
 }

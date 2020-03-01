@@ -26,6 +26,12 @@ public class PhraseRepository {
         });
     }
 
+    void update(Phrase phrase) {
+        PhraseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mPhraseDao.update(phrase);
+        });
+    }
+
     LiveData<Phrase> getPhrase(int id) {
         return mPhraseDao.get_by_id(id);
     }
