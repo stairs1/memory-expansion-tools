@@ -1,0 +1,30 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/data_streams_header">
+
+        <SwitchPreference
+            app:key="record_audio"
+            app:title="@string/record_audio"/>
+
+        <SwitchPreference
+            app:key="transcribe"
+            app:title="@string/transcribe"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/server_header">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="@string/sync_title" />
+
+        <EditTextPreference
+            app:key="server_address"
+            app:title="@string/server_address"
+            app:dependency="sync"
+            app:defaultValue="@string/default_server_address"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
