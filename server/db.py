@@ -21,9 +21,11 @@ class Database:
         serverStatusResult = self.db.command("serverStatus")
         return serverStatusResult
 
-    def addUser(self, name, email):
+    def addUser(self, name, username, email, password):
+        if self.userExists(username):
+            return None
         usersCollection = self.db.users
-        user = {"name": name, "email": email, "timestamp": time.time()}
+        user = {"name": name, "email": email, "timestamp": time.time(), "password": password, "username": username}
         resp = usersCollection.insert_one(user)
         userId = resp.inserted_id
         return userId
