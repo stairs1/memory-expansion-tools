@@ -1,4 +1,4 @@
-# SAMdroid
+# memory-prosthetic-tools
 
 ## Mongo Setup
 
