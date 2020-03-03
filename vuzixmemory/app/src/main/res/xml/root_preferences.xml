@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/transcription_settings_header">
+
+        <SwitchPreferenceCompat
+            app:key="transcription_switch"
+            app:title="@string/transcription_switch_title" />
+
+        <SwitchPreferenceCompat
+            app:key="server_switch"
+            app:title="@string/server_switch_title"/>
+
+        <EditTextPreference
+            app:key="server_address"
+            app:title="@string/default_server_title"
+            app:defaultValue="@string/default_server"
+            app:dependency="server_switch"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">vuzix-memory</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="transcription_settings_header">Settings</string>
+
+    <!-- transcription preferences -->
+    <string name="default_server">192.168.0.159</string>
+    <string name="default_server_title">Server Address</string>
+    <string name="transcription_switch_title">Live Transcription</string>
+    <string name="server_switch_title">Send to Server</string>
+
+</resources>
