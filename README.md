@@ -9,7 +9,7 @@ The system adds a new memory feature to the human mind, a mid-term memory, that 
 ## How It Works  
 
 The key mental upgrades this app currently provides you are:  
--**offloading** -> when you have many ideas flowing through your mind, put it all into the cache. This creates a mind like water, allowing you to flow between ideas and tasks without worrying about losing the previous ideas, as you can trust they are being saved into the cache by the system
+-**offloading** -> when you have many ideas flowing through your mind, put it all into the cache. This creates a mind like water, allowing you to flow between ideas and tasks without worrying about losing the previous ideas, as you can trust they are being saved into the cache by the system  
 -**onloading** -> when you are about to go for a walk to think, or you are sitting down to contemplate, or you want to write out and explore your ideas, then it is time to pull up the cache. This cache review period involves you reading quick snippets from the past 24 hours (the contents of the cache) and instantly *onloading* mental states that you had been in earlier that day, or late the day before. This allows you to instantly jump back to where you left off in a train of thought, an idea, or a problem.
 
 ## How To Use
@@ -26,18 +26,18 @@ Download from the Google Play Store (launching by March 16th). Or just open the 
 
 ### Server
 This has only been run/tested on an Ubuntu 18.04 LTS box.
-### Apache Setup  
+#### Apache Setup  
 
--Install and configure apache2
--Setup SSL with certbot - https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
--create a new virtualhost for same using something like the sam-apache.conf in the /server directory. Point to the WSGI file given here in the root / as sam.wsgi
--enable the site with `a2ensite <name>`
+-Install and configure apache2  
+-Setup SSL with certbot - https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04  
+-create a new virtualhost for same using something like the sam-apache.conf in the /server directory. Point to the WSGI file given here in the root / as sam.wsgi  
+-enable the site with `a2ensite <name>`  
 -restart apache with `sudo systemctl restart apache2`  
 
-### Flask Setup
--install Python3
--install pip3
--setup venv and activate virtualenv
+#### Flask Setup
+-install Python3  
+-install pip3  
+-setup venv and activate virtualenv  
 ```
 pip3 install virtualenv; python3 -m virtualenv venv; source venv/bin/activate
 ```  
@@ -46,10 +46,10 @@ pip3 install virtualenv; python3 -m virtualenv venv; source venv/bin/activate
 pip3 install -r requirements.txt
 ```  
 
-### Mongo Setup
+#### Mongo Setup
 
 -install Mongo and setup to run as a system d service: https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04
-#### Setup text indices for search
+##### Setup text indices for search
 
 (this may have to be done after initializing the database with a talk request first)
 
