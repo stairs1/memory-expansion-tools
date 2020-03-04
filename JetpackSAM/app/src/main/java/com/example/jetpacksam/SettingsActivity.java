@@ -36,6 +36,11 @@ public class SettingsActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "create prefs");
             createRecordAudioSwitchListener(findPreference("record_audio"));
             createTranscriptionSwitchListener(findPreference("transcribe"));
+            SwitchPreference bluetoothHeadsetSwitch = findPreference("bluetooth_headset");
+            createBluetoothHeadsetSwitchListener(bluetoothHeadsetSwitch);
+            BluetoothHeadsetManager.noHeadsetsCallback = (() -> {
+                bluetoothHeadsetSwitch.setChecked(false);
+            });
         }
 
         private void createRecordAudioSwitchListener(SwitchPreference audioSwitch){
@@ -75,6 +80,27 @@ public class SettingsActivity extends AppCompatActivity {
                 });
             }
 
+        }
+
+
+        private void createBluetoothHeadsetSwitchListener(SwitchPreference bluetoothHeadsetSwitch){
+            if (bluetoothHeadsetSwitch != null){
+                Context context = getContext();
+                bluetoothHeadsetSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    if(newValue.toString().equals("true")){
+                        if(BluetoothHeadsetManager.connectHeadset(context.getApplicationContext())){
+                            Log.d(LOG_TAG, "bluetooth headset connection turned on");
+                        }
+                    }
+                    else if(newValue.toString().equals("false")){
+                        Log.d(LOG_TAG, "bluetooth headset connection turned off");
+                        BluetoothHeadsetManager.disconnectHeadset();
+
+                        //TODO headset may still be used after this is turned off.
+                    }
+                    return true;
+                });
+            }
         }
     }
 }

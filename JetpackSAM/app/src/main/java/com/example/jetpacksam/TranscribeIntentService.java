@@ -67,6 +67,7 @@ public class TranscribeIntentService extends IntentService {
         super.onDestroy();
     }
 
+
     private void setupTranscription(){
         if(!transcription_on){
             transcription_on = true;

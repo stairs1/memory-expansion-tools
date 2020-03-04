@@ -14,7 +14,7 @@
 
     <PreferenceCategory app:title="@string/server_header">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             app:key="sync"
             app:title="@string/sync_title" />
 
@@ -26,5 +26,14 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/wearable_devices_header">
+
+        <SwitchPreference
+            app:key="bluetooth_headset"
+            app:title="@string/bluetooth_headset"/>
+
+    </PreferenceCategory>
+
 
 </PreferenceScreen>

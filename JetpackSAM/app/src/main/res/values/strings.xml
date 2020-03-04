@@ -12,6 +12,7 @@
     <!-- Preference Titles -->
     <string name="data_streams_header">Data Streams</string>
     <string name="server_header">Server</string>
+    <string name="wearable_devices_header">Wearables</string>
 
     <!-- Data Stream Preferences -->
     <string name="record_audio">Record Audio</string>
@@ -21,4 +22,8 @@
     <string name="sync_title">Paired Remote Server</string>
     <string name="server_address">Server Address</string>
     <string name="default_server_address">https://sam.caydenpierce.com</string>
+
+    <!-- Wearables Preferences -->
+    <string name="bluetooth_headset">Bluetooth Headset</string>
+
 </resources>
