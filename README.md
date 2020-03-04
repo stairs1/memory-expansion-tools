@@ -1,4 +1,4 @@
-# memory-prosthetic-tools
+# memory-expansion-tools
 
 ## Mongo Setup
 
