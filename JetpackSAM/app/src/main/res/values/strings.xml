@@ -23,9 +23,10 @@
     <string name="server_address">Server Address</string>
     <string name="default_server_address">https://memoryexpansiontools.com</string>
 
-    <!-- User Preferences -->
+    <!-- User -->
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="login_message">Welcome to your Expanded Memory. Please log in.</string>
 
     <!-- Wearables Preferences -->
     <string name="bluetooth_headset">Bluetooth Headset</string>
