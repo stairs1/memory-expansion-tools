@@ -1,10 +1,13 @@
 package com.example.jetpacksam;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -49,6 +52,7 @@ public class PhraseCreator {
                 Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time.getTime() + " lat: " + location.getLatitude() + " lon: " + location.getLongitude() + " address: " + address);
                 repo.insert(phrase);
                 server.sendPhrase(phrase); //testing server adapter
+
             }
             else{
                 Log.d(LOG_TAG, "location returned null, inserting phrase without location");

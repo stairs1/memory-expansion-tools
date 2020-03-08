@@ -3,6 +3,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,18 +37,29 @@ public class ServerAdapter {
         // Instantiate the RequestQueue.
         lcontext = context;
         queue = Volley.newRequestQueue(lcontext);
-        url = "https://memoryexpansiontools.com/";
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(lcontext);
+        url = sharedPreferences.getString("server_address", "https://memoryexpansiontools.com");
         retry = 0;
     }
 
     public void sendPhrase(Phrase phrase) {
+
+        //first check if we are to be streaming to the server
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(lcontext);
+        Boolean serverOn = sharedPreferences.getBoolean("sync", false);
+        if (!serverOn){
+            return;
+        }
+
         Log.d("cayden", "sendPhrase called");
 
         //get the current access token from sharedprefs
         String token = getToken(true);
 
         //url to hit for this api request
-        String turl = url + "remember";
+        String turl = url + "/remember";
 
         //to be sent
         JSONObject params = new JSONObject();
@@ -165,7 +178,7 @@ public class ServerAdapter {
     private void refresh(){
         Log.d("cayden", "refresh called");
         String token = getToken(false); //get the stored refresh token
-        String turl = url + "refresh";
+        String turl = url + "/refresh";
 
         // Request a json response from the provided URL.
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, turl, null,
