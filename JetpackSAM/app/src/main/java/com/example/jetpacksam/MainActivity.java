@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
         // Get a new or existing ViewModel from the ViewModelProvider.
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
 
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 startActivityForResult(intent, NEW_PHRASE_ACTIVITY_REQUEST_CODE);
             }
         });
+
+        //login the user to the server
+        ServerAdapter server = new ServerAdapter(this.getApplicationContext());
+        server.login("myuserhere", "mypasswordhere");
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

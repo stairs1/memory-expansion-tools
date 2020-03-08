@@ -18,7 +18,7 @@ import java.util.Locale;
 public class PhraseCreator {
     public static final String LOG_TAG = PhraseCreator.class.getName();
 
-    public static void create(String words, String medium, Context context, PhraseRepository repo) {
+    public static void create(String words, String medium, Context context, PhraseRepository repo, ServerAdapter server) {
 
         Date time = new Date();
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
@@ -48,6 +48,7 @@ public class PhraseCreator {
                 }
                 Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time.getTime() + " lat: " + location.getLatitude() + " lon: " + location.getLongitude() + " address: " + address);
                 repo.insert(phrase);
+                server.sendPhrase(phrase); //testing server adapter
             }
             else{
                 Log.d(LOG_TAG, "location returned null, inserting phrase without location");
