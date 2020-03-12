@@ -20,6 +20,7 @@ import java.util.Locale;
 public class TranscribeIntentService extends IntentService {
     public static final String LOG_TAG = TranscribeIntentService.class.getName();
     private PhraseRepository repo = null;
+    private ServerAdapter server = null;
     private Handler handler = null;
     SpeechRecognizer mSpeechRecognizer = null;
     Intent recogIntent = null;
@@ -100,6 +101,7 @@ public class TranscribeIntentService extends IntentService {
 
             //setup phrase creation interface
             repo = new PhraseRepository(getApplication());
+            server = new ServerAdapter(getApplicationContext());
         }
     };
 
@@ -175,7 +177,7 @@ public class TranscribeIntentService extends IntentService {
             public void onResults(Bundle results) {
                 //create phrase with the first (most likely) result only
                 List<String> sentences = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                PhraseCreator.create(sentences.get(0), getString(R.string.medium_spoken), getApplicationContext(), repo);
+                PhraseCreator.create(sentences.get(0), getString(R.string.medium_spoken), getApplicationContext(), repo, server);
 
                 Log.d(LOG_TAG, "got results and created phrase, calling startTranscription");
                 startTranscription();

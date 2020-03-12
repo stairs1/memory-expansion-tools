@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public static final int NEW_PHRASE_ACTIVITY_REQUEST_CODE = 1;
     public static final int VIEW_PHRASE_ACTIVITY_REQUEST_CODE = 2;
     public static final int SETTINGS_ACTIVITY_REQUEST_CODE = 2;
+    public static final int LOGIN_ACTIVITY_REQUEST_CODE = 3; //I don't know what these are for yet but this looks cool
     public static final String LOG_TAG = MainActivity.class.getName();
 
     private PhraseViewModel mPhraseViewModel;
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST_CODE);
                 return true;
+            case R.id.login:
+                Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(logIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
@@ -86,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 startActivityForResult(intent, NEW_PHRASE_ACTIVITY_REQUEST_CODE);
             }
         });
+
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

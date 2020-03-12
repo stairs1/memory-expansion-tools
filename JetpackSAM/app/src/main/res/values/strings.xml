@@ -21,7 +21,12 @@
     <!-- Server Preferences -->
     <string name="sync_title">Paired Remote Server</string>
     <string name="server_address">Server Address</string>
-    <string name="default_server_address">https://sam.caydenpierce.com</string>
+    <string name="default_server_address">https://memoryexpansiontools.com</string>
+
+    <!-- User -->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login_message">Welcome to your Expanded Memory. Please log in.</string>
 
     <!-- Wearables Preferences -->
     <string name="bluetooth_headset">Bluetooth Headset</string>
