@@ -21,11 +21,16 @@ class Database:
         serverStatusResult = self.db.command("serverStatus")
         return serverStatusResult
 
-    def addUser(self, name, email):
+    def addUser(self, name, username, email, password):
+        if self.userExists(username):
+            return None
         usersCollection = self.db.users
-        user = {"name": name, "email": email, "timestamp": time.time()}
+        stagesCollection = self.db.l1stages #TODO this is too dependent on the l1 stage right now, 
+        user = {"name": name, "email": email, "timestamp": time.time(), "password": password, "username": username}
         resp = usersCollection.insert_one(user)
         userId = resp.inserted_id
+        empty = {"userId" : userId, "stage" : { "1" : None, "2" : None, "3" : None, "4" : None }}
+        stagesCollection.insert_one(empty)
         return userId
 
     def nameToId(self, username):

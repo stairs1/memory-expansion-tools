@@ -27,7 +27,7 @@ async function search(event) {
 			console.log('Success:', data);
 			if (data['success'] == 1){
 				setCookie('access_token_cookie', data['token'], 1);
-				window.location = "search";
+				window.location = "ltwo";
 			}
 			else {
 				alert(data['message']);
