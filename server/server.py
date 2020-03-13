@@ -10,6 +10,7 @@ from flask_jwt_extended import (
     get_jwt_identity,
 )
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS, cross_origin
 
 # regular stuff
 import json
@@ -40,6 +41,7 @@ app.config["JWT_SECRET_KEY"] = "extendedmind"
 api = Api(app)  # flask_restful
 jwt = JWTManager(app)  # flask_jwt_extended
 bcrypt = Bcrypt(app)  # bcrypt password hashing
+CORS(app)
 
 app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
 

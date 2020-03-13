@@ -16,5 +16,5 @@ class L2(Resource):
         username = get_jwt_identity()
         userId = self.db.nameToId(username)
         cache = self.db.getL(userId, time.time(), level=2)
-        headers = {"Content-Type": "text/html"}
-        return make_response(render_template("ltwo.html", data=cache), 200, headers)
+        headers = {"Content-Type": "application/json"}
+        return cache
