@@ -212,11 +212,12 @@ public class TranscribeIntentService extends IntentService {
                 String words = sentences.get(0);
                 if(words.isEmpty() || words.length() == 1){
                     // if its one letter or less, its mostly garbage.
-                    return;
+                    Log.d(LOG_TAG, "skipping empty results, calling startTranscription");
+                } else {
+                    PhraseCreator.create(sentences.get(0), getString(R.string.medium_spoken), getApplicationContext(), repo, server);
+                    Log.d(LOG_TAG, "got results and created phrase, calling startTranscription");
                 }
-                PhraseCreator.create(sentences.get(0), getString(R.string.medium_spoken), getApplicationContext(), repo, server);
 
-                Log.d(LOG_TAG, "got results and created phrase, calling startTranscription");
                 startTranscription();
             }
 
