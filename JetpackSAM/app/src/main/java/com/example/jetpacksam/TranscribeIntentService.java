@@ -33,6 +33,12 @@ public class TranscribeIntentService extends IntentService {
     @Override
     public void onCreate(){
         super.onCreate();
+        recogIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.CANADA.toLanguageTag());
+        recogIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        recogIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        recogIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
         handler = new Handler(this.getMainLooper());
     }
 
@@ -51,6 +57,10 @@ public class TranscribeIntentService extends IntentService {
 
         startForeground(1, notification);
 
+        //setup phrase creation interface
+        repo = new PhraseRepository(getApplication());
+        server = new ServerAdapter(getApplicationContext());
+
         setupTranscription();
         startTranscription();
         while(transcription_on){
@@ -68,44 +78,40 @@ public class TranscribeIntentService extends IntentService {
         super.onDestroy();
     }
 
-
     private void setupTranscription(){
         if(!transcription_on){
             transcription_on = true;
-            handler.post(setupTranscriptionr);
+            handler.post(setupTranscription);
         }
     }
 
     private void startTranscription(){
         if(transcription_on) {
-            handler.post(startTranscriptionr);
+            handler.post(startTranscription);
         }
     }
 
     private void stopTranscription(){
         transcription_on = false;
-        handler.post(stopTranscriptionr);
+        handler.post(stopTranscription);
     }
 
-    Runnable setupTranscriptionr = new Runnable() {
+    private void restartTranscription(){
+        handler.post(stopTranscription);
+        handler.post(setupTranscription);
+        handler.post(startTranscription);
+    }
+
+    Runnable setupTranscription = new Runnable() {
         @Override
         public void run() {
             //setup speech recognizer
             mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
             mSpeechRecognizer.setRecognitionListener(createRecognitionListener());
-            recogIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.CANADA.toLanguageTag());
-            recogIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-            recogIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
-
-            //setup phrase creation interface
-            repo = new PhraseRepository(getApplication());
-            server = new ServerAdapter(getApplicationContext());
         }
     };
 
-    Runnable startTranscriptionr = new Runnable() {
+    Runnable startTranscription = new Runnable() {
         @Override
         public void run() {
             Log.d(LOG_TAG, "run starttranscription");
@@ -117,32 +123,48 @@ public class TranscribeIntentService extends IntentService {
         }
     };
 
-    Runnable stopTranscriptionr = new Runnable() {
+    Runnable stopTranscription = new Runnable() {
         @Override
         public void run() {
             mSpeechRecognizer.stopListening();
+            mSpeechRecognizer.destroy();
         }
     };
 
     private RecognitionListener createRecognitionListener() {
         return new RecognitionListener() {
             @Override
-            public void onReadyForSpeech(Bundle params) { }
+            public void onReadyForSpeech(Bundle params) {
+                Log.d(LOG_TAG, "Ready for speech");
+            }
 
             @Override
-            public void onBeginningOfSpeech() { }
+            public void onBeginningOfSpeech() {
+                Log.d(LOG_TAG, "beginning of speech");
+            }
 
             @Override
-            public void onRmsChanged(float rmsdB) { }
+            public void onRmsChanged(float rmsdB) {
+            }
 
             @Override
-            public void onBufferReceived(byte[] buffer) { }
+            public void onBufferReceived(byte[] buffer) {
+                Log.d(LOG_TAG, "buffer recieved");
+            }
 
             @Override
-            public void onEndOfSpeech() { }
+            public void onEndOfSpeech() {
+                Log.d(LOG_TAG, "end of speech");
+            }
 
             @Override
             public void onError(int error) {
+                // Unlink and create new speechrecognizer on each error.
+                // The speechrecognizer sends the error message before releasing
+                // its resources. If call startRecognition right after receiving error,
+                // the loop can enter a broken state.
+                // This causes the old speechrecognizer to throw error complaining it is not
+                // connected to recognition service; this error can be safely ignored.
                 switch (error){
                     case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
                         Log.e(LOG_TAG, "SpeechRecognizer needs permissions!");
@@ -150,25 +172,35 @@ public class TranscribeIntentService extends IntentService {
                         break;
                     case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                         Log.d(LOG_TAG, "request ignored, recognizer busy");
+                        restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                         Log.d(LOG_TAG, "timeout");
-                        try {
-                            // If start a recognition request shortly after error, it will be ignored.
-                            // this is presumably a bug in android.
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        startTranscription();
+                        restartTranscription();
+                        break;
+                    case SpeechRecognizer.ERROR_NETWORK:
+                        Log.d(LOG_TAG, "network error");
+                        restartTranscription();
+                        break;
+                    case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                        Log.d(LOG_TAG, "network timeout");
+                        restartTranscription();
+                        break;
+                    case SpeechRecognizer.ERROR_CLIENT:
+                        Log.d(LOG_TAG, "client error");
+                        restartTranscription();
+                        break;
+                    case SpeechRecognizer.ERROR_AUDIO:
+                        Log.d(LOG_TAG, "audio error");
+                        restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_NO_MATCH:
                         Log.d(LOG_TAG, "no match");
-                        startTranscription();
+                        restartTranscription();
                         break;
                     default:
                         Log.d(LOG_TAG, "defaulting to start" + error);
-                        startTranscription();
+                        restartTranscription();
                         break;
                 }
             }
@@ -177,6 +209,11 @@ public class TranscribeIntentService extends IntentService {
             public void onResults(Bundle results) {
                 //create phrase with the first (most likely) result only
                 List<String> sentences = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                String words = sentences.get(0);
+                if(words.isEmpty() || words.length() == 1){
+                    // if its one letter or less, its mostly garbage.
+                    return;
+                }
                 PhraseCreator.create(sentences.get(0), getString(R.string.medium_spoken), getApplicationContext(), repo, server);
 
                 Log.d(LOG_TAG, "got results and created phrase, calling startTranscription");
@@ -184,10 +221,14 @@ public class TranscribeIntentService extends IntentService {
             }
 
             @Override
-            public void onPartialResults(Bundle partialResults) { }
+            public void onPartialResults(Bundle partialResults) {
+                Log.d(LOG_TAG, "partial results");
+            }
 
             @Override
-            public void onEvent(int eventType, Bundle params) { }
+            public void onEvent(int eventType, Bundle params) {
+                Log.d(LOG_TAG, "on event");
+            }
         };
     }
 }
