@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { url, loginEnd } from "../constants";
+import AuthHandle from "./AuthHandler.js";
 
 class Login extends Component {
   constructor() {
@@ -19,7 +21,7 @@ class Login extends Component {
     this.setState({ error: '' });
   }
 
-  handleSubmit(evt) { //hit backend and get jwt token here
+  async handleSubmit(evt) { //hit backend and get jwt token here
     evt.preventDefault();
 
     if (!this.state.username) {
@@ -28,6 +30,16 @@ class Login extends Component {
 
     if (!this.state.password) {
       return this.setState({ error: 'Password is required' });
+    }
+    var res = await AuthHandle.login(this.state.username, this.state.password);
+      console.log(res);
+    if (res){ //use the given username and pass to login (hits the backend with credentials and gets jwt and saves in cookie
+        //we should redirect to the MXT cache here
+        console.log("success***************");
+		return this.setState({ error: "Successful login."}); //we don't need this, remove once we are redirecting
+    } else {
+        console.log("FAILLLL***************");
+		return this.setState({ error: "Unsuccessful login."});
     }
 
     return this.setState({ error: '' });
@@ -51,7 +63,7 @@ class Login extends Component {
 
     return (
       <div className="Login">
-        <h2>Welcome to Memory Expansion Tools. Log in.</h2>
+        <h1>Welcome to Memory Expansion Tools. Log in.</h1>
         <form onSubmit={this.handleSubmit}>
           {
             this.state.error &&
@@ -59,11 +71,11 @@ class Login extends Component {
               {this.state.error}
             </h3>
           }
-          <label>User Name</label>
-          <input type="text" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
+          <input type="text" data-test="username" placeholder="User Name" value={this.state.username} onChange={this.handleUserChange} />
+        <br />
 
-          <label>Password</label>
-          <input type="password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
+          <input type="password" data-test="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
+        <br />
 
           <input type="submit" value="Log In" data-test="submit" />
         </form>

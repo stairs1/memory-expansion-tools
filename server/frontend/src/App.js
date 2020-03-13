@@ -2,6 +2,7 @@ import Login from './components/Login.js';
 import Signup from './components/Signup.js';
 import MXT from './components/MXT.js';
 import Mem from './components/Mem.js';
+import "./App.css";
 
 import React from "react";
 import {

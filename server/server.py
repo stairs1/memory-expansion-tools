@@ -62,6 +62,5 @@ api.add_resource(Refresh, "/refresh", resource_class_args=[jwt])
 def start():
     app.run(debug=True)
 
-
 if __name__ == "__main__":
     start()

@@ -1,0 +1,42 @@
+h3 {
+    color: #666666;
+    font-family: verdana;
+    size: 200%;
+    text-align: center;
+}
+ol {
+    list-style: none;
+    counter-reset: li;
+}
+.right li::before {
+    content: counter(li);
+    color: #777777;
+    display: inline-block; width: 1em;
+    margin-left: -1em;
+}
+.right li {
+    counter-increment: li;
+}
+body {
+    background-color: #fffff8;
+}
+
+td:first-child {
+  color: #777777;
+}
+
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
+}
+
+
