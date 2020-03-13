@@ -27,6 +27,7 @@ class Mem extends Component{
     populate() {
         for (var i=0; i < 8; i++){
             var is = (i+1).toString()
+            console.log( this.state.value.phrases[i]);
             ReactDOM.render(
                 React.createElement('p', null, this.state.value.phrases[i]),
                 document.getElementById("r"+is)
