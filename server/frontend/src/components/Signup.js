@@ -30,6 +30,14 @@ class Signup extends Component {
     if (!this.state.password) {
       return this.setState({ error: 'Password is required' });
     }
+ 
+    if (!this.state.email) {
+      return this.setState({ error: 'Email address is required' });
+    }
+
+      if (!this.state.name) {
+      return this.setState({ error: 'Name is required' });
+    }
 
     return this.setState({ error: '' });
   }
@@ -64,7 +72,7 @@ class Signup extends Component {
 
     return (
       <div className="Login">
-        <h2>Welcome to Memory Expansion Tools. Sign up.</h2>
+        <h1>Welcome to Memory Expansion Tools. Sign up.</h1>
         <form onSubmit={this.handleSubmit}>
           {
             this.state.error &&
@@ -72,17 +80,17 @@ class Signup extends Component {
               {this.state.error}
             </h3>
           }
-          <label>User Name</label>
-          <input type="text" data-test="username" value={this.state.username} onChange={this.handleUserChange} />
+          <input type="text" data-test="username" placeholder="User Name" value={this.state.username} onChange={this.handleUserChange} />
+          <br />
           
-          <label>First and Last Name</label>
-          <input type="text" data-test="name" value={this.state.name} onChange={this.handleNameChange} />
+          <input type="text" data-test="name" placeholder="First and Last Name" value={this.state.name} onChange={this.handleNameChange} />
+          <br />
 
-          <label>Email</label>
-          <input type="text" data-test="email" value={this.state.email} onChange={this.handleEmailChange} />
+          <input type="text" data-test="email" placeholder="Email" value={this.state.email} onChange={this.handleEmailChange} />
+          <br />
 
-          <label>Password</label>
-          <input type="password" data-test="password" value={this.state.password} onChange={this.handlePassChange} />
+          <input type="password" data-test="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
+          <br />
 
           <input type="submit" value="Sign Up" data-test="submit" />
         </form>
