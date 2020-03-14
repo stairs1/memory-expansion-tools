@@ -53,7 +53,7 @@ class Database:
             apass = usersCollection.find_one({"_id": ObjectId(userId)})["password"]
             return apass
 
-    def addTalk(self, userId, words, timestamp, cache=0):
+    def addTalk(self, userId, words, timestamp, latitude, longitude, address, cache=0):
         if not self.userExists(userId):
             return "No such user exists, exiting"  # TODO throw error
 
@@ -68,7 +68,7 @@ class Database:
         else:
             talksCollection = self.db.talks
 
-        talk = {"userId": userId, "talk": words, "timestamp": timestamp}
+        talk = {"userId": userId, "talk": words, "timestamp": timestamp, "latitude" : latitude, "longitude" : longitude, "address" : address}
 
         if talk in talksCollection.find(
             {}, {"userId": 1, "talk": 1, "timestamp": 1, "_id": 0}
