@@ -26,10 +26,6 @@ public class Phrase {
     private Date timestamp;
 
     @NonNull
-    @ColumnInfo(name = "utimestamp") //addiotionally saving the unix timestamp for faster processing, wider compatibility, ease
-    private long utimestamp;
-
-    @NonNull
     @ColumnInfo(name = "medium")
     private String medium;
 
@@ -39,26 +35,23 @@ public class Phrase {
     @ColumnInfo(name = "address")
     private String address;
 
-    public Phrase(@NonNull String phrase, @NonNull Date timestamp, @NonNull long utimestamp, @NonNull String medium, Location location, String address) {
+    public Phrase(@NonNull String phrase, @NonNull Date timestamp, @NonNull String medium, Location location, String address) {
         this.phrase = phrase;
         this.timestamp = timestamp;
-        this.utimestamp = utimestamp;
         this.medium = medium;
         this.location = location;
         this.address = address;
     }
 
     @Ignore
-     public Phrase(@NonNull String phrase, @NonNull Date timestamp, @NonNull long utimestamp, @NonNull String medium){
+     public Phrase(@NonNull String phrase, @NonNull Date timestamp, @NonNull String medium){
         this.phrase = phrase;
         this.timestamp = timestamp;
-        this.utimestamp = utimestamp;
         this.medium = medium;
      }
 
     public String getPhrase(){return this.phrase;}
     public Date getTimestamp(){return this.timestamp;}
-    public long getUtimestamp(){return this.utimestamp;}
     public String getMedium(){return this.medium;}
     public Location getLocation(){return this.location;}
     public void setLocation(Location location){this.location = location;}

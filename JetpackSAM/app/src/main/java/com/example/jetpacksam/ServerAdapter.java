@@ -69,7 +69,7 @@ public class ServerAdapter {
         try {
             JSONObject phraseNest = new JSONObject();
             phraseNest.put("speech", phrase.getPhrase());
-            phraseNest.put("timestamp", phrase.getUtimestamp());
+            phraseNest.put("timestamp", phrase.getTimestamp().getTime());
             JSONArray phraseList = new JSONArray();
             phraseList.put(phraseNest);
 

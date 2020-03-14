@@ -38,7 +38,7 @@ public class TranscribeIntentService extends IntentService {
         recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.CANADA.toLanguageTag());
         recogIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recogIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        recogIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+        recogIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, false);
         handler = new Handler(this.getMainLooper());
     }
 

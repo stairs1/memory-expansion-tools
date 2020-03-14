@@ -24,9 +24,8 @@ public class PhraseCreator {
     public static void create(String words, String medium, Context context, PhraseRepository repo, ServerAdapter server) {
 
         Date time = new Date();
-        long utime = time.getTime() / 1000;
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        Phrase phrase = new Phrase(words, time, utime, medium);
+        Phrase phrase = new Phrase(words, time, medium);
 
         // Using getLastLocation is not always totally accurate. Good to update this at some point.
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
