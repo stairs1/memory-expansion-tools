@@ -14,17 +14,17 @@ class Mem extends Component{
 
     componentDidMount(){
         this.connectSock(); //connect to the backend
-        this.populate();
     }
     
     connectSock() {
         const socket = io("https://memoryexpansiontools.com");
-        socket.on("my_response", data => this.setState({value: data}));
+        socket.on("my_response", data => {this.setState({value: data}); this.populate()});
         socket.emit("join", {data : "dgs"});
         console.log("SockIO connected, room joined.");
     }
 
     populate() {
+        console.log("populate called");
         for (var i=0; i < 8; i++){
             var is = (i+1).toString()
             console.log( this.state.value.phrases[i]);

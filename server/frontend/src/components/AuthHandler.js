@@ -1,4 +1,4 @@
-import { url, loginEnd, refreshEnd } from "../constants";
+import { url, loginEnd, refreshEnd, signupEnd } from "../constants";
 
 class AuthHandle {
 
@@ -90,6 +90,28 @@ class AuthHandle {
                     }
             })
     } 
+
+    static async signup(username, email, name, password) {
+        return await fetch(url + signupEnd, {
+            method: 'POST',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "username" : username, "password" : password, "email" : email, "name" : name})
+            }).then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+                if (data['success'] === 1){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+        })
+      }
+
+
 }
 
 export default AuthHandle;
