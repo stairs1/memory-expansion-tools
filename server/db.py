@@ -196,7 +196,7 @@ class Database:
 
         result = list()
         for item in resp:
-            result.append(item["talk"])
+            result.append(item)
         return result
 
     def timeFlow(self, userId, talkId=None, timeFrame=None):

@@ -24,7 +24,7 @@ class Remember(Resource):
             timestamp = float(phrase["timestamp"])
             speech = phrase["speech"]
             if self.checkData(speech):
-                resp = self.db.addTalk(userId, speech, timestamp, latitude, longitude, address)
+                resp = self.db.addTalk(userId, speech, float(timestamp), latitude, longitude, address)
                 print(resp)
 
     def checkData(self, phrase):
@@ -58,7 +58,7 @@ class Remember(Resource):
             phrasePass["speech"]
         )
         if cmd_index:
-            self.db.addTalk(userId, phrase, phrasePass["timestamp"], latitude, longitude, address, cache=cmd_index)
+            self.db.addTalk(userId, phrase, float(phrasePass["timestamp"]), latitude, longitude, address, cache=cmd_index)
         return phrase
 
     @marshal_with(success_marshaller)

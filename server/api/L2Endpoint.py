@@ -7,14 +7,28 @@ import time
 
 
 class L2(Resource):
+    ltwo_marshaller = {
+        "userId": fields.String,
+        "talk": fields.String(default="Anonymous User"),
+        "timestamp": fields.Float,
+        "_id": fields.String,
+        "latitude": fields.Float,
+        "longitude": fields.Float,
+        "address": fields.String
+    }
+
     def __init__(self):
         self.db = Database()
         self.db.connect()
 
+    @marshal_with(ltwo_marshaller)
     @jwt_required
     def get(self):
         username = get_jwt_identity()
         userId = self.db.nameToId(username)
         cache = self.db.getL(userId, time.time(), level=2)
+        results = list()
+        for item in cache:
+            results.append(item)
         headers = {"Content-Type": "application/json"}
-        return cache
+        return results
