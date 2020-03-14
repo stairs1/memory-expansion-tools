@@ -21,7 +21,7 @@ class Remember(Resource):
 
     def remember(self, userId, phraseList, latitude, longitude, address):
         for phrase in phraseList:
-            timestamp = phrase["timestamp"]
+            timestamp = float(phrase["timestamp"])
             speech = phrase["speech"]
             if self.checkData(speech):
                 resp = self.db.addTalk(userId, speech, timestamp, latitude, longitude, address)
