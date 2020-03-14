@@ -198,6 +198,11 @@ public class TranscribeIntentService extends IntentService {
                         Log.d(LOG_TAG, "no match");
                         restartTranscription();
                         break;
+                    case SpeechRecognizer.ERROR_SERVER:
+                        // this error is thrown when using native voicerec on unsupported devices.
+                        Log.d(LOG_TAG, "server error");
+                        restartTranscription();
+                        break;
                     default:
                         Log.d(LOG_TAG, "defaulting to start" + error);
                         restartTranscription();
