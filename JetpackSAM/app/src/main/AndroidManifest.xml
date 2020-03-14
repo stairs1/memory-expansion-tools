@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -17,13 +18,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver android:name="HeadsetStateChangedReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"/>
+            </intent-filter>
+        </receiver>
         <service
             android:name=".TranscribeIntentService"
             android:exported="false"></service>
         <service
             android:name=".RecordAudioIntentService"
             android:exported="false" />
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -43,7 +48,6 @@
         </activity>
         <activity android:name=".NewPhraseActivity" />
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

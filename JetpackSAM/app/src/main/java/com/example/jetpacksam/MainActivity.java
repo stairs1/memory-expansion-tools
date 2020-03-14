@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        TranscriptionManager.wakeup(this);
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);

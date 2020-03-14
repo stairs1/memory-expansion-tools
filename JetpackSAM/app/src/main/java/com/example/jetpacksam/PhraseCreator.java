@@ -50,13 +50,13 @@ public class PhraseCreator {
                     Log.d(LOG_TAG, "no address found, omitting");
                 }
                 Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time.getTime() + " lat: " + location.getLatitude() + " lon: " + location.getLongitude() + " address: " + address);
-                repo.insert(phrase);
-                server.sendPhrase(phrase); //testing server adapter
 
             }
             else{
                 Log.d(LOG_TAG, "location returned null, inserting phrase without location");
             }
+            repo.insert(phrase);
+            server.sendPhrase(phrase);
         });
     }
 }
