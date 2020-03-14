@@ -69,12 +69,15 @@ public class ServerAdapter {
         try {
             JSONObject phraseNest = new JSONObject();
             phraseNest.put("speech", phrase.getPhrase());
-            phraseNest.put("timestamp", phrase.getTimestamp());
+            phraseNest.put("timestamp", phrase.getTimestamp().getTime());
             JSONArray phraseList = new JSONArray();
             phraseList.put(phraseNest);
 
             //specify parameters (info about the phrase
             params.put("type", "phrase");
+            params.put("lat", phrase.getLocation().getLatitude());
+            params.put("long", phrase.getLocation().getLongitude());
+            params.put("address", phrase.getAddress());
             params.put("phrases", phraseList);
         } catch (JSONException e){
             e.printStackTrace();

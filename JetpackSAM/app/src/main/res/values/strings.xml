@@ -27,6 +27,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login_message">Welcome to your Expanded Memory. Please log in.</string>
+    <string name="signup_message">If you don\'t have an account, sign up at memoryexpansiontools.com.</string>
 
     <!-- Wearables Preferences -->
     <string name="bluetooth_headset">Bluetooth Headset</string>

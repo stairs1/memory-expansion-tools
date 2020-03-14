@@ -19,12 +19,12 @@ class Remember(Resource):
         self.l1size = 4  # size of l1 cache
         self.command_manager = voice_commands.SpokenCommandManager()
 
-    def remember(self, userId, phraseList):
+    def remember(self, userId, phraseList, latitude, longitude, address):
         for phrase in phraseList:
-            timestamp = phrase["timestamp"]
+            timestamp = float(phrase["timestamp"])
             speech = phrase["speech"]
             if self.checkData(speech):
-                resp = self.db.addTalk(userId, speech, timestamp)
+                resp = self.db.addTalk(userId, speech, timestamp, latitude, longitude, address)
                 print(resp)
 
     def checkData(self, phrase):
@@ -53,12 +53,12 @@ class Remember(Resource):
         self.db.saveL1Stage(userId, stage)
         return stage, cmd
 
-    def handleCacheCommands(self, phrasePass, userId):
+    def handleCacheCommands(self, phrasePass, userId, latitude, longitude, address):
         cmd_index, phrase = self.command_manager.parse_cache_command(
             phrasePass["speech"]
         )
         if cmd_index:
-            self.db.addTalk(userId, phrase, phrasePass["timestamp"], cache=cmd_index)
+            self.db.addTalk(userId, phrase, phrasePass["timestamp"], latitude, longitude, address, cache=cmd_index)
         return phrase
 
     @marshal_with(success_marshaller)
@@ -67,12 +67,18 @@ class Remember(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("type", type=type)
         parser.add_argument("phrases", type=list, location="json")
+        parser.add_argument("lat", type=float)
+        parser.add_argument("long", type=float)
+        parser.add_argument("address", type=str)
         args = parser.parse_args()
 
         username = get_jwt_identity()
         userId = str(self.db.nameToId(username))
 
         memType = args["type"]
+        latitude = args["lat"]
+        longitude = args["long"]
+        address = args["address"]
         sentPhrases = args["phrases"]
 
         phrases = self.db.getPhrases(userId)
@@ -85,12 +91,12 @@ class Remember(Resource):
 
         # if not a stage command, check if it's a L2, L3, or annotation command
         if not cmd:
-            phraseTmp = self.handleCacheCommands(sentPhrases[0], userId)
+            phraseTmp = self.handleCacheCommands(sentPhrases[0], userId, latitude, longitude, address)
             if (
                 phraseTmp is not None
             ):  # if it is a command, take the parsed phrase and use that instead
                 sentPhrases[0]["speech"] = phraseTmp
-            self.remember(userId, sentPhrases)  # remember this in our talks database
+            self.remember(userId, sentPhrases, latitude, longitude, address)  # remember this in our talks database
             # logic to move the phrases around so we don't have to query db again
             phrases.insert(0, sentPhrases[0]["speech"])
             phrases = phrases[:-1]
