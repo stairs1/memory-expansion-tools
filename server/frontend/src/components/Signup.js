@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { url, signupEnd } from "../constants";
+import AuthHandle from "./AuthHandler.js";
 
 class Signup extends Component {
   constructor() {
@@ -9,18 +11,21 @@ class Signup extends Component {
       email: '',
       name: '',
       error: '',
-    };
-
+    }; 
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleUserChange = this.handleUserChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this); this.dismissError = this.dismissError.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.dismissError = this.dismissError.bind(this);
   }
 
   dismissError() {
     this.setState({ error: '' });
   }
 
-  handleSubmit(evt) { //hit backend and get jwt token here
+
+  async handleSubmit(evt) { //hit backend and get jwt token here
     evt.preventDefault();
 
     if (!this.state.username) {
@@ -30,49 +35,59 @@ class Signup extends Component {
     if (!this.state.password) {
       return this.setState({ error: 'Password is required' });
     }
- 
-    if (!this.state.email) {
-      return this.setState({ error: 'Email address is required' });
+
+    if (!this.state.name) {
+      return this.setState({ error: 'Name is required' });
     }
 
-      if (!this.state.name) {
-      return this.setState({ error: 'Name is required' });
+    if (!this.state.email) {
+      return this.setState({ error: 'Email is required' });
+    }
+    
+      var res = await AuthHandle.signup(this.state.username, this.state.email, this.state.name, this.state.password);
+
+    if (res){ //use the given username and pass to login (hits the backend with credentials and gets jwt and saves in cookie
+        //we should redirect to the MXT cache here
+        console.log("success***************");
+		return this.setState({ error: "Successful signup."}); //we don't need this, remove once we are redirecting
+    } else {
+        console.log("FAILLLL***************");
+		return this.setState({ error: "Unsuccessful signup."});
     }
 
     return this.setState({ error: '' });
   }
 
-  handleUserChange(evt) {
-    this.setState({
-      username: evt.target.value,
-    });
-  };
+    handleUserChange(evt) {
+        this.setState({
+          username: evt.target.value,
+        });
+    };
 
-  handlePassChange(evt) {
-    this.setState({
-      password: evt.target.value,
-    });
-  }
+    handlePassChange(evt) {
+        this.setState({
+          password: evt.target.value,
+        });
+    }
 
-  handleNameChange(evt) {
-    this.setState({
-      password: evt.target.value,
-    });
-  }
 
- handleEmailChange(evt) {
-    this.setState({
-      password: evt.target.value,
-    });
-  }
-
-  render() {
-    // NOTE: I use data-attributes for easier E2E testing
-    // but you don't need to target those (any css-selector will work)
-
-    return (
-      <div className="Login">
-        <h1>Welcome to Memory Expansion Tools. Sign up.</h1>
+    handleEmailChange(evt) {
+        this.setState({
+          email: evt.target.value,
+        });
+    }
+     
+    handleNameChange(evt) {
+        this.setState({
+          name: evt.target.value,
+        });
+    }
+ 
+       
+    render() {
+        return (
+            <div>
+              <h1>Welcome to Memory Expansion Tools. Please sign up here.</h1>
         <form onSubmit={this.handleSubmit}>
           {
             this.state.error &&
@@ -81,23 +96,24 @@ class Signup extends Component {
             </h3>
           }
           <input type="text" data-test="username" placeholder="User Name" value={this.state.username} onChange={this.handleUserChange} />
-          <br />
-          
-          <input type="text" data-test="name" placeholder="First and Last Name" value={this.state.name} onChange={this.handleNameChange} />
-          <br />
+        <br />
 
           <input type="text" data-test="email" placeholder="Email" value={this.state.email} onChange={this.handleEmailChange} />
-          <br />
+        <br />
+          
+            <input type="text" data-test="name" placeholder="Name" value={this.state.name} onChange={this.handleNameChange} />
+        <br />
 
-          <input type="password" data-test="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
-          <br />
+            <input type="password" data-test="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
+        <br />
 
-          <input type="submit" value="Sign Up" data-test="submit" />
+          <input type="submit" value="Log In" data-test="submit" />
         </form>
-      </div>
-    );
-  }
+
+                </div>
+          )
+      }
 }
 
-export default Signup  
 
+export default Signup

@@ -2,6 +2,7 @@ import Login from './components/Login.js';
 import Signup from './components/Signup.js';
 import MXT from './components/MXT.js';
 import Mem from './components/Mem.js';
+import Search from './components/Search.js';
 import "./App.css";
 
 import React from "react";
@@ -25,6 +26,9 @@ export default function App() {
               <Link to="/mem">WorkingMemory</Link>
             </li>
             <li>
+              <Link to="/search">Search</Link>
+            </li>
+            <li>
               <Link to="/">Signup</Link>
             </li>
             <li>
@@ -41,6 +45,9 @@ export default function App() {
           </Route>
           <Route path="/mem">
             <Mem />
+          </Route>
+          <Route path="/search">
+            <Search />
           </Route>
           <Route path="/login">
             <Login />
