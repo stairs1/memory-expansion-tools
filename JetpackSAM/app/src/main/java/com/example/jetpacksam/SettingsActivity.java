@@ -110,6 +110,12 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     TranscriptionManager.stopTranscriptionOnHeadset();
                 }
+            } else if (key.equals("native_voicerec")) {
+                Log.d(LOG_TAG, "native voicerec switched");
+
+                //TranscribeIntentService loads this preference on startup, so toggle transcription
+                TranscriptionManager.stopTranscription(getContext());
+                TranscriptionManager.wakeup(getContext());
             }
         };
 

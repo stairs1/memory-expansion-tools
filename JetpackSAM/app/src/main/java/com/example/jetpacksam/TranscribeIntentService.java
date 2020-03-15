@@ -6,12 +6,15 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import java.util.List;
 import java.util.Locale;
@@ -33,12 +36,13 @@ public class TranscribeIntentService extends IntentService {
     @Override
     public void onCreate(){
         super.onCreate();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         recogIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.CANADA.toLanguageTag());
         recogIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recogIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        recogIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, false);
+        recogIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, prefs.getBoolean("native_voicerec", false));
         handler = new Handler(this.getMainLooper());
     }
 

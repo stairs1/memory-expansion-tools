@@ -3,12 +3,14 @@
     <PreferenceCategory app:title="@string/data_streams_header">
 
         <SwitchPreference
-            app:key="record_audio"
-            app:title="@string/record_audio"/>
-
-        <SwitchPreference
             app:key="transcribe"
             app:title="@string/transcribe"/>
+
+        <SwitchPreference
+            app:key="native_voicerec"
+            app:title="@string/native_voicerec"
+            app:dependency="transcribe"
+            app:summary="@string/native_voicerec_summary"/>
 
     </PreferenceCategory>
 
