@@ -59,7 +59,7 @@ public class ServerAdapter {
         String token = getToken(true);
 
         //url to hit for this api request
-        String turl = url + "/remember";
+        String turl = url + "/api/remember";
 
         //to be sent
         JSONObject params = new JSONObject();
@@ -69,16 +69,19 @@ public class ServerAdapter {
         try {
             JSONObject phraseNest = new JSONObject();
             phraseNest.put("speech", phrase.getPhrase());
-            phraseNest.put("timestamp", phrase.getTimestamp().getTime());
+            phraseNest.put("timestamp", phrase.getTimestamp().getTime()/1000);
             JSONArray phraseList = new JSONArray();
             phraseList.put(phraseNest);
 
             //specify parameters (info about the phrase
             params.put("type", "phrase");
-            params.put("lat", phrase.getLocation().getLatitude());
-            params.put("long", phrase.getLocation().getLongitude());
-            params.put("address", phrase.getAddress());
             params.put("phrases", phraseList);
+            if (phrase.getAddress() != null) {
+                params.put("lat", phrase.getLocation().getLatitude());
+                params.put("long", phrase.getLocation().getLongitude());
+                params.put("address", phrase.getAddress());
+                params.put("phrases", phraseList);
+            }
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -120,7 +123,7 @@ public class ServerAdapter {
 
     public void login(String user, String pass){
         Log.d("cayden", "login called with user: " + user + ":" + pass);
-        String turl = url;
+        String turl = url + "/api/loginapi";
         //build login params body
         JSONObject params = new JSONObject();
         try {
@@ -181,7 +184,7 @@ public class ServerAdapter {
     private void refresh(){
         Log.d("cayden", "refresh called");
         String token = getToken(false); //get the stored refresh token
-        String turl = url + "/refresh";
+        String turl = url + "/api/refresh";
 
         // Request a json response from the provided URL.
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, turl, null,

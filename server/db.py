@@ -73,7 +73,6 @@ class Database:
         if talk in talksCollection.find(
             {}, {"userId": 1, "talk": 1, "timestamp": 1, "_id": 0}
         ):
-            print("This talk has already been saved")
             return -1
 
         resp = talksCollection.insert_one(talk)
@@ -191,14 +190,13 @@ class Database:
             l = self.db.ltwotalks
             startTime = timestamp - 86400  # L2 lasts one day
 
-        print(startTime, userId)
         resp = l.find({"timestamp": {"$gt": startTime}, "userId": str(userId)}).sort(
             [("timestamp", -1)]
         )
 
         result = list()
         for item in resp:
-            result.append(item["talk"])
+            result.append(item)
         return result
 
     def timeFlow(self, userId, talkId=None, timeFrame=None):

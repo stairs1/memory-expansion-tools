@@ -12,6 +12,9 @@ class SearchPage(Resource):
         "timestamp": fields.Float,
         "_id": fields.String,
         "prettyTime": fields.String,
+        "latitude": fields.Float,
+        "longitude": fields.Float,
+        "address": fields.String
     }
 
     def __init__(self, jwt):
@@ -45,6 +48,7 @@ class SearchPage(Resource):
             data = item["speech"]
             r = self.db.search(userId, data, queryTime=reqTime)
             for item in r:
+                print(item)
                 item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
                     "%a, %b %-d %-I:%-M %p"
                 )
