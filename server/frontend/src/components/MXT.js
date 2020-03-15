@@ -37,7 +37,7 @@ class MXT extends Component {
               <h1>MXT Cache</h1>
                 <ul className="cachelist">
             {this.state.cache.length > 0 && this.state.cache.map((cachep) => (
-                        <li key={cachep} className="cacheitem">{cachep}</li>
+                        <li key={cachep} className="cacheitem">{cachep["talk"]}</li>
                         ))
                     }
                   </ul>

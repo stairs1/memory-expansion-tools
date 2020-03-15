@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { url, loginEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
+import App from "../App.js";
 
 class Login extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       username: '',
       password: '',
@@ -36,6 +37,7 @@ class Login extends Component {
     if (res){ //use the given username and pass to login (hits the backend with credentials and gets jwt and saves in cookie
         //we should redirect to the MXT cache here
         console.log("success***************");
+        this.props.authCallback();
 		return this.setState({ error: "Successful login."}); //we don't need this, remove once we are redirecting
     } else {
         console.log("FAILLLL***************");

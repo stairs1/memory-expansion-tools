@@ -2,17 +2,47 @@ import { url, loginEnd, refreshEnd, signupEnd } from "../constants";
 
 class AuthHandle {
 
-    static async getToken(){
-        var token = await this.getCookie("access_token_cookie");
+    static async checkExpired(token){
         var decodedToken = this.parseJwt(token);
-        console.log(decodedToken);
         var date = new Date();
         // date.getTime() is in milliseconds and thus we've got to divide by 1000
         if(decodedToken.exp<date.getTime()/1000){ //the token has expired
-            await this.refresh();
-            var token = this.getCookie("access_token_cookie");
+            return true;
         }
-        return token;
+        return false;
+    }
+
+    static async getToken(){
+        var token = await this.getCookie("access_token_cookie");
+        if (token === null){
+            return null;
+        }
+        if(this.checkExpired(token)){ //the token has expired
+            var res = await this.refresh();
+            if (res){ 
+                var token = this.getCookie("access_token_cookie");
+                return token;
+            }
+        }
+        return null;
+    }
+
+    static async authStatus(){ //this bit is a gross and should be abstracted out, it's just a repeat of above
+        console.log("getting it...");
+        var token = await AuthHandle.getToken();
+        console.log("got it...");
+        if (token === null){
+            console.log("running");
+            return false;
+        }
+            console.log("not running");
+        return true; //return true because we have a token and it is not expired
+    }
+
+    static async logout(){
+        this.deleteCookie("access_token_cookie");//delete the login cookies
+        this.deleteCookie("refresh_token_cookie"); 
+        return true;
     }
 
     static async login(username, password) {
@@ -47,8 +77,18 @@ class AuthHandle {
         document.cookie = name + "=" + (value || "")  + expires + "; path=/";
     }
 
+    static async deleteCookie(name){
+        var d = new Date(); //Create an date object
+        d.setTime(d.getTime() - (1000*60*60*24)); //Set the time to the past. 1000 milliseonds = 1 second
+        var expires = "expires=" + d.toGMTString(); //Compose the expirartion date
+        window.document.cookie = name+"="+"; "+expires;//Set the cookie with name and the expiration date
+    }
+
     static async getCookie(name) {
         var nameEQ = name + "=";
+        if (document.cookie === null) { //there are no cookies at all
+            return null;
+        }
         var ca = document.cookie.split(';');
         for(var i=0;i < ca.length;i++) {
         var c = ca[i];
