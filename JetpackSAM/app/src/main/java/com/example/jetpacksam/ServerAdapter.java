@@ -59,7 +59,7 @@ public class ServerAdapter {
         String token = getToken(true);
 
         //url to hit for this api request
-        String turl = url + "/remember";
+        String turl = url + "/api/remember";
 
         //to be sent
         JSONObject params = new JSONObject();
@@ -123,7 +123,7 @@ public class ServerAdapter {
 
     public void login(String user, String pass){
         Log.d("cayden", "login called with user: " + user + ":" + pass);
-        String turl = url;
+        String turl = url + "/api/loginapi";
         //build login params body
         JSONObject params = new JSONObject();
         try {
@@ -184,7 +184,7 @@ public class ServerAdapter {
     private void refresh(){
         Log.d("cayden", "refresh called");
         String token = getToken(false); //get the stored refresh token
-        String turl = url + "/refresh";
+        String turl = url + "/api/refresh";
 
         // Request a json response from the provided URL.
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, turl, null,

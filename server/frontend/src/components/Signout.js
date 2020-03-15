@@ -13,15 +13,14 @@ class Signout extends Component {
     }
     
   async componentDidMount(){
-        this.setState({logout : await AuthHandle.logout()}, console.log("dogs" + this.state.logout));
-      this.props.authCallback();
+        this.setState({logout : await AuthHandle.logout()}, console.log("dogs" + this.state.logout), this.props.authCallback());
         }
   
             render() {
             return(
                 <div>
-              <h3>Logging {this.state.logout} you out...</h3>
-                {this.state.logout ? <Redirect to="/" /> : null}
+              <h3>Logging you out...</h3>
+                {this.state.logout ? <Redirect to="/react" /> : null}
                 </div>
           )
         }
