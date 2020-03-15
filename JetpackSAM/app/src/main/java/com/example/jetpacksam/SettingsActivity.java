@@ -1,6 +1,8 @@
 package com.example.jetpacksam;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,16 +12,25 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
+
+import java.util.Arrays;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String LOG_TAG = SettingsActivity.class.getName();
     public static final int PERMISSION_REQUEST = 66;
     static Runnable transcriptionSwitchCallback = null;
+    public static final String[] perms = {
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TranscriptionManager.wakeup(this);
         setContentView(R.layout.settings_activity);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -34,14 +45,26 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if(requestCode == PERMISSION_REQUEST) {
-            if(grantResults.length == 2
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-                Log.d(LOG_TAG, "all perms granted");
-            }
-            else{
+
+            // For now, require all permissions
+            if(Arrays.stream(grantResults).anyMatch(i -> i == PackageManager.PERMISSION_DENIED)){
                 Log.d(LOG_TAG, "a permission was denied");
                 transcriptionSwitchCallback.run();
+                new AlertDialog.Builder(SettingsActivity.this)
+                        .setTitle("Why the permissions?")
+                        .setMessage(
+                                "The microphone is used to transcribe your speech\n\n" +
+                                        "Location is used to let you remember ideas by place, " +
+                                        "and where you were by what you were saying"
+                        )
+                        .setPositiveButton("ok", null)
+                        .show();
+            }
+            else{
+                Log.d(LOG_TAG, "all permissions granted");
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                prefs.edit().putBoolean("transcribe", true).commit();
+                TranscriptionManager.wakeup(getApplicationContext());
             }
         }
     }
@@ -90,18 +113,25 @@ public class SettingsActivity extends AppCompatActivity {
             }
         };
 
+        // If there are any missing return false
+        public static boolean checkPerms(Context context){
+            int granted = PackageManager.PERMISSION_GRANTED;
+            for(String perm: perms){
+                if(context.checkSelfPermission(perm) != granted){
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // Manages permissions by requiring them when transcription is switched on
         private void createTranscriptionSwitchListener(SwitchPreference transcriptionSwitch){
             if (transcriptionSwitch != null){
                 transcriptionSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     if(newValue.toString().equals("true")){
                         Log.d(LOG_TAG, "transcription switched on, check permissions");
-                        if(ActivityCompat.checkSelfPermission( getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-                            ActivityCompat.requestPermissions(
-                                    getActivity(),
-                                    new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION},
-                                    PERMISSION_REQUEST
-                            );
+                        if(!checkPerms(getContext())){
+                            ActivityCompat.requestPermissions( getActivity(), perms, PERMISSION_REQUEST );
                         }
                     }
                     return true;

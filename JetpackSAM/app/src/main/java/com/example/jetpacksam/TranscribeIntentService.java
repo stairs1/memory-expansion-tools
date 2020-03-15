@@ -169,6 +169,7 @@ public class TranscribeIntentService extends IntentService {
                     case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
                         Log.e(LOG_TAG, "SpeechRecognizer needs permissions!");
                         transcription_on = false;
+                        stopTranscription();
                         break;
                     case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                         Log.d(LOG_TAG, "request ignored, recognizer busy");

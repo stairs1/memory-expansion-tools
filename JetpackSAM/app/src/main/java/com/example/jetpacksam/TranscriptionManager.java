@@ -1,5 +1,6 @@
 package com.example.jetpacksam;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
@@ -46,10 +47,19 @@ public class TranscriptionManager {
         stopTranscriptionOnHeadset();
     }
 
+    @SuppressLint("ApplySharedPref")
     public static void wakeup(Context context){
         context = context.getApplicationContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if(prefs.getBoolean("transcribe", false)){
+            // check for permissions, and if they are gone, set transcription preference to off.
+            // This prevents the app from entering a broken state when permissions
+            // are revoked from settings.
+            if(!SettingsActivity.SettingsFragment.checkPerms(context)){
+                prefs.edit().putBoolean("transcribe", false).commit();
+                return;
+            }
+
             Log.d(LOG_TAG, "transcription is on, ensure service started");
             startTranscription(context);
             if(prefs.getBoolean("bluetooth_headset", false)){
