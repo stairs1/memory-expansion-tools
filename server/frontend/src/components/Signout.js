@@ -20,7 +20,7 @@ class Signout extends Component {
             return(
                 <div>
               <h3>Logging you out...</h3>
-                {this.state.logout ? <Redirect to="/react" /> : null}
+                {this.state.logout ? <Redirect to="/" /> : null}
                 </div>
           )
         }
