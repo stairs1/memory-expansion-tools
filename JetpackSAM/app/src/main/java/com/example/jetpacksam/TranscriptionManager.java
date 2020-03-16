@@ -27,6 +27,7 @@ public class TranscriptionManager {
     public static final String LOG_TAG = TranscriptionManager.class.getName();
     static BluetoothHeadset headset = null;
     static BluetoothDevice headsetDevice = null;
+    static boolean headsetInUse = false;
     static boolean transcriptionOn = false;
 
     private static void startTranscription(Context context){
@@ -52,18 +53,25 @@ public class TranscriptionManager {
         context = context.getApplicationContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if(prefs.getBoolean("transcribe", false)){
-            // check for permissions, and if they are gone, set transcription preference to off.
+            // check for permissions, and if gone, set transcription and headset preferences to off.
             // This prevents the app from entering a broken state when permissions
             // are revoked from settings.
             if(!SettingsActivity.SettingsFragment.checkPerms(context)){
                 prefs.edit().putBoolean("transcribe", false).commit();
+                prefs.edit().putBoolean("bluetooth_headset", false).commit();
+                stopTranscriptionOnHeadset();
+                stopTranscription(context);
+                transcriptionOn = false;
+                headsetInUse = false;
                 return;
             }
 
             Log.d(LOG_TAG, "transcription is on, ensure service started");
+
             startTranscription(context);
-            if(prefs.getBoolean("bluetooth_headset", false)){
-                startTranscriptionOnHeadset(context);
+            if (prefs.getBoolean("bluetooth_headset", false) && !headsetInUse) {
+                // behind a flag because if it is already on, there is a flipflop behaviour
+                startTranscriptionOnHeadset(context.getApplicationContext());
             }
         }
         else{
@@ -79,7 +87,14 @@ public class TranscriptionManager {
             if(connectedDevices.size() > 0) {
                 Log.d(LOG_TAG, "starting voicerec on headset");
                 headsetDevice = connectedDevices.get(0);
-                headset.startVoiceRecognition(headsetDevice);
+
+                //start voicerec, and if it is already started, restart it.
+                if(headset.startVoiceRecognition(headsetDevice)){
+                    headsetInUse = true;
+                }
+                else{
+                    Log.d(LOG_TAG, "start failed");
+                }
             }
         }
 
@@ -95,7 +110,9 @@ public class TranscriptionManager {
     public static void stopTranscriptionOnHeadset(){
         if(headset != null && headsetDevice != null){
             Log.d(LOG_TAG, "stopping voicerec on headset");
-            headset.stopVoiceRecognition(headsetDevice);
+            if(headset.stopVoiceRecognition(headsetDevice)){
+                headsetInUse = false;
+            }
         }
     }
 }

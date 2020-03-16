@@ -1,9 +1,16 @@
 package com.example.jetpacksam;
 
 import android.app.Application;
+import android.location.Location;
+
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class PhraseRepository {
 
@@ -20,15 +27,23 @@ public class PhraseRepository {
         return mAllPhrases;
     }
 
-    void insert(Phrase phrase) {
-        PhraseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mPhraseDao.insert(phrase);
-        });
+    long insert(Phrase phrase) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Callable<Long> insertCallable = () -> mPhraseDao.insert(phrase);
+        Future<Long> future = executorService.submit(insertCallable);
+        long rowId = 0;
+        try{
+            rowId = future.get();
+        }
+        catch (InterruptedException | ExecutionException e){
+            e.printStackTrace();
+        }
+        return rowId;
     }
 
-    void update(Phrase phrase) {
+    void update(long id, Location location, String address) {
         PhraseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mPhraseDao.update(phrase);
+            mPhraseDao.update(id, location, address);
         });
     }
 

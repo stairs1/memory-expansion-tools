@@ -1,22 +1,23 @@
 package com.example.jetpacksam;
 
+import android.location.Location;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.List;
 
 @Dao
 public interface PhraseDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Phrase phrase);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insert(Phrase phrase);
 
-    @Update
-    void update(Phrase phrase);
+    @Query("UPDATE PhraseTable SET location = :location, address = :address WHERE id = :id")
+    void update(long id, Location location, String address);
 
     @Query("DELETE FROM PhraseTable")
     void deleteAll();

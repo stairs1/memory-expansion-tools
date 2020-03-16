@@ -1,6 +1,7 @@
 package com.example.jetpacksam;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "main oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

@@ -224,7 +224,7 @@ public class TranscribeIntentService extends IntentService {
                     // if its one letter or less, its mostly garbage.
                     Log.d(LOG_TAG, "skipping empty results, calling startTranscription");
                 } else {
-                    PhraseCreator.create(sentences.get(0), getString(R.string.medium_spoken), getApplicationContext(), repo, server);
+                    PhraseCreator.create(words, getString(R.string.medium_spoken), getApplicationContext(), repo, server);
                     Log.d(LOG_TAG, "got results and created phrase, calling startTranscription");
                 }
 
