@@ -1,16 +1,25 @@
 import React, { Component } from "react";
-import { List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
-class TalkItem extends Component:
+class TalkItem extends Component{
     
     render() {
-        <ListItem key={data}>
-                  <ListItemText
-                    primary={data}
-                  />
+        return (
+            <Paper elevation={5}>
+                <ListItem >
+                <Typography variant="body1" />
+                    {this.props.data}
                 </ListItem>
-    }
+            </Paper>
+        ) }
 }
 
-default export TalkItem
+export default  TalkItem
 
+//    <ListItem key={this.props.talk} className="cacheitem">
+//                      <ListItemText
+//                        primary={this.props.talk}
+//                      />
+//                    </ListItem>
+//

@@ -88,8 +88,8 @@ class Signup extends Component {
     render() {
         return (
             <div>
-        <Typography type="h1">
-              Welcome to Memory Expansion Tools. Please sign up here.
+        <Typography variant="h3">
+              This is Memory Expansion Tools. Please sign up here.
         </Typography>
         <form onSubmit={this.handleSubmit}>
           {

@@ -15,11 +15,12 @@ class NavBar extends Component {
           <Typography variant="h6" >
             MemoryExpansionTools
           </Typography>
-          <Button component={Link} to="/login" color="inherit">Login</Button>
           <Button component={Link} to="/" color="inherit">Signup</Button>
+          <Button component={Link} to="/login" color="inherit">Login</Button>
             {this.props.login ? <Button component={Link} to="/mxt" color="inherit">MXTCache</Button> : null }
             {this.props.login ? <Button component={Link} to="/stream" color="inherit">MemoryStream</Button> : null}
             {this.props.login ? <Button component={Link} to="/search" color="inherit">Search</Button> : null}
+            {this.props.login ? <Button component={Link} to="/signout" color="inherit">Signout</Button> : null }
         </Toolbar>
       </AppBar>
     </div>

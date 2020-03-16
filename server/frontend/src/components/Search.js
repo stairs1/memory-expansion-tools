@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TalkItem from "./Talks.js";
 import { url, searchEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
 import { List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
@@ -49,7 +50,7 @@ class MXT extends Component {
     render() {
         return (
            <div>
-         <Typography type="h1">
+         <Typography variant="h3">
               Search
         </Typography>
         <form onSubmit={this.handleSubmit}>
@@ -59,12 +60,7 @@ class MXT extends Component {
             </form>
 
             {this.state.results.length > 0 && this.state.results.map((result) => (
-                  <ListItem key={result}>
-                      <ListItemText
-                        primary={result.talk}
-                        />
-                </ListItem>
-
+                  <TalkItem data={result.talk} />
                         ))
                     }
                 </div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { url, loginEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
 import App from "../App.js";
@@ -69,9 +69,10 @@ class Login extends Component {
     // but you don't need to target those (any css-selector will work)
 
     return (
+        <Fragment>
       <div className="Login">
         {this.state.logout ? <Redirect to="/mxt" /> : null}
-        <Typography type="h1">
+        <Typography variant="h3">
         Login
         </Typography>
         <form onSubmit={this.handleSubmit}>
@@ -81,7 +82,7 @@ class Login extends Component {
               {this.state.error}
             </h3>
           }
-          <TextField autoFocus id="username" label="User Name" value={this.state.username} onChange={this.handleUserChange} /> 
+          <TextField autoFocus={true} id="username" label="User Name" value={this.state.username} onChange={this.handleUserChange} /> 
         <br />
 
           <TextField id="password" type="password" label="Password" value={this.state.password} onChange={this.handlePassChange} /> 
@@ -89,6 +90,7 @@ class Login extends Component {
             <Button type="submit" id="submit">Log In</Button>
         </form>
       </div>
+        </Fragment>
     );
   }
 }
