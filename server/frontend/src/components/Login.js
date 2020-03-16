@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { url, loginEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
 import App from "../App.js";
+import { Redirect } from "react-router-dom";
+import { FormControl, TextField, Button, Typography } from '@material-ui/core';
 
 class Login extends Component {
   constructor(props) {
@@ -9,6 +11,7 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
+        logout : false,
       error: '',
     };
 
@@ -38,6 +41,8 @@ class Login extends Component {
         //we should redirect to the MXT cache here
         console.log("success***************");
         this.props.authCallback();
+        this.setState({logout : true});
+        this.props.authCallback();
 		return this.setState({ error: "Successful login."}); //we don't need this, remove once we are redirecting
     } else {
         console.log("FAILLLL***************");
@@ -65,7 +70,10 @@ class Login extends Component {
 
     return (
       <div className="Login">
-        <h1>Welcome to Memory Expansion Tools. Log in.</h1>
+        {this.state.logout ? <Redirect to="/mxt" /> : null}
+        <Typography type="h1">
+        Login
+        </Typography>
         <form onSubmit={this.handleSubmit}>
           {
             this.state.error &&
@@ -73,13 +81,12 @@ class Login extends Component {
               {this.state.error}
             </h3>
           }
-          <input type="text" data-test="username" placeholder="User Name" value={this.state.username} onChange={this.handleUserChange} />
+          <TextField autoFocus id="username" label="User Name" value={this.state.username} onChange={this.handleUserChange} /> 
         <br />
 
-          <input type="password" data-test="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
+          <TextField id="password" type="password" label="Password" value={this.state.password} onChange={this.handlePassChange} /> 
         <br />
-
-          <input type="submit" value="Log In" data-test="submit" />
+            <Button type="submit" id="submit">Log In</Button>
         </form>
       </div>
     );

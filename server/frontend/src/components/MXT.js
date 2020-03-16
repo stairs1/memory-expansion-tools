@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { url, mxtEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
+import { List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
 
 class MXT extends Component {
     state = {
@@ -34,13 +35,21 @@ class MXT extends Component {
     render() {
         return (
             <div>
-              <h1>MXT Cache</h1>
-                <ul className="cachelist">
+        <Typography type="h1">
+              MXT Cache
+        </Typography>
+        <List>
+            
             {this.state.cache.length > 0 && this.state.cache.map((cachep) => (
-                        <li key={cachep} className="cacheitem">{cachep["talk"]}</li>
+              <ListItem key={cachep.talk} className="cacheitem">
+                  <ListItemText
+                    primary={cachep["talk"]}
+                  />
+                </ListItem>
+
                         ))
                     }
-                  </ul>
+                            </List>
                 </div>
           )
       }

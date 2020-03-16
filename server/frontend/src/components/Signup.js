@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { url, signupEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
+import { FormControl, TextField, Button, Typography } from '@material-ui/core';
 
 class Signup extends Component {
   constructor() {
@@ -87,7 +88,9 @@ class Signup extends Component {
     render() {
         return (
             <div>
-              <h1>Welcome to Memory Expansion Tools. Please sign up here.</h1>
+        <Typography type="h1">
+              Welcome to Memory Expansion Tools. Please sign up here.
+        </Typography>
         <form onSubmit={this.handleSubmit}>
           {
             this.state.error &&
@@ -95,19 +98,20 @@ class Signup extends Component {
               {this.state.error}
             </h3>
           }
-          <input type="text" data-test="username" placeholder="User Name" value={this.state.username} onChange={this.handleUserChange} />
+          <TextField autoFocus id="username" label="User Name" value={this.state.username} onChange={this.handleUserChange} /> 
         <br />
 
-          <input type="text" data-test="email" placeholder="Email" value={this.state.email} onChange={this.handleEmailChange} />
+          <TextField id="email" label="Email" value={this.state.email} onChange={this.handleEmailChange} /> 
         <br />
           
-            <input type="text" data-test="name" placeholder="Name" value={this.state.name} onChange={this.handleNameChange} />
+
+          <TextField id="name" label="Full Name" value={this.state.name} onChange={this.handleNameChange} /> 
         <br />
 
-            <input type="password" data-test="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
+          <TextField id="password" type="password" label="Password" value={this.state.password} onChange={this.handlePassChange} /> 
         <br />
 
-          <input type="submit" value="Log In" data-test="submit" />
+            <Button type="submit" id="submit">Sign Up</Button>
         </form>
 
                 </div>
