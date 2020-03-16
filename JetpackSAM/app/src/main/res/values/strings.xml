@@ -17,8 +17,8 @@
     <!-- Data Stream Preferences -->
     <string name="record_audio">Record Audio</string>
     <string name="transcribe">Live Transcription</string>
-    <string name="native_voicerec">On-Device Transcription</string>
-    <string name="native_voicerec_summary">Faster, may not work on older devices</string>
+    <string name="native_voicerec">On-Device Transcription (Beta)</string>
+    <string name="native_voicerec_summary">Faster, but may fail or work inconsistently on some devices</string>
 
     <!-- Server Preferences -->
     <string name="sync_title">Paired Remote Server</string>

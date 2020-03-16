@@ -8,14 +8,15 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -69,10 +70,13 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
         final PhraseListAdapter adapter = new PhraseListAdapter(this);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() -1);
 
         TranscriptionManager.wakeup(this);
 
@@ -87,26 +91,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        EditText editText = findViewById(R.id.add_phrase_text);
+        Button submitButton = findViewById(R.id.submit_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewPhraseActivity.class);
-                startActivityForResult(intent, NEW_PHRASE_ACTIVITY_REQUEST_CODE);
+            public void onClick(View v) {
+                String words = editText.getText().toString();
+                if(!words.isEmpty()) {
+                    editText.setText("");
+                    mPhraseViewModel.addPhrase(words, getString(R.string.medium_text));
+                }
             }
         });
-
-
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == NEW_PHRASE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                String words = data.getStringExtra(NewPhraseActivity.EXTRA_WORD);
-                mPhraseViewModel.addPhrase(words, getString(R.string.medium_text));
-            }
-        }
     }
 }
