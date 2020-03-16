@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,15 +22,13 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String LOG_TAG = SettingsActivity.class.getName();
     public static final int PERMISSION_REQUEST = 66;
     static Runnable transcriptionSwitchCallback = null;
-    public static final String[] perms = {
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-    };
+    public static Build build = new Build();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         TranscriptionManager.wakeup(this);
         setContentView(R.layout.settings_activity);
         getSupportFragmentManager()
@@ -119,8 +118,28 @@ public class SettingsActivity extends AppCompatActivity {
             }
         };
 
+        public static String[] getPerms(){
+            String[] perms = null;
+            if(Build.VERSION.SDK_INT >= 29){
+                perms = new String[]{
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                };
+            }
+            else{
+                perms = new String[]{
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                };
+            }
+            return perms;
+        }
+
         // If there are any missing return false
         public static boolean checkPerms(Context context){
+            String[] perms = getPerms();
+            Log.d(LOG_TAG, "numperms: " + perms.length);
             int granted = PackageManager.PERMISSION_GRANTED;
             for(String perm: perms){
                 if(context.checkSelfPermission(perm) != granted){
@@ -137,7 +156,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if(newValue.toString().equals("true")){
                         Log.d(LOG_TAG, "transcription switched on, check permissions");
                         if(!checkPerms(getContext())){
-                            ActivityCompat.requestPermissions( getActivity(), perms, PERMISSION_REQUEST );
+                            ActivityCompat.requestPermissions( getActivity(), getPerms(), PERMISSION_REQUEST );
                         }
                     }
                     return true;
