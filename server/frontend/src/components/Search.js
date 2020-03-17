@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import TalkItem from "./Talks.js";
 import { url, searchEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
+import { Box, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 class MXT extends Component {
   constructor() {
@@ -47,21 +50,21 @@ class MXT extends Component {
 
     render() {
         return (
-            <div>
-              <h1>Search</h1>
+            <Box m={2}>
+         <Typography variant="h4">
+              Search
+        </Typography>
         <form onSubmit={this.handleSubmit}>
-          <input type="text" data-test="query" placeholder="Search query here..." value={this.state.query} onChange={this.handleQueryChange}/>
+          <TextField autoFocus id="query" label="Query" value={this.state.query} onChange={this.handleQueryChange} /> 
         <br />
-          <input type="submit" value="Log In" data-test="submit" />
+            <Button type="submit" id="submit">Submit</Button>
             </form>
 
-                <ul className="results">
             {this.state.results.length > 0 && this.state.results.map((result) => (
-                        <li key={result} className="searchitem">{result.talk}</li>
+                  <TalkItem data={result.talk} />
                         ))
                     }
-                  </ul>
-                </div>
+            </Box>
           )
       }
 }

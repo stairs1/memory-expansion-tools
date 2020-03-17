@@ -141,11 +141,11 @@ class Database:
             recents.append(item)
         return recents
 
-    def getPhrases(self, userId):
+    def getPhrases(self, userId, num=100):
         if not self.userExists(userId):
             return Non
 
-        talks = self.getMostRecent(userId, 10)
+        talks = self.getMostRecent(userId, num)
         phrases = list()
         for item in talks:
             phrases.append(item["talk"])

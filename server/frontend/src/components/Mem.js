@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 import ReactDOM from 'react-dom';
+import { FormControl, TextField, Button, Typography } from '@material-ui/core';
 
 class Mem extends Component{
     constructor() {
@@ -34,24 +35,27 @@ class Mem extends Component{
             )
         }
 
-        var listy = [
-            this.state.value.stage[0],
-            this.state.value.stage[1],
-            this.state.value.stage[2],
-            this.state.value.stage[3]
-        ];
-		var listitems = listy.map((child, i) => 
-			React.createElement('li', {key : i}, child)
-		    );
-        ReactDOM.render(
-            React.createElement('ol', {key : "stage"}, listitems),
-            document.getElementById('stage')
-        )
+//        var listy = [
+//            this.state.value.stage[0],
+//            this.state.value.stage[1],
+//            this.state.value.stage[2],
+//            this.state.value.stage[3]
+//        ];
+//		var listitems = listy.map((child, i) => 
+//			React.createElement('li', {key : i}, child)
+//		    );
+//        ReactDOM.render(
+//            React.createElement('ol', {key : "stage"}, listitems),
+//            document.getElementById('stage')
+//        )
     }
 
     render() {
         return (
             <div>
+        <Typography type="h1">
+        Voice Stream
+        </Typography>
     <div className='split left'>
         <h3>What I've been saying</h3>
         <hr/>

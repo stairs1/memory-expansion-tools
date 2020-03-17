@@ -1,27 +1,50 @@
 import Login from './components/Login.js';
 import Signup from './components/Signup.js';
 import MXT from './components/MXT.js';
+import Stream from './components/Stream.js';
 import Mem from './components/Mem.js';
 import Search from './components/Search.js';
 import Signout from './components/Signout.js';
-import "./App.css";
+import BottomAppBar from './components/Nav.js';
+import TitleBar from './components/TitleBar.js';
+
+import CardMedia from '@material-ui/core/CardMedia';
+
 import AuthHandle from "./components/AuthHandler.js";
 
 import React from "react";
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+
+//material-ui stuff
+import { CssBaseline, AppBar, Typography, MenuList, MenuItem
+} from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: "#222222", contrastText: "#ffffff"
+ },
+    secondary: {
+        main: '#bf360c', contrastText: "#ffffff"
+    },
+  },
+});
 
 class App extends React.Component {
 
    constructor() {
     super();
     this.state = {
-      login: true,
-      dog: "hello"
+      login: false
     };
    }
 
@@ -29,19 +52,11 @@ class App extends React.Component {
         this.setState({login: await AuthHandle.authStatus()}, () => { console.log("updater" +this.state.login)});
     }
 
-    foo(){
-        return "hello";
-    }
-
-   state = {
-        login : false
-    }
-
     menuItem(name, link){
         return (
-                <li>
+              <MenuItem component={Link} to={link}>
                   <Link to={link}>{name}</Link>
-                </li>
+              </MenuItem>
         )
     }
 
@@ -52,47 +67,38 @@ class App extends React.Component {
         render() {
 
       return (
-        <Router>
           <div>
-            <nav>
-              <ul>
-                {this.state.login ? this.menuItem("MXT Cache", "/mxt") : null}
-                {this.state.login ? this.menuItem("WorkingMemory Cache", "/mem") : null}
-                {this.state.login ? this.menuItem("Search", "/search") : null}
-                <li>
-                  <Link to="/">Signup</Link>
-                </li>
-                <li>
-                  <Link to="/login">Log In</Link>
-                </li>
-                {this.state.login ? this.menuItem("Logout", "/signout") : null}
-              </ul>
-            </nav>
-
-            {/* A <Switch> looks through its children <Route>s and
-                renders the first one that matches the current URL. */}
-            <Switch>
-              <Route path="/mxt">
-                <MXT />
-              </Route>
-              <Route path="/mem">
-                <Mem />
-              </Route>
-              <Route path="/search">
-                <Search />
-              </Route>
-              <Route path="/login">
-                <Login authCallback={this.updateAuth.bind(this)}/>
-              </Route>
-              <Route path="/signout">
-                <Signout authCallback={this.updateAuth.bind(this)}/>
-              </Route>
-              <Route path="/">
-                <Signup/>
-              </Route>
-            </Switch>
+              <ThemeProvider theme={theme}>
+                    <BrowserRouter>
+                     <TitleBar />
+                <BottomAppBar login={this.state.login} />
+                <CssBaseline/> {/* make things always look the same 
+                    */}
+                        {/* A <Switch> looks through its children <Route>s and
+                            renders the first one that matches the current URL. */}
+                        <Switch>
+                          <Route path="/mxt">
+                            <MXT />
+                          </Route>
+                          <Route path="/stream">
+                            <Stream />
+                          </Route>
+                          <Route path="/search">
+                            <Search />
+                          </Route>
+                          <Route path="/login">
+                            <Login authCallback={this.updateAuth.bind(this)}/>
+                          </Route>
+                          <Route path="/signout">
+                            <Signout authCallback={this.updateAuth.bind(this)}/>
+                          </Route>
+                          <Route path="/">
+                            <Signup/>
+                          </Route>
+                        </Switch>
+                    </BrowserRouter>
+              </ThemeProvider>
           </div>
-        </Router>
       );
         }
 }
