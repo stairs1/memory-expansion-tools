@@ -66,8 +66,6 @@ public class TranscriptionManager {
                 return;
             }
 
-            Log.d(LOG_TAG, "transcription is on, ensure service started");
-
             startTranscription(context);
             if (prefs.getBoolean("bluetooth_headset", false) && !headsetInUse) {
                 // behind a flag because if it is already on, there is a flipflop behaviour
@@ -75,7 +73,6 @@ public class TranscriptionManager {
             }
         }
         else{
-            Log.d(LOG_TAG, "transcription is off, don't start service");
         }
     }
 
@@ -85,7 +82,6 @@ public class TranscriptionManager {
             headset = (BluetoothHeadset) proxy;
             List<BluetoothDevice> connectedDevices = headset.getConnectedDevices();
             if(connectedDevices.size() > 0) {
-                Log.d(LOG_TAG, "starting voicerec on headset");
                 headsetDevice = connectedDevices.get(0);
 
                 //start voicerec, and if it is already started, restart it.
@@ -93,7 +89,6 @@ public class TranscriptionManager {
                     headsetInUse = true;
                 }
                 else{
-                    Log.d(LOG_TAG, "start failed");
                 }
             }
         }
@@ -109,7 +104,6 @@ public class TranscriptionManager {
 
     public static void stopTranscriptionOnHeadset(){
         if(headset != null && headsetDevice != null){
-            Log.d(LOG_TAG, "stopping voicerec on headset");
             if(headset.stopVoiceRecognition(headsetDevice)){
                 headsetInUse = false;
             }

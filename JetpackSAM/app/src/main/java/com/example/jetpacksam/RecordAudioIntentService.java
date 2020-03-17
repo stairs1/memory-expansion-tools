@@ -63,7 +63,6 @@ public class RecordAudioIntentService extends IntentService {
                break;
             }
             if(ChronoUnit.MINUTES.between(ptime, ntime) >= 60){
-                Log.d(LOG_TAG, "creating new log file after time: " + ChronoUnit.MINUTES.between(ptime, ntime));
                 ptime = ntime;
                 stopRecording();
                 startRecording();
@@ -78,7 +77,6 @@ public class RecordAudioIntentService extends IntentService {
 
     @Override
     public void onDestroy(){
-        Log.d(LOG_TAG, "ending record audio service");
         stopRecording();
         stopForeground(Service.STOP_FOREGROUND_REMOVE);
         super.onDestroy();
@@ -99,17 +97,14 @@ public class RecordAudioIntentService extends IntentService {
         try {
             recorder.prepare();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
         }
 
 
         recorder.start();
         recording = true;
-        Log.d(LOG_TAG, "recording started");
     }
 
     private void stopRecording() {
-        Log.d(LOG_TAG, "stopRecording");
         if(recording){
             recording = false;
             try{

@@ -118,7 +118,6 @@ public class TranscribeIntentService extends IntentService {
     Runnable startTranscription = new Runnable() {
         @Override
         public void run() {
-            Log.d(LOG_TAG, "run starttranscription");
             if(mSpeechRecognizer == null || recogIntent == null){
                 Log.e(LOG_TAG, "Error: startTranscription called without initializing speechrecognizer or intent");
                 return;
@@ -139,12 +138,10 @@ public class TranscribeIntentService extends IntentService {
         return new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
-                Log.d(LOG_TAG, "Ready for speech");
             }
 
             @Override
             public void onBeginningOfSpeech() {
-                Log.d(LOG_TAG, "beginning of speech");
             }
 
             @Override
@@ -153,12 +150,10 @@ public class TranscribeIntentService extends IntentService {
 
             @Override
             public void onBufferReceived(byte[] buffer) {
-                Log.d(LOG_TAG, "buffer recieved");
             }
 
             @Override
             public void onEndOfSpeech() {
-                Log.d(LOG_TAG, "end of speech");
             }
 
             @Override
@@ -171,45 +166,35 @@ public class TranscribeIntentService extends IntentService {
                 // connected to recognition service; this error can be safely ignored.
                 switch (error){
                     case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                        Log.e(LOG_TAG, "SpeechRecognizer needs permissions!");
                         transcription_on = false;
                         stopTranscription();
                         break;
                     case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                        Log.d(LOG_TAG, "request ignored, recognizer busy");
                         restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                        Log.d(LOG_TAG, "timeout");
                         restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_NETWORK:
-                        Log.d(LOG_TAG, "network error");
                         restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                        Log.d(LOG_TAG, "network timeout");
                         restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_CLIENT:
-                        Log.d(LOG_TAG, "client error");
                         restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_AUDIO:
-                        Log.d(LOG_TAG, "audio error");
                         restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_NO_MATCH:
-                        Log.d(LOG_TAG, "no match");
                         restartTranscription();
                         break;
                     case SpeechRecognizer.ERROR_SERVER:
                         // this error is thrown when using native voicerec on unsupported devices.
-                        Log.d(LOG_TAG, "server error");
                         restartTranscription();
                         break;
                     default:
-                        Log.d(LOG_TAG, "defaulting to start" + error);
                         restartTranscription();
                         break;
                 }
@@ -222,10 +207,8 @@ public class TranscribeIntentService extends IntentService {
                 String words = sentences.get(0);
                 if(words.isEmpty() || words.length() == 1){
                     // if its one letter or less, its mostly garbage.
-                    Log.d(LOG_TAG, "skipping empty results, calling startTranscription");
                 } else {
                     PhraseCreator.create(words, getString(R.string.medium_spoken), getApplicationContext(), repo, server);
-                    Log.d(LOG_TAG, "got results and created phrase, calling startTranscription");
                 }
 
                 startTranscription();
@@ -233,12 +216,10 @@ public class TranscribeIntentService extends IntentService {
 
             @Override
             public void onPartialResults(Bundle partialResults) {
-                Log.d(LOG_TAG, "partial results");
             }
 
             @Override
             public void onEvent(int eventType, Bundle params) {
-                Log.d(LOG_TAG, "on event");
             }
         };
     }

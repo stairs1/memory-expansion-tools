@@ -32,7 +32,6 @@ public class ViewPhraseActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.view_phrase_toolbar);
         setSupportActionBar(toolbar);
         int phraseID = getIntent().getIntExtra("phrase", 0);
-        Log.d(LOG_TAG, "Got id in other activity: " + phraseID);
 
         mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
 
@@ -48,7 +47,6 @@ public class ViewPhraseActivity extends AppCompatActivity {
             public void onChanged(@Nullable final Phrase phrase) {
                 Date stamp = phrase.getTimestamp();
                 Location location = phrase.getLocation();
-                Log.d(LOG_TAG, "address: " + phrase.getAddress() + "location: " + location);
                 SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM d yyyy. h:mm:ss a");
                 dateholder.setText(formatter.format(stamp));
                 phraseholder.setText(phrase.getPhrase());

@@ -10,17 +10,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonIOException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,8 +48,6 @@ public class ServerAdapter {
         if (!serverOn){
             return;
         }
-
-        Log.d("cayden", "sendPhrase called");
 
         //get the current access token from sharedprefs
         String token = getToken(true);
@@ -92,21 +86,17 @@ public class ServerAdapter {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
-                        Log.d("cayden", "Response is: " + response.toString());
                         retry = 0;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("cayden", error.toString());
                 error.printStackTrace();
-                Log.d("cayden", "That didn't work!");
                 if (retry < 3) {
                     retry += 1;
                     refresh();
                     sendPhrase(phrase);
                 } else {
-                    Log.d("cayden", "Refresh unsuccessful, not trying again.");
                 }
             }
         }) {
@@ -122,7 +112,6 @@ public class ServerAdapter {
     }
 
     public void login(String user, String pass){
-        Log.d("cayden", "login called with user: " + user + ":" + pass);
         String turl = url + "/api/loginapi";
         //build login params body
         JSONObject params = new JSONObject();
@@ -139,7 +128,6 @@ public class ServerAdapter {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
-                        Log.d("cayden", "Response is: " + response.toString());
 
                         //store the token into shared preferences
                         SharedPreferences sharedPref = lcontext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
@@ -149,16 +137,13 @@ public class ServerAdapter {
                             editor.putString("refreshToken", response.getString("refreshToken"));
                             editor.commit();
                         } catch (JSONException e){
-                            Log.d("cayden", "error saving token");
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("cayden", error.toString());
                 error.printStackTrace();
-                Log.d("cayden", "That didn't work!");
             }
         });
         // Add the request to the RequestQueue.
@@ -177,12 +162,10 @@ public class ServerAdapter {
         SharedPreferences sharedPref = lcontext.getSharedPreferences(
                 "mxt", Context.MODE_PRIVATE);
         token = sharedPref.getString(name, "null");
-        Log.d("cayden", "******** SendHTTP TOKEN ISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" + token);
         return token;
     }
 
     private void refresh(){
-        Log.d("cayden", "refresh called");
         String token = getToken(false); //get the stored refresh token
         String turl = url + "/api/refresh";
 
@@ -192,7 +175,6 @@ public class ServerAdapter {
                     @Override
                     public void onResponse(JSONObject response) {
                         // Display the first 500 characters of the response string.
-                        Log.d("cayden", "Response is: " + response.toString());
                         try {
                             //store the new token into our shared preferences
                             String newToken = response.getString("token");
@@ -208,9 +190,7 @@ public class ServerAdapter {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("cayden", error.toString());
                 error.printStackTrace();
-                Log.d("cayden", "That didn't work!");
             }
         })
             {

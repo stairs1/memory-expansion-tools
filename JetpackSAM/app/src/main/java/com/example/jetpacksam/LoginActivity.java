@@ -41,7 +41,6 @@ public class LoginActivity extends Activity {
                     server.login(username.getText().toString(), password.getText().toString());
                     finish();
                 } else { //user hasn't entered correct credentials
-                    Log.d("cayden", "didn't enter stuff for login");
                 }
             }
         });

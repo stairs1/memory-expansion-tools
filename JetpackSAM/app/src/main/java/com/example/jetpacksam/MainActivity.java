@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "main oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

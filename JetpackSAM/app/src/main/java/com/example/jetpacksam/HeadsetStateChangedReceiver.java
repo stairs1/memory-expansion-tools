@@ -13,10 +13,8 @@ public class HeadsetStateChangedReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent){
         int state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, BluetoothHeadset.STATE_DISCONNECTED);
         if(state == BluetoothHeadset.STATE_CONNECTED){
-            Log.d(LOG_TAG, "headset got turned on");
             TranscriptionManager.wakeup(context);
         } else if (state == BluetoothHeadset.STATE_DISCONNECTED){
-            Log.d(LOG_TAG, "headset got turned off");
             TranscriptionManager.stopTranscriptionOnHeadset();
         }
     }

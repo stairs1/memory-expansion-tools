@@ -47,17 +47,13 @@ public class PhraseCreator {
                         phrase.setAddress(address);
                     }
                     else {
-                        Log.d(LOG_TAG, "no address found, omitting");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.d(LOG_TAG, "no address found, omitting");
                 }
-                Log.d(LOG_TAG, "phrase: " + words + ", " + "time: " + time.getTime() + " lat: " + location.getLatitude() + " lon: " + location.getLongitude() + " address: " + address);
                 repo.update(id, location, address);
             }
             else{
-                Log.d(LOG_TAG, "location returned null, sending phrase without location");
             }
             server.sendPhrase(phrase);
         });

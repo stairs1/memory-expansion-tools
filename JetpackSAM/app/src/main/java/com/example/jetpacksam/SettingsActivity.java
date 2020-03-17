@@ -47,7 +47,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             // For now, require all permissions
             if(Arrays.stream(grantResults).anyMatch(i -> i == PackageManager.PERMISSION_DENIED)){
-                Log.d(LOG_TAG, "a permission was denied");
                 transcriptionSwitchCallback.run();
                 new AlertDialog.Builder(SettingsActivity.this)
                         .setTitle("Why the permissions?")
@@ -60,7 +59,6 @@ public class SettingsActivity extends AppCompatActivity {
                         .show();
             }
             else{
-                Log.d(LOG_TAG, "all permissions granted");
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 prefs.edit().putBoolean("transcribe", true).commit();
                 TranscriptionManager.wakeup(getApplicationContext());
@@ -73,7 +71,6 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-            Log.d(LOG_TAG, "create prefs");
             SwitchPreference transcriptionPreference = findPreference("transcribe");
             SettingsActivity.transcriptionSwitchCallback = (() -> {
                 transcriptionPreference.setChecked(false);
@@ -96,22 +93,18 @@ public class SettingsActivity extends AppCompatActivity {
         // Responds to preference changes, eg to start or stop transcription
         SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, key) -> {
             if (key.equals("transcribe")) {
-                Log.d(LOG_TAG, "transcribe switched");
                 if (sharedPreferences.getBoolean("transcribe", false)) {
                     TranscriptionManager.wakeup(getContext());
                 } else {
                     TranscriptionManager.stopTranscription(getContext());
                 }
             } else if (key.equals("bluetooth_headset")) {
-                Log.d(LOG_TAG, "bluetooth switched");
                 if (sharedPreferences.getBoolean("bluetooth_headset", false)) {
                     TranscriptionManager.wakeup(getContext());
                 } else {
                     TranscriptionManager.stopTranscriptionOnHeadset();
                 }
             } else if (key.equals("native_voicerec")) {
-                Log.d(LOG_TAG, "native voicerec switched");
-
                 //TranscribeIntentService loads this preference on startup, so toggle transcription
                 TranscriptionManager.stopTranscription(getContext());
                 TranscriptionManager.wakeup(getContext());
@@ -139,7 +132,6 @@ public class SettingsActivity extends AppCompatActivity {
         // If there are any missing return false
         public static boolean checkPerms(Context context){
             String[] perms = getPerms();
-            Log.d(LOG_TAG, "numperms: " + perms.length);
             int granted = PackageManager.PERMISSION_GRANTED;
             for(String perm: perms){
                 if(context.checkSelfPermission(perm) != granted){
@@ -154,7 +146,6 @@ public class SettingsActivity extends AppCompatActivity {
             if (transcriptionSwitch != null){
                 transcriptionSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     if(newValue.toString().equals("true")){
-                        Log.d(LOG_TAG, "transcription switched on, check permissions");
                         if(!checkPerms(getContext())){
                             ActivityCompat.requestPermissions( getActivity(), getPerms(), PERMISSION_REQUEST );
                         }
