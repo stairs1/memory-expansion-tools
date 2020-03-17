@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { url, mxtEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
 import TalkItem from "./Talks.js";
-import { Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { Box, Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 class MXT extends Component {
     state = {
@@ -35,8 +36,9 @@ class MXT extends Component {
        
     render() {
         return (
+            <Box m={2}>
             <div>
-        <Typography variant="h3">
+        <Typography variant="h4">
               MXT Cache
         </Typography>
             <List>
@@ -46,6 +48,7 @@ class MXT extends Component {
                     }
                             </List>
                 </div>
+            </Box>
           )
       }
 }

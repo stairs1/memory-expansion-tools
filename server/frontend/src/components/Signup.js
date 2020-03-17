@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { url, signupEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
-import { FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { CardMedia, Paper, Box, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
+import BackgroundImage from '../res/bg_small.jpg';
 
 class Signup extends Component {
   constructor() {
@@ -87,7 +89,8 @@ class Signup extends Component {
        
     render() {
         return (
-            <div>
+            <Box m={0}>
+            <Box m={2}>
         <Typography variant="h3">
               This is Memory Expansion Tools. Please sign up here.
         </Typography>
@@ -98,7 +101,7 @@ class Signup extends Component {
               {this.state.error}
             </h3>
           }
-          <TextField autoFocus id="username" label="User Name" value={this.state.username} onChange={this.handleUserChange} /> 
+          <TextField id="username" label="User Name" value={this.state.username} onChange={this.handleUserChange} /> 
         <br />
 
           <TextField id="email" label="Email" value={this.state.email} onChange={this.handleEmailChange} /> 
@@ -113,8 +116,9 @@ class Signup extends Component {
 
             <Button type="submit" id="submit">Sign Up</Button>
         </form>
+            </Box>
 
-                </div>
+            </Box>
           )
       }
 }

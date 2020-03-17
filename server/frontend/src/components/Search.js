@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import TalkItem from "./Talks.js";
 import { url, searchEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
-import { List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { Box, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 class MXT extends Component {
   constructor() {
@@ -49,8 +50,8 @@ class MXT extends Component {
 
     render() {
         return (
-           <div>
-         <Typography variant="h3">
+            <Box m={2}>
+         <Typography variant="h4">
               Search
         </Typography>
         <form onSubmit={this.handleSubmit}>
@@ -63,7 +64,7 @@ class MXT extends Component {
                   <TalkItem data={result.talk} />
                         ))
                     }
-                </div>
+            </Box>
           )
       }
 }

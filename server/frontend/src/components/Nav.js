@@ -26,6 +26,14 @@ import { Button, Popper, Menu, MenuItem, CssBaseline, AppBar, Typography, MenuLi
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
+  palette: {
+    primary: { main: "#111111", contrastText: "#ffffff"
+ },
+    secondary: {
+        main: '#c53211', contrastText: "#ffffff"
+    },
+      textPrimary : { main: '#fff'},
+  },
   text: {
     padding: theme.spacing(2, 2, 0),
   },
@@ -111,7 +119,7 @@ export default function BottomAppBar(props) {
                   aria-haspopup="true"
                   onClick={handleToggle}
                     id="accountMenuButton" 
-                color="inherit" 
+                color="secondary" 
                 edge="start" 
                 classes={{label: classes.iconButtonLabel}}
                 >
@@ -146,15 +154,16 @@ export default function BottomAppBar(props) {
             console.log("trueeeeee");
             return (
                 <div>
-               <IconButton color="inherit" component={Link} to="/stream" classes={{label: classes.iconButtonLabel}}>
+               <IconButton color="secondary" component={Link} to="/stream" classes={{label: classes.iconButtonLabel}}>
                 <PlayArrowIcon />
                 <Typography variant="body2">Stream</Typography>
+                
               </IconButton>
-              <IconButton color="inherit" component={Link} to="/mxt" classes={{label: classes.iconButtonLabel}}>
+              <IconButton color="secondary" component={Link} to="/mxt" classes={{label: classes.iconButtonLabel}}>
                 <MemoryIcon />
                 <Typography variant="body2">Cache</Typography>
               </IconButton>
-              <IconButton color="inherit" component={Link} to="/search" classes={{label: classes.iconButtonLabel}}>
+              <IconButton color="secondary" component={Link} to="/search" classes={{label: classes.iconButtonLabel}}>
                 <SearchIcon />
                 <Typography variant="body2">Search</Typography>
               </IconButton>

@@ -3,7 +3,8 @@ import { url, loginEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
 import App from "../App.js";
 import { Redirect } from "react-router-dom";
-import { FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { Box, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 class Login extends Component {
   constructor(props) {
@@ -69,10 +70,11 @@ class Login extends Component {
     // but you don't need to target those (any css-selector will work)
 
     return (
+        <Box m={2}>
         <Fragment>
       <div className="Login">
         {this.state.logout ? <Redirect to="/mxt" /> : null}
-        <Typography variant="h3">
+        <Typography variant="h4">
         Login
         </Typography>
         <form onSubmit={this.handleSubmit}>
@@ -91,6 +93,7 @@ class Login extends Component {
         </form>
       </div>
         </Fragment>
+        </Box>
     );
   }
 }

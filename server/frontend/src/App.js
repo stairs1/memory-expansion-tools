@@ -6,8 +6,10 @@ import Mem from './components/Mem.js';
 import Search from './components/Search.js';
 import Signout from './components/Signout.js';
 import BottomAppBar from './components/Nav.js';
+import TitleBar from './components/TitleBar.js';
 
-//import "./App.css";
+import CardMedia from '@material-ui/core/CardMedia';
+
 import AuthHandle from "./components/AuthHandler.js";
 
 import React from "react";
@@ -29,9 +31,10 @@ import green from '@material-ui/core/colors/green';
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: "#111111" },
+    primary: { main: "#222222", contrastText: "#ffffff"
+ },
     secondary: {
-      main: '#e31c25',
+        main: '#bf360c', contrastText: "#ffffff"
     },
   },
 });
@@ -41,20 +44,12 @@ class App extends React.Component {
    constructor() {
     super();
     this.state = {
-      login: true
+      login: false
     };
    }
 
     async updateAuth(){
         this.setState({login: await AuthHandle.authStatus()}, () => { console.log("updater" +this.state.login)});
-    }
-
-    foo(){
-        return "hello";
-    }
-
-   state = {
-        login : false
     }
 
     menuItem(name, link){
@@ -75,6 +70,7 @@ class App extends React.Component {
           <div>
               <ThemeProvider theme={theme}>
                     <BrowserRouter>
+                     <TitleBar />
                 <BottomAppBar login={this.state.login} />
                 <CssBaseline/> {/* make things always look the same 
                     */}

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 import ReactDOM from 'react-dom';
-import { Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { Box, Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
 import TalkItem from "./Talks.js";
+import { spacing } from '@material-ui/system';
 
 class Stream extends Component{
     
@@ -29,8 +30,8 @@ class Stream extends Component{
 
     render() {
         return (
-            <div>
-        <Typography variant="h3">
+            <Box m={2}>
+        <Typography variant="h4">
         Memory Stream
         </Typography>
     <div className='split left'>
@@ -39,7 +40,7 @@ class Stream extends Component{
             ))}
 
     </div>
-   </div>
+            </Box>
 
     )
 }
