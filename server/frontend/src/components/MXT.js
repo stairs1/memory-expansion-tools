@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { url, mxtEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
+import TalkItem from "./Talks.js";
+import { Box, Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 class MXT extends Component {
     state = {
@@ -33,15 +36,19 @@ class MXT extends Component {
        
     render() {
         return (
+            <Box m={2}>
             <div>
-              <h1>MXT Cache</h1>
-                <ul className="cachelist">
-            {this.state.cache.length > 0 && this.state.cache.map((cachep) => (
-                        <li key={cachep} className="cacheitem">{cachep["talk"]}</li>
+        <Typography variant="h4">
+              MXT Cache
+        </Typography>
+            <List>
+                {this.state.cache.length > 0 && this.state.cache.map((cachep) => (
+                    <TalkItem data={cachep.talk} />
                         ))
                     }
-                  </ul>
+                            </List>
                 </div>
+            </Box>
           )
       }
 }

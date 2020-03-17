@@ -13,7 +13,7 @@ class Signout extends Component {
     }
     
   async componentDidMount(){
-        this.setState({logout : await AuthHandle.logout()}, console.log("dogs" + this.state.logout), this.props.authCallback());
+        this.setState({logout : await AuthHandle.logout()}, console.log("test222" + this.state.logout), this.props.authCallback());
         }
   
             render() {
