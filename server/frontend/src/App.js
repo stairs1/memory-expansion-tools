@@ -11,6 +11,7 @@ import TitleBar from './components/TitleBar.js';
 import CardMedia from '@material-ui/core/CardMedia';
 
 import AuthHandle from "./components/AuthHandler.js";
+import MetaTags from 'react-meta-tags';
 
 import React from "react";
 import {
@@ -68,7 +69,14 @@ class App extends React.Component {
 
       return (
           <div>
+          <div>
               <ThemeProvider theme={theme}>
+          <MetaTags>
+            <title>MXT | Memory Expansion Tools</title>
+            <meta name="description" content="These are tools used to expand your memory. Expanding one's memory is extending one's thinking. If we are able to capture all of someone's thoughts, ideas, and experiences, we give them the ability to think with in an entirely new way, a way that takes into consideration an extended amount of ideas and information.." />
+            <meta property="og:title" content="MXT | Memory Expansion Tools<" />
+            <meta property="og:image" content="https://caydenpierce.com/cloud/mxt_logo_text_orange_grey_small.png" />
+          </MetaTags>
                     <BrowserRouter>
                      <TitleBar />
                 <BottomAppBar login={this.state.login} />
@@ -99,8 +107,11 @@ class App extends React.Component {
                     </BrowserRouter>
               </ThemeProvider>
           </div>
+          </div>
       );
         }
 }
 
 export default App
+
+
