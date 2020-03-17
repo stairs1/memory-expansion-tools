@@ -11,11 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="MXT"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="MXT"
+        />
+<!--        app:titleTextColor="#bf360c"-->
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
@@ -26,7 +28,7 @@
             app:layout_constraintBottom_toTopOf="@id/submit_layout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/main_toolbar"/>
 
     <LinearLayout
         android:id="@+id/submit_layout"
