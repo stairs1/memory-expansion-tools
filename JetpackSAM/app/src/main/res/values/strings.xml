@@ -13,6 +13,8 @@
     <string name="data_streams_header">Data Streams</string>
     <string name="server_header">Server</string>
     <string name="wearable_devices_header">Wearables</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="privacy_title">Privacy</string>
 
     <!-- Data Stream Preferences -->
     <string name="record_audio">Record Audio</string>

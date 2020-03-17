@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory app:title="@string/data_streams_header">
 
@@ -35,6 +36,13 @@
             app:key="bluetooth_headset"
             app:title="@string/bluetooth_headset"/>
 
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/privacy_title" >
+    <Preference app:title="@string/privacy" >
+        <intent android:action="android.intent.action.VIEW"
+            android:data="https://www.memoryexpansiontools.com/privacy_policy.html" />
+    </Preference>
     </PreferenceCategory>
 
 
