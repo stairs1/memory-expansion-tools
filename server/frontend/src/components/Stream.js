@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import ReactDOM from 'react-dom';
 import { Box, Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
 import TalkItem from "./Talks.js";
+import TalkCard from "./TalkCard.js";
 import { spacing } from '@material-ui/system';
 
 class Stream extends Component{
@@ -31,12 +32,12 @@ class Stream extends Component{
     render() {
         return (
             <Box m={2}>
-        <Typography variant="h4">
+        <Typography variant="h6">
         Memory Stream
         </Typography>
     <div className='split left'>
             {this.state.value.phrases.length > 0 && this.state.value.phrases.map((data) => (
-                <TalkItem data={data} />
+                <TalkCard data={data} />
             ))}
 
     </div>

@@ -37,7 +37,8 @@ class SignUp(Resource):
         parser.add_argument("name", type=str)
         args = parser.parse_args()
         # check if user exists and verify their password
-        userId = args["username"]
+        username = args["username"]
+        userId = self.db.nameToId(username)
         password = args["password"]
         email = args["email"]
         name = args["name"]
@@ -46,7 +47,7 @@ class SignUp(Resource):
             return {"success" : 0}
 
         hashword = self.bcrypt.generate_password_hash(password)
-        user = self.db.addUser(name, userId, email, hashword.decode("utf-8")) 
+        user = self.db.addUser(name, username, email, hashword.decode("utf-8")) 
         if user is not None:
             return {"success" : 1}
 

@@ -12,6 +12,7 @@ class L2(Resource):
         "talk": fields.String(default="Anonymous User"),
         "timestamp": fields.Float,
         "_id": fields.String,
+        "prettyTime": fields.String,
         "latitude": fields.Float,
         "longitude": fields.Float,
         "address": fields.String
@@ -29,6 +30,9 @@ class L2(Resource):
         cache = self.db.getL(userId, time.time(), level=2)
         results = list()
         for item in cache:
+            item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
+                "%a, %b %-d %-I:%-M %p"
+                )
             results.append(item)
         headers = {"Content-Type": "application/json"}
         return results

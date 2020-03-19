@@ -10,7 +10,7 @@ class TalkItem extends Component{
             <Paper elevation={8}>
                 <ListItem >
                 <Typography variant="body1" />
-                    {this.props.data}
+                   {this.props.data.prettyTime} : {this.props.data.talk}  
                 </ListItem>
             </Paper>
             </Box>
@@ -18,10 +18,3 @@ class TalkItem extends Component{
 }
 
 export default  TalkItem
-
-//    <ListItem key={this.props.talk} className="cacheitem">
-//                      <ListItemText
-//                        primary={this.props.talk}
-//                      />
-//                    </ListItem>
-//

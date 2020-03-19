@@ -68,7 +68,7 @@ class Database:
         else:
             talksCollection = self.db.talks
 
-        talk = {"userId": userId, "talk": words, "timestamp": timestamp, "latitude" : latitude, "longitude" : longitude, "address" : address}
+        talk = {"userId": str(userId), "talk": words, "timestamp": timestamp, "latitude" : latitude, "longitude" : longitude, "address" : address}
 
         if talk in talksCollection.find(
             {}, {"userId": 1, "talk": 1, "timestamp": 1, "_id": 0}
@@ -89,7 +89,7 @@ class Database:
         else:
             return True
 
-    def userExists(self, userId: str):
+    def userExists(self, userId):
         usersCollection = self.db.users
         try:
             resp = usersCollection.find_one({"_id": ObjectId(userId)})
@@ -126,12 +126,13 @@ class Database:
 
     def getMostRecent(self, userId, num=1):
         if not self.userExists(userId):
+            print("fail")
             return None
 
         talksCollection = self.db.talks
 
         resp = (
-            talksCollection.find({"userId": userId})
+            talksCollection.find({"userId": str(userId)})
             .sort([("timestamp", -1)])
             .limit(num)
         )
@@ -141,14 +142,17 @@ class Database:
             recents.append(item)
         return recents
 
-    def getPhrases(self, userId, num=100):
+    def getPhrases(self, username, num=100):
+        userId = self.nameToId(username)
         if not self.userExists(userId):
-            return Non
+            return None
 
         talks = self.getMostRecent(userId, num)
         phrases = list()
         for item in talks:
-            phrases.append(item["talk"])
+            item.pop('_id', None)
+            item.pop('userId', None)
+            phrases.append(item)
         return phrases
 
     def saveL1Stage(self, userId, stage):
@@ -254,7 +258,8 @@ class Database:
 def main():
     db = Database()
     db.connect()
-    a = db.getMostRecent("5e0e6e1807cdcbd6a097708d", 5)
+    print("hell")
+    a = db.getMostRecent(ObjectId("5e72bd909b00395d1247101e"), 3)
     print(a)
 
 
