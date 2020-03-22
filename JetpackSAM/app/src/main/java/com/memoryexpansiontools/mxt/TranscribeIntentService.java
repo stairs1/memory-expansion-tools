@@ -29,6 +29,8 @@ public class TranscribeIntentService extends IntentService {
     Intent recogIntent = null;
     private boolean transcription_on = false;
 
+    private String lastPhrase = ""; //this saves the last phrase that was spoken, used to get around the bug where the speech recognizer run onResults() twice
+
     public TranscribeIntentService() {
         super("TranscribeIntentService");
     }
@@ -205,12 +207,14 @@ public class TranscribeIntentService extends IntentService {
                 //create phrase with the first (most likely) result only
                 List<String> sentences = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 String words = sentences.get(0);
-                if(words.isEmpty() || words.length() == 1){
-                    // if its one letter or less, its mostly garbage.
+                if(words.isEmpty() || words.length() == 1 || (words.equals(lastPhrase))){
+                    // if its one letter or less, its mostly garbage.,
+                    //also, if the words are equal to the last phrase, it is a bug where onResults is called twice with the same results (but different confidence... I don't know man
                 } else {
                     PhraseCreator.create(words, getString(R.string.medium_spoken), getApplicationContext(), repo, server);
                 }
 
+                lastPhrase = words;
                 startTranscription();
             }
 
