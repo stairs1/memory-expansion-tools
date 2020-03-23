@@ -60,6 +60,7 @@ public class LoginActivity extends Activity {
 
         login =  findViewById(R.id.login);
         username = findViewById(R.id.username);
+        username.requestFocus(); //focus on login text edit field
         password = findViewById(R.id.password);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
