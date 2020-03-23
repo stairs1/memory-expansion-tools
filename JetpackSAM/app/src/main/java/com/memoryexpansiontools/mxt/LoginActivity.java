@@ -2,11 +2,13 @@ package com.example.jetpacksam;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -39,8 +41,6 @@ public class LoginActivity extends Activity {
         server.queue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
             @Override
             public void onRequestFinished(Request<Object> request) {
-
-
                 //the following needs to occur when the request returns, not inline here
                 //check if the user was successfully logged in
                 SharedPreferences sharedPref = mContext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
@@ -49,7 +49,6 @@ public class LoginActivity extends Activity {
                 //if the user was logged in successfully, finish
                 if(!loggedIn.equals("null")){
                     finish();
-
                     //otherwise, display an alert indicating the login creds were invalid
                 } else{
                     Snackbar snackbar = Snackbar
@@ -68,11 +67,7 @@ public class LoginActivity extends Activity {
                 //check if some creds are entered but not if they are valid
                 if ((!username.getText().toString().equals("")) && (!password.getText().toString().equals(""))) {
                     //login the user to the server
-
-
-
                     server.login(username.getText().toString(), password.getText().toString());
-
                 } else { //user hasn't entered anything as credentials
                     Snackbar snackbar = Snackbar
                             .make(loginLayout, "Please make sure both fields have been filled in.", Snackbar.LENGTH_LONG);
@@ -80,5 +75,23 @@ public class LoginActivity extends Activity {
                 }
             }
         });
+
+        //the following needs to occur when the request returns, not inline here
+        //check if the user was successfully logged in
+        SharedPreferences sharedPref = mContext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
+        String loggedIn = sharedPref.getString("token", "");
+        TextView loggedInMessageTextView = (TextView) findViewById(R.id.loggedInMessage);
+
+
+        //check if the user is logged in
+        if(com.example.jetpacksam.MainActivity.loginCount <= 1){
+            com.example.jetpacksam.MainActivity.loginCount++;
+            loggedInMessageTextView.setText("");
+        } else if(!loggedIn.equals("null")) {
+            loggedInMessageTextView.setText("You are already logged in. Logging in again will change the account you are logged in with.");
+        } else {
+            loggedInMessageTextView.setText("");
+        }
+
     }
 }

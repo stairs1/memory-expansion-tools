@@ -63,28 +63,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST_CODE);
                 return true;
             case R.id.login:
-                //the following needs to occur when the request returns, not inline here
-                //check if the user was successfully logged in
-                SharedPreferences sharedPref = mContext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
-                String loggedIn = sharedPref.getString("token", "");
-                String loggedInRefresh = sharedPref.getString("refreshtoken", "");
-                //check if the user is logged in
-                if(loginCount == 0){
-                    loginCount++;
-                    Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(logIntent, LOGIN_ACTIVITY_REQUEST_CODE);
-                    return true;
-                } else if(!loggedIn.equals("null")) {
-                Snackbar snackbar = Snackbar
-                        .make(loginLayout, "You are already logged in, no need to do it again.", Snackbar.LENGTH_LONG);
-                snackbar.show();
-                //otherwise display a message indicating the user is already logged in
-                } else {
-                    Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(logIntent, LOGIN_ACTIVITY_REQUEST_CODE);
-                    return true;
-                }
-
+                Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(logIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                loginCount++;
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
