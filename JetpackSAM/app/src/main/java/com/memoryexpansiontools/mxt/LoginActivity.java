@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -35,6 +38,31 @@ public class LoginActivity extends Activity {
             }
         });
 
+        ConstraintLayout loginLayout = (ConstraintLayout) findViewById(R.id.loginLayout);
+        ServerAdapter server = new ServerAdapter(mContext);
+        server.queue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
+            @Override
+            public void onRequestFinished(Request<Object> request) {
+
+
+                //the following needs to occur when the request returns, not inline here
+                //check if the user was successfully logged in
+                SharedPreferences sharedPref = mContext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
+                String loggedIn = sharedPref.getString("token", "");
+                String loggedInRefresh = sharedPref.getString("refreshtoken", "");
+                //if the user was logged in successfully, finish
+                if(!loggedIn.equals("null")){
+                    finish();
+
+                    //otherwise, display an alert indicating the login creds were invalid
+                } else{
+                    Snackbar snackbar = Snackbar
+                            .make(loginLayout, "Your login credentials are invalid. Please try again.", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            }
+        });
+
         login =  findViewById(R.id.login);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -42,27 +70,17 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //check if some creds are entered but not if they are valid
-                if ((username.getText().toString() != "") && (password.getText().toString() != "")) {
+                if ((!username.getText().toString().equals("")) && (!password.getText().toString().equals(""))) {
                     //login the user to the server
-                    ServerAdapter server = new ServerAdapter(mContext);
+
+
+
                     server.login(username.getText().toString(), password.getText().toString());
 
-
-                    //check if the user was successfully logged in
-                    SharedPreferences sharedPref = mContext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
-                    String loggedIn = sharedPref.getString("token", "");
-                    String loggedInRefresh = sharedPref.getString("refreshtoken", "");
-                    CoordinatorLayout loginLayout = (CoordinatorLayout) findViewById(R.id.loginLayout);
-                    //if the user was logged in successfully, finish
-                    if(loggedIn != null){
-                        finish();
-                        //otherwise, display an alert indicating the login creds were invalid
-                    } else{
-                        Snackbar snackbar = Snackbar
-                                .make(loginLayout, "Your login credentials are invalid. Please try again.", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
                 } else { //user hasn't entered anything as credentials
+                    Snackbar snackbar = Snackbar
+                            .make(loginLayout, "Please make sure both fields have been filled in.", Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
         });
