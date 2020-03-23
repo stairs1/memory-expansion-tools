@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +24,7 @@ import java.util.Map;
 //adapter to communicate with the backend server, handles sign in, auth, sending talks
 public class ServerAdapter {
     //TODO as we make more modalities (images, videos, etc) and implement more API class, we should make one volley JSON sender function, and just wrap that that with other functions to pass it in the right body and endpoint
-    private RequestQueue queue;
+    public RequestQueue queue;
     private Context lcontext;
     private String url;
     private int retry; //saves a number of retries, if this goes over three, we should stop trying to refresh the token

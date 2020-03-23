@@ -1,6 +1,8 @@
 package com.example.jetpacksam;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,10 +15,13 @@ import android.widget.EditText;
 
 import androidx.appcompat.widget.Toolbar;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public static final int SETTINGS_ACTIVITY_REQUEST_CODE = 2;
     public static final int LOGIN_ACTIVITY_REQUEST_CODE = 3; //I don't know what these are for yet but this looks cool
     public static final String LOG_TAG = MainActivity.class.getName();
+
+    public static int loginCount = 0;
 
     private PhraseViewModel mPhraseViewModel;
 
@@ -47,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
+        Context mContext = this.getApplicationContext();
+        ConstraintLayout loginLayout = (ConstraintLayout) findViewById(R.id.mainlayout);
+
         switch(item.getItemId()){
             case R.id.action_settings:
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -55,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             case R.id.login:
                 Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivityForResult(logIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                loginCount++;
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
