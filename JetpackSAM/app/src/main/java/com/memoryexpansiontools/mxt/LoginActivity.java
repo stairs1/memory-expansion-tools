@@ -4,19 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.json.JSONException;
 
 public class LoginActivity extends Activity {
     Button cancel, login;
@@ -38,7 +34,7 @@ public class LoginActivity extends Activity {
             }
         });
 
-        ConstraintLayout loginLayout = (ConstraintLayout) findViewById(R.id.loginLayout);
+        ConstraintLayout loginLayout = (ConstraintLayout) findViewById(R.id.loginlayout);
         ServerAdapter server = new ServerAdapter(mContext);
         server.queue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
             @Override
