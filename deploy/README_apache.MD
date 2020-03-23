@@ -15,4 +15,4 @@ See the main README for setup of this, but basically use these conf files to con
 
 The sam.wsgi file here is what the backend .conf file is referencing. This is needed to start the Flask server with Apache.
 
-Finally, checkout the build.sh script in ../server/frontend. Run this to build the React frontend changes you make and restart the server stuff so it is immediatly live (assuming all of the Apache stuff is already properly setup).
+Finally, checkout the build.sh script in ../web/frontend. Run this to build the React frontend changes you make and restart the server stuff so it is immediatly live (assuming all of the Apache stuff is already properly setup).
