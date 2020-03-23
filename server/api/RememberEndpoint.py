@@ -54,9 +54,8 @@ class Remember(Resource):
         return stage, cmd
 
     def handleCacheCommands(self, phrasePass, userId, latitude, longitude, address):
-        cmd_index, phrase = self.command_manager.parse_cache_command(
-            phrasePass["speech"]
-        )
+        cmd_index = self.command_manager.parse_cache_command(phrasePass["speech"])
+        phrase = phrasePass["speech"]
         if cmd_index:
             self.db.addTalk(userId, phrase, float(phrasePass["timestamp"]), latitude, longitude, address, cache=cmd_index)
         return phrase
@@ -73,7 +72,7 @@ class Remember(Resource):
         args = parser.parse_args()
 
         username = get_jwt_identity()
-        userId = str(self.db.nameToId(username))
+        userId = self.db.nameToId(username)
 
         memType = args["type"]
         latitude = float(args["lat"])
@@ -81,12 +80,12 @@ class Remember(Resource):
         address = args["address"]
         sentPhrases = args["phrases"]
 
-        phrases = self.db.getPhrases(userId)
+        phrases = self.db.getPhrases(username)
         stage = self.db.getL1Stage(userId)
 
         # check if it is a command for our working memory (L1) stage
         stage, cmd = self.handleStageCommands(
-            userId, sentPhrases[0]["speech"], stage, phrases
+            username, sentPhrases[0]["speech"], stage, phrases
         )
 
         # if not a stage command, check if it's a L2, L3, or annotation command
@@ -98,10 +97,11 @@ class Remember(Resource):
                 sentPhrases[0]["speech"] = phraseTmp
             self.remember(userId, sentPhrases, latitude, longitude, address)  # remember this in our talks database
             # logic to move the phrases around so we don't have to query db again
-            phrases.insert(0, sentPhrases[0]["speech"])
+            packPhrase = {"talk" : sentPhrases[0]["speech"], "timestamp": sentPhrases[0]["timestamp"], "latitude" : longitude, "longitude" : latitude, "address" : address}
+            phrases.insert(0, packPhrase)
             phrases = phrases[:-1]
 
         # notify the PhraseManager so it can update the frontend if need be
-        self.PhraseManager.ping(userId, phrases, stage)
+        self.PhraseManager.ping(username, phrases, stage)
 
         return {"success": 1}

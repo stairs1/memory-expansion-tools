@@ -34,6 +34,9 @@ class SpokenCommandManager:
             "nxt": 2,
             "xd": 2,
             "mxd": 2,
+            "iced-t": 2,
+            "iced t": 2,
+            "next T": 2,
             "level three cache": 3,
             "level 3 cache": 3,
             "level three cash": 3,
@@ -63,9 +66,5 @@ class SpokenCommandManager:
         for command in self.cacheIndices:
             if command in text.lower():
                 last = command.split()[-1:][0]
-                print(text, last)
-                return (
-                    self.cacheIndices[command],
-                    text[text.find(last) + len(last) + 1 :],
-                )
-        return None, None
+                return self.cacheIndices[command]
+        return None

@@ -4,6 +4,7 @@ import AuthHandle from "./AuthHandler.js";
 import { CardMedia, Paper, Box, FormControl, TextField, Button, Typography } from '@material-ui/core';
 import { spacing } from '@material-ui/system';
 import BackgroundImage from '../res/bg_small.jpg';
+import { Redirect } from "react-router-dom";
 
 class Signup extends Component {
   constructor() {
@@ -24,7 +25,9 @@ class Signup extends Component {
   }
 
   dismissError() {
-    this.setState({ error: '' });
+    this.setState({ error: '',
+        success : false
+    });
   }
 
 
@@ -52,7 +55,9 @@ class Signup extends Component {
     if (res){ //use the given username and pass to login (hits the backend with credentials and gets jwt and saves in cookie
         //we should redirect to the MXT cache here
         console.log("success***************");
-		return this.setState({ error: "Successful signup."}); //we don't need this, remove once we are redirecting
+		this.setState({ error: "Successful signup."}); //let em know, but should redirect
+		this.setState({ success: true }); //we are redirecting to login page
+        return
     } else {
         console.log("FAILLLL***************");
 		return this.setState({ error: "Unsuccessful signup."});
@@ -91,7 +96,7 @@ class Signup extends Component {
         return (
             <Box m={0}>
             <Box m={2}>
-        <Typography variant="h3">
+        <Typography variant="h6">
               This is Memory Expansion Tools. Please sign up here.
         </Typography>
         <form onSubmit={this.handleSubmit}>
@@ -99,6 +104,7 @@ class Signup extends Component {
             this.state.error &&
             <h3 data-test="error" onClick={this.dismissError}>
               {this.state.error}
+            {this.state.success ? <Redirect to="/login" /> : null}
             </h3>
           }
           <TextField id="username" label="User Name" value={this.state.username} onChange={this.handleUserChange} /> 

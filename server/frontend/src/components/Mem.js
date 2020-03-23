@@ -53,7 +53,7 @@ class Mem extends Component{
     render() {
         return (
             <div>
-        <Typography type="h1">
+        <Typography variant="h6">
         Voice Stream
         </Typography>
     <div className='split left'>

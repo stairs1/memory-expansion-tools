@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { url, mxtEnd } from "../constants";
 import AuthHandle from "./AuthHandler.js";
 import TalkItem from "./Talks.js";
+import TalkCard from "./TalkCard.js";
 import { Box, Paper, List, ListItem, ListItemText, FormControl, TextField, Button, Typography } from '@material-ui/core';
 import { spacing } from '@material-ui/system';
 
@@ -38,12 +39,14 @@ class MXT extends Component {
         return (
             <Box m={2}>
             <div>
-        <Typography variant="h4">
+        <Typography variant="h6">
               MXT Cache
         </Typography>
             <List>
                 {this.state.cache.length > 0 && this.state.cache.map((cachep) => (
-                    <TalkItem data={cachep.talk} />
+                    <div>
+                    <TalkCard data={cachep} />
+                    </div>
                         ))
                     }
                             </List>

@@ -74,7 +74,7 @@ class Login extends Component {
         <Fragment>
       <div className="Login">
         {this.state.logout ? <Redirect to="/mxt" /> : null}
-        <Typography variant="h4">
+        <Typography variant="h6">
         Login
         </Typography>
         <form onSubmit={this.handleSubmit}>

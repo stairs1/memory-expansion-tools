@@ -32,7 +32,8 @@ const useStyles = makeStyles(theme => ({
     secondary: {
         main: '#c53211', contrastText: "#ffffff"
     },
-      textPrimary : { main: '#fff'},
+      textPrimary : { main: '#ffffff'},
+      textSecondary : { main: '#ffffff'},
   },
   text: {
     padding: theme.spacing(2, 2, 0),
