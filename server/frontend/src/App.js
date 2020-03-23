@@ -7,6 +7,8 @@ import Search from './components/Search.js';
 import Signout from './components/Signout.js';
 import BottomAppBar from './components/Nav.js';
 import TitleBar from './components/TitleBar.js';
+import SignInSide from './components/SignInSide.js';
+import SignUpSide from './components/SignUpSide.js';
 
 import CardMedia from '@material-ui/core/CardMedia';
 
@@ -78,7 +80,6 @@ class App extends React.Component {
             <meta property="og:image" content="https://caydenpierce.com/cloud/mxt_logo_text_orange_grey_small.png" />
           </MetaTags>
                     <BrowserRouter>
-                     <TitleBar />
                 <BottomAppBar login={this.state.login} />
                 <CssBaseline/> {/* make things always look the same 
                     */}
@@ -86,22 +87,31 @@ class App extends React.Component {
                             renders the first one that matches the current URL. */}
                         <Switch>
                           <Route path="/mxt">
+                            <TitleBar/>
                             <MXT />
                           </Route>
                           <Route path="/stream">
+                            <TitleBar/>
                             <Stream />
                           </Route>
                           <Route path="/search">
+                            <TitleBar/>
                             <Search />
                           </Route>
-                          <Route path="/login">
+          {/* <Route path="/login">
+                            <TitleBar/>
                             <Login authCallback={this.updateAuth.bind(this)}/>
-                          </Route>
+                          </Route>  */}                        
                           <Route path="/signout">
-                            <Signout authCallback={this.updateAuth.bind(this)}/>
+                            <Signout authCallback={this.updateAuth.bind(this)}/>                          
+                            </Route>
+
+                          <Route path="/signup">
+                            <SignUpSide/>
                           </Route>
+                            }
                           <Route path="/">
-                            <Signup/>
+                            <SignInSide authCallback={this.updateAuth.bind(this)}/>
                           </Route>
                         </Switch>
                     </BrowserRouter>
