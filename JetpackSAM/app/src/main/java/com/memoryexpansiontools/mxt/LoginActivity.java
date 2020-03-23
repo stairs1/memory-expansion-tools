@@ -11,6 +11,8 @@ import android.widget.EditText;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONException;
 
 public class LoginActivity extends Activity {
@@ -47,8 +49,7 @@ public class LoginActivity extends Activity {
 
 
                     //check if the user was successfully logged in
-                    SharedPreferences sharedPref = server.lcontext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
+                    SharedPreferences sharedPref = mContext.getSharedPreferences("mxt", Context.MODE_PRIVATE);
                     String loggedIn = sharedPref.getString("token", "");
                     String loggedInRefresh = sharedPref.getString("refreshtoken", "");
                     CoordinatorLayout loginLayout = (CoordinatorLayout) findViewById(R.id.loginLayout);
