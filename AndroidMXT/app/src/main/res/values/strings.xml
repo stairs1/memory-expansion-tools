@@ -16,6 +16,11 @@
     <string name="privacy">Privacy Policy</string>
     <string name="privacy_title">Privacy</string>
 
+    <!-- Modes -->
+    <string name="remind_mode">Remind Mode</string>
+    <string name="remind_mode_summary">Set an interval at which to be reminded to offload your current thoughts.</string>
+    <string name="remind_interval">Reminder Interval Time (seconds)</string>
+
     <!-- Data Stream Preferences -->
     <string name="record_audio">Record Audio</string>
     <string name="transcribe">Live Transcription</string>

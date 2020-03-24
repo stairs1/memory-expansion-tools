@@ -3,6 +3,7 @@ package com.memoryexpansiontools.mxt;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -35,6 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.settings, new SettingsFragment())
                 .commit();
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -108,6 +110,23 @@ public class SettingsActivity extends AppCompatActivity {
                 //TranscribeIntentService loads this preference on startup, so toggle transcription
                 TranscriptionManager.stopTranscription(getContext());
                 TranscriptionManager.wakeup(getContext());
+            }else if (key.equals("remind_mode")) {
+                if (sharedPreferences.getBoolean("remind_mode", false)) {
+                    Intent intent = new Intent(getContext(), RemindModeService.class);
+                    getContext().startService(intent);
+                } else {
+                   //stop remind mode service here
+                    Intent remoteService = new Intent(getContext(), RemindModeService.class);
+                    getContext().stopService(remoteService);
+                }
+            }
+            else if (key.equals("remind_interval")) {
+                //stop remind mode service here
+                Intent remoteService = new Intent(getContext(), RemindModeService.class);
+                getContext().stopService(remoteService);
+                //start it up again, with new number
+                Intent intent = new Intent(getContext(), RemindModeService.class);
+                getContext().startService(intent);
             }
         };
 
