@@ -1,4 +1,4 @@
-package com.example.jetpacksam;
+package com.memoryexpansiontools.mxt;
 
 import android.Manifest;
 import android.app.AlertDialog;

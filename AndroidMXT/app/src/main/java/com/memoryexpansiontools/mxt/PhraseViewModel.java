@@ -1,4 +1,4 @@
-package com.example.jetpacksam;
+package com.memoryexpansiontools.mxt;
 
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;

@@ -1,8 +1,7 @@
-package com.example.jetpacksam;
+package com.memoryexpansiontools.mxt;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -85,8 +84,8 @@ public class LoginActivity extends Activity {
 
 
         //check if the user is logged in
-        if(com.example.jetpacksam.MainActivity.loginCount <= 1){
-            com.example.jetpacksam.MainActivity.loginCount++;
+        if(com.memoryexpansiontools.mxt.MainActivity.loginCount <= 1){
+            com.memoryexpansiontools.mxt.MainActivity.loginCount++;
             loggedInMessageTextView.setText("");
         } else if(!loggedIn.equals("null")) {
             loggedInMessageTextView.setText("You are already logged in. Logging in again will change the account you are logged in with.");

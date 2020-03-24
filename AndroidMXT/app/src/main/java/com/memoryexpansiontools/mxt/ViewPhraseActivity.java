@@ -1,4 +1,4 @@
-package com.example.jetpacksam;
+package com.memoryexpansiontools.mxt;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;

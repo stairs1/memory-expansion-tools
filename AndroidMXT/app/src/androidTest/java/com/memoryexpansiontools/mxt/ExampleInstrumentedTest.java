@@ -1,4 +1,4 @@
-package com.example.jetpacksam;
+package com.memoryexpansiontools.mxt;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;

@@ -1,7 +1,6 @@
-package com.example.jetpacksam;
+package com.memoryexpansiontools.mxt;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 

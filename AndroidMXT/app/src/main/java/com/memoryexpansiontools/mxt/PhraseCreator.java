@@ -1,10 +1,9 @@
-package com.example.jetpacksam;
+package com.memoryexpansiontools.mxt;
 
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
