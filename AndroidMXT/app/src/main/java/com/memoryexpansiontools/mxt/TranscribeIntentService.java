@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognitionListener;
@@ -28,6 +29,8 @@ public class TranscribeIntentService extends IntentService {
     SpeechRecognizer mSpeechRecognizer = null;
     Intent recogIntent = null;
     private boolean transcription_on = false;
+    private int mStreamVolume = 0;
+    private AudioManager mAudioManager;
 
     private String lastPhrase = ""; //this saves the last phrase that was spoken, used to get around the bug where the speech recognizer run onResults() twice
 
@@ -46,6 +49,7 @@ public class TranscribeIntentService extends IntentService {
         recogIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         recogIntent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, prefs.getBoolean("native_voicerec", false));
         handler = new Handler(this.getMainLooper());
+        mAudioManager =(AudioManager)getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override
@@ -125,6 +129,10 @@ public class TranscribeIntentService extends IntentService {
                 return;
             }
             mSpeechRecognizer.startListening(recogIntent);
+
+            //mute sound so users don't hear voice recognition beep
+            mStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC); // getting system volume into var for later un-muting
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0); //muting
         }
     };
 
@@ -213,7 +221,6 @@ public class TranscribeIntentService extends IntentService {
                 } else {
                     PhraseCreator.create(words, getString(R.string.medium_spoken), getApplicationContext(), repo, server);
                 }
-
                 lastPhrase = words;
                 startTranscription();
             }
