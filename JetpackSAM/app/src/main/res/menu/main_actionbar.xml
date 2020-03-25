@@ -8,6 +8,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/cache"
+        android:icon="@drawable/ic_web_asset_black_24dp"
+        android:title="@string/cache"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings_24px"
         android:title="@string/action_settings"

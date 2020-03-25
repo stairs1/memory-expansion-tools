@@ -8,6 +8,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="medium_text">text</string>
     <string name="medium_spoken">spoken</string>
+    <string name="cache">cache</string>
 
     <!-- Preference Titles -->
     <string name="data_streams_header">Data Streams</string>

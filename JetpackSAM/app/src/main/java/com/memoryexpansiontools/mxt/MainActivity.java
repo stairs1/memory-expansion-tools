@@ -26,7 +26,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public static final int NEW_PHRASE_ACTIVITY_REQUEST_CODE = 1;
     public static final int VIEW_PHRASE_ACTIVITY_REQUEST_CODE = 2;
     public static final int SETTINGS_ACTIVITY_REQUEST_CODE = 2;
-    public static final int LOGIN_ACTIVITY_REQUEST_CODE = 3; //I don't know what these are for yet but this looks cool
+    public static final int LOGIN_ACTIVITY_REQUEST_CODE = 3;
+    public static final int CACHE_ACTIVITY_REQUEST_CODE = 4; //I don't know what these are for yet but this looks cool
+
     public static final String LOG_TAG = MainActivity.class.getName();
 
     private PhraseViewModel mPhraseViewModel;
@@ -55,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             case R.id.login:
                 Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivityForResult(logIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                return true;
+            case R.id.cache:
+                Intent cacheIntent = new Intent(MainActivity.this, CacheActivity.class);
+                startActivityForResult(cacheIntent, LOGIN_ACTIVITY_REQUEST_CODE);
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
