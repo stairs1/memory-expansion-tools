@@ -21,11 +21,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-<<<<<<< HEAD:JetpackSAM/app/src/main/java/com/memoryexpansiontools/mxt/MainActivity.java
 import com.memoryexpansiontools.mxt.CacheActivity;
-=======
 import com.google.android.material.snackbar.Snackbar;
->>>>>>> master:AndroidMXT/app/src/main/java/com/memoryexpansiontools/mxt/MainActivity.java
 
 import java.util.List;
 

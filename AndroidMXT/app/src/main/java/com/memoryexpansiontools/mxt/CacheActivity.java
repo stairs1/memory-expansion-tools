@@ -10,11 +10,6 @@ import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.example.jetpacksam.LoginActivity;
-import com.example.jetpacksam.MainActivity;
-import com.example.jetpacksam.R;
-import com.example.jetpacksam.SettingsActivity;
-
 public class CacheActivity extends AppCompatActivity {
 
     public static final int NEW_PHRASE_ACTIVITY_REQUEST_CODE = 1;
