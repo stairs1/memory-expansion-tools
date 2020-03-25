@@ -3,6 +3,7 @@ package com.memoryexpansiontools.mxt;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.example.jetpacksam.R;
@@ -17,6 +18,15 @@ public class CacheActivity extends AppCompatActivity {
         //Create and load a webview pointed at the memoryexpansiontools website
         //This allows the user to access MXT Cache directly within the app.
         WebView cacheWebView = (WebView) findViewById(R.id.cacheView);
-        cacheWebView.loadUrl("memoryexpansiontools.com");
+        WebSettings webSettings = cacheWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+        webSettings.setSupportZoom(true);
+        webSettings.setDefaultTextEncodingName("utf-8");
+        cacheWebView.loadUrl("https://www.memoryexpansiontools.com");
     }
 }
