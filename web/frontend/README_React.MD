@@ -1,0 +1,3 @@
+-standard layout for a React project is followed here  
+-this single page React app is served from Apache. React-router handles all linking  
+-use the ./build.sh to deploy your changes immediatly on an apache server (see the ~/deploy for info on setting up a server)  
