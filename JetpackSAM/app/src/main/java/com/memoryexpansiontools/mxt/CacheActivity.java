@@ -1,6 +1,7 @@
 package com.memoryexpansiontools.mxt;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.webkit.WebSettings;
@@ -14,6 +15,10 @@ public class CacheActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cache);
+
+        //Create the action bar for this activity
+        Toolbar cache_toolbar = (Toolbar) findViewById(R.id.cache_toolbar);
+;        setSupportActionBar(cache_toolbar);
 
         //Create and load a webview pointed at the memoryexpansiontools website
         //This allows the user to access MXT Cache directly within the app.
