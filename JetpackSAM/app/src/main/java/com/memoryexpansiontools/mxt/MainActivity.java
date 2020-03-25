@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 return true;
             case R.id.cache:
                 Intent cacheIntent = new Intent(MainActivity.this, CacheActivity.class);
-                startActivityForResult(cacheIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(cacheIntent, CACHE_ACTIVITY_REQUEST_CODE);
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
