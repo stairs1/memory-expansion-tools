@@ -1,0 +1,62 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/data_streams_header">
+
+        <SwitchPreference
+            app:key="transcribe"
+            app:title="@string/transcribe"/>
+
+        <SwitchPreference
+            app:key="remind_mode"
+            app:title="@string/remind_mode"
+            app:dependency="transcribe"
+            app:summary="@string/remind_mode_summary"/>
+
+        <EditTextPreference
+            app:key="remind_interval"
+            app:title="@string/remind_interval"
+            android:inputType="number"
+            app:defaultValue="120"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            app:key="native_voicerec"
+            app:title="@string/native_voicerec"
+            app:dependency="transcribe"
+            app:summary="@string/native_voicerec_summary"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/server_header">
+
+        <SwitchPreference
+            app:key="sync"
+            app:title="@string/sync_title" />
+
+        <EditTextPreference
+            app:key="server_address"
+            app:title="@string/server_address"
+            app:dependency="sync"
+            app:defaultValue="@string/default_server_address"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/wearable_devices_header">
+
+        <SwitchPreference
+            app:key="bluetooth_headset"
+            app:title="@string/bluetooth_headset"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/privacy_title" >
+    <Preference app:title="@string/privacy" >
+        <intent android:action="android.intent.action.VIEW"
+            android:data="https://www.memoryexpansiontools.com/privacy_policy.html" />
+    </Preference>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
