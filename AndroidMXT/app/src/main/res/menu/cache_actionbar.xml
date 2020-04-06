@@ -8,9 +8,9 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/cache"
-        android:icon="@drawable/ic_memory_black_24dp"
-        android:title="@string/cache"
+        android:id="@+id/stream"
+        android:icon="@drawable/ic_play_arrow_black_24dp"
+        android:title="@string/stream"
         app:showAsAction="ifRoom"/>
 
     <item
