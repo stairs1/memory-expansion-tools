@@ -17,6 +17,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import MemoryIcon from '@material-ui/icons/Memory';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HelpIcon from '@material-ui/icons/Help';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 
@@ -127,6 +128,9 @@ export default function BottomAppBar(props) {
             <AccountCircleIcon onClick={handleAccountMenuClick} />
             <Typography variant="body2"></Typography>
           </IconButton>
+                <IconButton color="secondary" component={Link} to="/howto" classes={{label: classes.iconButtonLabel}}>
+                    <HelpIcon />
+                </IconButton>
                 <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
               {({ TransitionProps, placement }) => (
                 <Grow
@@ -152,7 +156,6 @@ export default function BottomAppBar(props) {
         
     const userMenu = function() {
         if (props.login){
-            console.log("trueeeeee");
             return (
                 <div>
                <IconButton color="secondary" component={Link} to="/stream" classes={{label: classes.iconButtonLabel}}>
@@ -171,7 +174,6 @@ export default function BottomAppBar(props) {
                 </div>
             )
         } else {
-            console.log("FALLLLLLLLLLSEEEEEE");
             return null;
         }
     }

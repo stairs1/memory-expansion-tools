@@ -181,7 +181,7 @@ class SignUpSide extends Component {
           <Avatar className={classes.avatar}>
             <AccountCircleIcon/>
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
             Sign Up
           </Typography>
           <form onSubmit={this.handleSubmit} className={classes.form} noValidate>
@@ -198,7 +198,7 @@ class SignUpSide extends Component {
               required
               fullWidth
               id="email"
-              label="Username"
+              label="Username (case-sensitive)"
               name="username"
               autoComplete="username"
               autoFocus

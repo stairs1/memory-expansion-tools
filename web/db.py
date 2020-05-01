@@ -117,7 +117,7 @@ class Database:
                 "userId": userId,
                 "$text": {"$search": query},
             }
-        )
+        ).sort("timestamp", -1)
 
         data = list()
         for item in resp:

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AuthHandle from "./AuthHandler.js";
+import HelpIcon from '@material-ui/icons/Help';
 import { Redirect } from "react-router-dom";
 import { ButtonBase, Divider, Card, CardMedia } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
@@ -58,7 +59,7 @@ const useStyles = (theme) => ({
   },
 });
 
-class SignInSide extends Component {
+class HowTo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -123,7 +124,7 @@ class SignInSide extends Component {
       console.log(classes);
       return (
     <Grid container component="main" className={classes.root}>
-        {this.state.logout ? <Redirect to="/stream" /> : null}
+        {this.state.logout ? <Redirect to="/mxt" /> : null}
       <CssBaseline />
       <Grid item xs={false} sm={4} md={6} className={classes.image} />
       <Grid item xs={12} sm={8} md={6} component={Paper} elevation={0} square>
@@ -162,70 +163,47 @@ class SignInSide extends Component {
             </Grid>
 
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+            <HelpIcon />
           </Avatar>
-          <Typography component="h1" variant="h4">
-            Log in
+          <Typography variant="h4">
+            What is this?
           </Typography>
-          <form onSubmit={this.handleSubmit} className={classes.form} noValidate>
-          {
-            this.state.error &&
-            <h3 data-test="error" onClick={this.dismissError}>
-              {this.state.error}
-            </h3>
-          }
+          <br />
+          <Typography variant="body1">
+                Memory Expansion Tools are designed to serve as an extension to human cognitive capabilities. The long term goal is to make humans smarter and better in every way by enhancing ourselves with technology. As a big step in this direction, we are tackling an area where humans are weakest and technology is strongest: memory/storage.
+        <br /><br />
+                Use a voice command (wake word "MXT") to allow to save your memories to an external memory cache, the MXT Cache. You can say the wake word at the beginning or at any point in your speech to save the current sentence to the cache. As you go about the day coming up with new ideas and making steps toward solving problems, this cache can be filled with your best thoughts as they come to mind (a kindof high-bandwidth interface note taking). This part of the Memory Expansion Tools system is implemented as Android app. See the link above for Google Play Store download link.
+          <br /><br />
+          The MXT Cache is the place where all of your tagged ideas go and you can access all of these ideas on the Android app or the web app on any device. Here, you can come across idea after idea that you had throughout the day but you never had a chance to fully think through. This is a "midterm memory" that lasts 24 hours, and adds an extra dimension to thinking. Memory Expansion Tools is is most effective for entrepreneurs, software engineers, writers, and general high performers as these these often have highly optimized thinking and problem solving strategies that are ripe fore extension by an external technolog mind extending tool.
+        </Typography>
+          <br />
+                 <Typography variant="h4">
+            How do I use it?
+          </Typography>
+           <Typography variant="body1" align="left">
+                    <ul>
+                <li>Visit https://memoryexpansiontools.com to sign up</li>
+                <li>Open the app and sign in with the top right "account" button</li>
+                <li>Go to MXT app settings, turn on "Live Transcription" and "Remote Server" (as well as "Bluetooth Headset" if you have one, which we highly recomend)</li>
+                <li>Say "MXT" at any point in a sentence to save the sentence you are currently speaking to a storage area (MXT Cache) that you can review later</li>
+                <li>A live Memory Stream can be viewed in the Android app</li>
+                <li>The live Memory Stream and your MXT cache can now be viewed at https://memoryexpansiontools.com</li>
+              </ul>
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Username (case-sensitive)"
-              name="email"
-              autoComplete="email"
-              autoFocus
-                value={this.state.username}
-                onChange={this.handleUserChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-                value={this.state.password}
-                onChange={this.handlePassChange}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-             Log In 
-            </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-            <Box mt={5}>
-              <Copyright />
-            </Box>
-          </form>
-        </div>
+              </Typography>
+                 <Typography variant="h4">
+                Contact
+          </Typography>
+           <Typography variant="body1" align="left">
+                memoryexpansiontools@gmail.com
+              </Typography>
+
+
+               </div>
       </Grid>
     </Grid>
   );
   }
 }
 
-export default withStyles(useStyles)(SignInSide)
+export default withStyles(useStyles)(HowTo)

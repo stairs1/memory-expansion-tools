@@ -75,8 +75,9 @@ class Remember(Resource):
         userId = self.db.nameToId(username)
 
         memType = args["type"]
-        latitude = float(args["lat"])
-        longitude = float(args["long"])
+        if args["lat"] is not None:
+            latitude = float(args["lat"])
+            longitude = float(args["long"])
         address = args["address"]
         sentPhrases = args["phrases"]
 

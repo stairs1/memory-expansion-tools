@@ -9,6 +9,7 @@ import BottomAppBar from './components/Nav.js';
 import TitleBar from './components/TitleBar.js';
 import SignInSide from './components/SignInSide.js';
 import SignUpSide from './components/SignUpSide.js';
+import HowTo from './components/HowTo.js';
 
 import CardMedia from '@material-ui/core/CardMedia';
 
@@ -108,6 +109,9 @@ class App extends React.Component {
 
                           <Route path="/signup">
                             <SignUpSide/>
+                          </Route>
+                          <Route path="/howto">
+                            <HowTo/>
                           </Route>
                             }
                           <Route path="/">
