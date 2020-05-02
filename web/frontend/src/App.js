@@ -12,6 +12,7 @@ import SignUpSide from './components/SignUpSide.js';
 import HowTo from './components/HowTo.js';
 import Tags from './components/Tags.js';
 
+import Dashboard from './components/Dashboard/Dashboard'; 
 import CardMedia from '@material-ui/core/CardMedia';
 
 import AuthHandle from "./components/AuthHandler.js";
@@ -24,6 +25,10 @@ import {
   Route,
   Link
 } from "react-router-dom";
+
+// Redux imports
+import { Provider } from 'react-redux'; 
+import store from './store'; 
 
 //material-ui stuff
 import { CssBaseline, AppBar, Typography, MenuList, MenuItem
@@ -72,7 +77,8 @@ class App extends React.Component {
         render() {
 
       return (
-          <div>
+          <Provider store={store}>
+            <div>
           <div>
               <ThemeProvider theme={theme}>
           <MetaTags>
@@ -104,6 +110,10 @@ class App extends React.Component {
                             <TitleBar/>
                             <Search />
                           </Route>
+                          <Route path="/dashboard">
+                            <TitleBar />
+                            <Dashboard />
+                          </Route>
           {/* <Route path="/login">
                             <TitleBar/>
                             <Login authCallback={this.updateAuth.bind(this)}/>
@@ -127,6 +137,7 @@ class App extends React.Component {
               </ThemeProvider>
           </div>
           </div>
+          </Provider>
       );
         }
 }

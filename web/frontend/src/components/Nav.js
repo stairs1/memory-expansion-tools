@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import { Box } from '@material-ui/core';
+import React, { useState, Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -159,26 +160,36 @@ export default function BottomAppBar(props) {
     const userMenu = function() {
         if (props.login){
             return (
-                <div>
-               <IconButton color="secondary" component={Link} to="/stream" classes={{label: classes.iconButtonLabel}}>
-                <PlayArrowIcon />
-                <Typography variant="body2">Stream</Typography>
-                
-              </IconButton>
-              <IconButton color="secondary" component={Link} to="/mxt" classes={{label: classes.iconButtonLabel}}>
-                <MemoryIcon />
-                <Typography variant="body2">Cache</Typography>
-              </IconButton>
-              <IconButton color="secondary" component={Link} to="/tags" classes={{label: classes.iconButtonLabel}}>
-                    <LabelImportantIcon />
-                <Typography variant="body2">Tags</Typography>
-              </IconButton>
-
-              <IconButton color="secondary" component={Link} to="/search" classes={{label: classes.iconButtonLabel}}>
-                <SearchIcon />
-                <Typography variant="body2">Search</Typography>
-              </IconButton>
-                </div>
+              <Fragment>
+                  <IconButton color="secondary" component={Link} to="/stream" classes={{label: classes.iconButtonLabel}}>
+                      <PlayArrowIcon />
+                      <Typography variant="body2">
+                          Stream
+                      </Typography>
+                  </IconButton>
+                  <IconButton color="secondary" component={Link} to="/mxt" classes={{label: classes.iconButtonLabel}}>
+                      <MemoryIcon />
+                      <Typography variant="body2">
+                          Cache
+                      </Typography>
+                  </IconButton>
+                  <IconButton color="secondary" component={Link} to="/search" classes={{label: classes.iconButtonLabel}}>
+                      <SearchIcon />
+                      <Typography variant="body2">
+                          Search
+                      </Typography>
+                  </IconButton>
+                  <IconButton color="secondary" component={Link} to="/tags" classes={{label: classes.iconButtonLabel}}>
+                      <LabelImportantIcon />
+                      <Typography variant="body2">Tags</Typography>
+                  </IconButton>
+                  <IconButton color="secondary" component={Link} to="/dashboard" classes={{label: classes.iconButtonLabel}}>
+                      <MemoryIcon />
+                      <Typography variant="body2">
+                          Dashboard
+                      </Typography>
+                  </IconButton>
+              </Fragment>
             )
         } else {
             return null;
