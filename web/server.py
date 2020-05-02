@@ -25,6 +25,7 @@ from api.SearchEndpoint import SearchPage
 from api.TimeFlowEndpoint import TimeFlow
 from api.L1Endpoint import L1
 from api.RememberEndpoint import Remember
+from api.TagMakerEndpoint import TagMaker
 from api.LoginEndpoint import Login
 from api.RefreshTokenEndpoint import Refresh
 from api.SignUpEndpoint import SignUp
@@ -53,6 +54,7 @@ api.add_resource(L1, "/lone", resource_class_args=[jwt])
 api.add_resource(SearchPage, "/searchapi", resource_class_args=[jwt])
 api.add_resource(TimeFlow, "/timeflow", resource_class_args=[jwt])
 api.add_resource(Remember, "/remember", resource_class_args=[app, jwt, phraseSock])
+api.add_resource(TagMaker, "/tagmake", resource_class_args=[app, jwt])
 api.add_resource(SignUp, "/signupapi", resource_class_args=[bcrypt])
 api.add_resource(L2, "/ltwo")
 api.add_resource(L3, "/lthree")

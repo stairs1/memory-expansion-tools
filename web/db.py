@@ -22,7 +22,8 @@ class Database:
         return serverStatusResult
 
     def addUser(self, name, username, email, password):
-        if self.userExists(username):
+        userId = self.nameToId(username)
+        if self.userExists(userId):
             return None
         usersCollection = self.db.users
         stagesCollection = self.db.l1stages #TODO this is too dependent on the l1 stage right now, 
@@ -32,6 +33,27 @@ class Database:
         empty = {"userId" : userId, "stage" : { "1" : None, "2" : None, "3" : None, "4" : None }}
         stagesCollection.insert_one(empty)
         return userId
+
+    def addTag(self, username, tag):
+        userId = self.nameToId(username)
+        if not self.userExists(userId):
+            return None
+        tagsCollection = self.db.tags
+        tagJson = {"username": username, "tag" : tag, "timestamp" : time.time()}
+        resp = tagsCollection.insert_one(tagJson)
+        if resp:
+            return True
+
+    def getTags(self, username):
+        userId = self.nameToId(username)
+        if not self.userExists(userId):
+            return None
+        tagsCollection = self.db.tags
+        resp = tagsCollection.find({"username" : username})
+        respl = list()
+        for i in resp:
+            respl.append(i)
+        return respl
 
     def nameToId(self, username):
         usersCollection = self.db.users
@@ -259,9 +281,8 @@ def main():
     db = Database()
     db.connect()
     print("hell")
-    a = db.getMostRecent(ObjectId("5e72bd909b00395d1247101e"), 3)
+    a = db.getTags("cayden")
     print(a)
-
 
 if __name__ == "__main__":
     main()

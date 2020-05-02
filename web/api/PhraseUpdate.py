@@ -12,7 +12,7 @@ from db import Database
 
 class PhraseSocket:
     def __init__(self, app):
-        self.socketio = SocketIO(app)
+        self.socketio = SocketIO(app, cors_allowed_origins="*")
         self.connections = list()
         self.socketio.on_event("join", self.on_join)
         self.db = Database()

@@ -6,6 +6,7 @@ import { Box, Paper, List, ListItem, ListItemText, FormControl, TextField, Butto
 import TalkItem from "./Talks.js";
 import TalkCard from "./TalkCard.js";
 import { spacing } from '@material-ui/system';
+import { url } from "../constants";
 
 class Stream extends Component{
     
@@ -23,7 +24,7 @@ class Stream extends Component{
     }
     
     connectSock() {
-        const socket = io("https://memoryexpansiontools.com");
+        const socket = io(url);
         socket.on("my_response", data => {this.setState({value: data}); console.log(this.state.value.phrases[0])});
         socket.emit("join", {data : "dgs"});
         console.log("SockIO connected, room joined.");
