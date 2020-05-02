@@ -20,6 +20,7 @@ class NavBar extends Component {
             {this.props.login ? <Button component={Link} to="/mxt" color="inherit">MXTCache</Button> : null }
             {this.props.login ? <Button component={Link} to="/stream" color="inherit">MemoryStream</Button> : null}
             {this.props.login ? <Button component={Link} to="/search" color="inherit">Search</Button> : null}
+            {this.props.login ? <Button component={Link} to="/dashboard" color="inherit">Dashboard</Button> : null}
             {this.props.login ? <Button component={Link} to="/signout" color="inherit">Signout</Button> : null }
         </Toolbar>
       </AppBar>
