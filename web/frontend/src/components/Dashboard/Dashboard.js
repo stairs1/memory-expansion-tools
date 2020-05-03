@@ -9,8 +9,13 @@ export class Dashboard extends Component {
         const { memories } = this.props; 
         return (
             <Fragment>
-                <h1>Memory Dashboard</h1>
-                <MapContainer />
+                <div class='container-fluid'>
+                    <div class='row'>
+                        <div class='col-lg-4 col-md-6 col-sm-12'>
+                            <MapContainer />
+                        </div>                        
+                    </div>                    
+                </div>                
             </Fragment>
         )
     }

@@ -2,8 +2,8 @@ import { FETCH_MEMORIES } from './types';
 import { url, mxtEnd } from "../constants";
 import AuthHandle from "../components/AuthHandler";
 
-export const fetchMemories = () => dispatch => { 
-    const token = AuthHandle.getToken(); 
+export const fetchMemories = () => async(dispatch) => { 
+    const token = await AuthHandle.getToken(); 
     fetch(url + mxtEnd, {
 		    method: 'GET',
             headers: {
@@ -13,10 +13,12 @@ export const fetchMemories = () => dispatch => {
             }
         })
         .then(res => res.json())
-        .then(memories => 
+        .then(memories => {
+            console.log(memories)
             dispatch({
                 type: FETCH_MEMORIES,
                 payload: memories 
             })
+        }
         );
 }
