@@ -24,7 +24,7 @@ class PhraseSocket:
             phraseResults = list()
             for item in phrases:
                 item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
-                        "%a, %b %-d %-I:%-M %p"
+                        "%a, %b %-d %-I:%M %p"
                     )
                 phraseResults.append(item)
             self.socketio.emit(

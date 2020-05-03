@@ -172,8 +172,6 @@ class Database:
         talks = self.getMostRecent(userId, num)
         phrases = list()
         for item in talks:
-            item.pop('_id', None)
-            item.pop('userId', None)
             phrases.append(item)
         return phrases
 

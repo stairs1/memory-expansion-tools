@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 import time
 
 
-class L2(Resource):
+class Recent(Resource):
     ltwo_marshaller = {
         "userId": fields.String,
         "talk": fields.String(default="Anonymous User"),
@@ -22,14 +22,41 @@ class L2(Resource):
         self.db = Database()
         self.db.connect()
 
+    #difference between GET and POST is POST allow you to select how many memories you want to retrieve
     @marshal_with(ltwo_marshaller)
     @jwt_required
     def get(self):
         username = get_jwt_identity()
         userId = self.db.nameToId(username)
-        cache = self.db.getL(userId, time.time(), level=2)
+
+        phrases = self.db.getPhrases(username)
+
         results = list()
-        for item in cache:
+        for item in phrases:
+            item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
+                "%a, %b %-d %-I:%M %p"
+                )
+            results.append(item)
+        headers = {"Content-Type": "application/json"}
+        return results
+
+    @marshal_with(ltwo_marshaller)
+    @jwt_required
+    def post(self):
+        # define args to accepts from post
+        parser = reqparse.RequestParser()
+        parser.add_argument("numTalks", type=int)
+        args = parser.parse_args()
+
+        numTalks = args["numTalks"] #number of results we want passed back
+
+        username = get_jwt_identity()
+        userId = self.db.nameToId(username)
+
+        phrases = self.db.getPhrases(username, num=numTalks)
+
+        results = list()
+        for item in phrases:
             item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
                 "%a, %b %-d %-I:%M %p"
                 )

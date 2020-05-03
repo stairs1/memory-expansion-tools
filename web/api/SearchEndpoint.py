@@ -50,7 +50,7 @@ class SearchPage(Resource):
             for item in r:
                 print(item)
                 item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
-                    "%a, %b %-d %-I:%-M %p"
+                    "%a, %b %-d %-I:%M %p"
                 )
                 result.append(item)
 

@@ -62,7 +62,7 @@ class TimeFlow(Resource):
 
         for result in results:
             result["prettyTime"] = datetime.fromtimestamp(result["timestamp"]).strftime(
-                "%a, %b %-d %-I:%-M %p"
+                "%a, %b %-d %-I:%M %p"
             )
 
         return results
