@@ -4,6 +4,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import { Redirect } from "react-router-dom";
 import { ButtonBase, Divider, Card, CardMedia } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import { spacing } from '@material-ui/system';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -123,6 +124,7 @@ class HowTo extends Component {
       const { classes } = this.props;
       console.log(classes);
       return (
+          <Box mb={10}>
     <Grid container component="main" className={classes.root}>
         {this.state.logout ? <Redirect to="/mxt" /> : null}
       <CssBaseline />
@@ -202,6 +204,7 @@ class HowTo extends Component {
                </div>
       </Grid>
     </Grid>
+          </Box>
   );
   }
 }

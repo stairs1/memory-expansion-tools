@@ -51,7 +51,7 @@ class Search extends Component {
 
     render() {
         return (
-            <Box m={2}>
+            <Box m={2} mb={10}>
          <Typography variant="h6">
               Search
         </Typography>

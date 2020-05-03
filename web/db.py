@@ -52,7 +52,7 @@ class Database:
         resp = tagsCollection.find({"username" : username})
         respl = list()
         for i in resp:
-            respl.append(i)
+            respl.append(i["tag"])
         return respl
 
     def nameToId(self, username):

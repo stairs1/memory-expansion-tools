@@ -78,6 +78,10 @@ class Remember(Resource):
         if args["lat"] is not None:
             latitude = float(args["lat"])
             longitude = float(args["long"])
+        else:
+            latitude = None
+            longitude = None
+
         address = args["address"]
         sentPhrases = args["phrases"]
 

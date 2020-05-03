@@ -120,7 +120,6 @@ class SignInSide extends Component {
 
   render() {
       const { classes } = this.props;
-      console.log(classes);
       return (
     <Grid container component="main" className={classes.root}>
         {this.state.logout ? <Redirect to="/stream" /> : null}

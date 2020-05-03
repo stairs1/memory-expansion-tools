@@ -28,14 +28,10 @@ class AuthHandle {
     }
 
     static async authStatus(){ //this bit is a gross and should be abstracted out, it's just a repeat of above
-        console.log("getting it...");
         var token = await AuthHandle.getToken();
-        console.log("got it...");
         if (token === null){
-            console.log("running");
             return false;
         }
-            console.log("not running");
         return true; //return true because we have a token and it is not expired
     }
 
@@ -55,7 +51,6 @@ class AuthHandle {
 		body: JSON.stringify({ "userId" : username, "password" : password})
 		}).then((response) => response.json())
 		.then((data) => {
-			console.log('Success:', data);
 			if (data['success'] === 1){
 				this.setCookie('access_token_cookie', data['token'], 1);
 				this.setCookie('refresh_token_cookie', data['refreshToken'], 7);
@@ -119,8 +114,6 @@ class AuthHandle {
                 }
                 }).then((response) => response.json())
                 .then((data) => {
-                    console.log(data);
-                    console.log('Success:', data);
                     if (data['success'] === 1){
                         this.setCookie('access_token_cookie', data['token'], 1);
                         return true;
@@ -141,7 +134,6 @@ class AuthHandle {
             body: JSON.stringify({ "username" : username, "password" : password, "email" : email, "name" : name})
             }).then((response) => response.json())
             .then((data) => {
-                console.log('Success:', data);
                 if (data['success'] === 1){
                     return true;
                 }

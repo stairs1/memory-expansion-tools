@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 import ReactDOM from 'react-dom';
@@ -7,6 +8,13 @@ import TalkItem from "./Talks.js";
 import TalkCard from "./TalkCard.js";
 import { spacing } from '@material-ui/system';
 import { url } from "../constants";
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    paddingBottom: 50,
+  },
+}));
 
 class Stream extends Component{
     
@@ -32,7 +40,8 @@ class Stream extends Component{
 
     render() {
         return (
-            <Box m={2}>
+            <Box m={2} mb={10}>
+          <CssBaseline />
         <Typography variant="h6">
         Memory Stream
         </Typography>

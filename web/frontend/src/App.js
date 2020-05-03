@@ -10,6 +10,7 @@ import TitleBar from './components/TitleBar.js';
 import SignInSide from './components/SignInSide.js';
 import SignUpSide from './components/SignUpSide.js';
 import HowTo from './components/HowTo.js';
+import Tags from './components/Tags.js';
 
 import CardMedia from '@material-ui/core/CardMedia';
 
@@ -65,7 +66,7 @@ class App extends React.Component {
     }
 
     async componentWillMount(){
-        this.setState({login: await AuthHandle.authStatus()}, () => { console.log("inappcheck" + this.state.login)});
+        this.setState({login: await AuthHandle.authStatus()}, () => {});
     }
     
         render() {
@@ -94,6 +95,10 @@ class App extends React.Component {
                           <Route path="/stream">
                             <TitleBar/>
                             <Stream />
+                          </Route>
+                          <Route path="/tags">
+                            <TitleBar/>
+                            <Tags />
                           </Route>
                           <Route path="/search">
                             <TitleBar/>

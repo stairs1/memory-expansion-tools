@@ -37,16 +37,13 @@ class Login extends Component {
       return this.setState({ error: 'Password is required' });
     }
     var res = await AuthHandle.login(this.state.username, this.state.password);
-      console.log(res);
     if (res){ //use the given username and pass to login (hits the backend with credentials and gets jwt and saves in cookie
         //we should redirect to the MXT cache here
-        console.log("success***************");
         this.props.authCallback();
         this.setState({logout : true});
         this.props.authCallback();
 		return this.setState({ error: "Successful login."}); //we don't need this, remove once we are redirecting
     } else {
-        console.log("FAILLLL***************");
 		return this.setState({ error: "Unsuccessful login."});
     }
 

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import LabelImportantIcon from '@material-ui/icons/LabelImportant';
+import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,6 +22,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HelpIcon from '@material-ui/icons/Help';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
+//import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { Button, Popper, Menu, MenuItem, CssBaseline, AppBar, Typography, MenuList
 } from '@material-ui/core';
@@ -27,6 +30,7 @@ import { Button, Popper, Menu, MenuItem, CssBaseline, AppBar, Typography, MenuLi
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
+    appBarSpacer: theme.mixins.toolbar,
   palette: {
     primary: { main: "#111111", contrastText: "#ffffff"
  },
@@ -108,12 +112,10 @@ export default function BottomAppBar(props) {
   }, [open]);
 
     const handleAccountMenuClick = function() {
-        console.log("CLIIIIIIICKKKKKKKK");
         setAccountMenu(!accountMenu);
     }
 
     const accountMenuBuilder = function() {
-        console.log("BUIIIIIIIIIIIIIIIIIIIIIIIIIIII");
             return (
                 <div>
       <IconButton ref={anchorRef}
@@ -167,6 +169,11 @@ export default function BottomAppBar(props) {
                 <MemoryIcon />
                 <Typography variant="body2">Cache</Typography>
               </IconButton>
+              <IconButton color="secondary" component={Link} to="/tags" classes={{label: classes.iconButtonLabel}}>
+                    <LabelImportantIcon />
+                <Typography variant="body2">Tags</Typography>
+              </IconButton>
+
               <IconButton color="secondary" component={Link} to="/search" classes={{label: classes.iconButtonLabel}}>
                 <SearchIcon />
                 <Typography variant="body2">Search</Typography>
@@ -179,7 +186,11 @@ export default function BottomAppBar(props) {
     }
 
   return (
+      <div>
       <React.Fragment>
+      <CssBaseline />
+
+      <Box>
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar>
             {accountMenuBuilder()}
@@ -191,7 +202,10 @@ export default function BottomAppBar(props) {
           <div className={classes.grow} />
             {userMenu()}
                </Toolbar>
+
       </AppBar>
+      </Box>
     </React.Fragment>
+      </div>
   );
 }

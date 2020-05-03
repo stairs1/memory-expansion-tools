@@ -37,7 +37,7 @@ class MXT extends Component {
        
     render() {
         return (
-            <Box m={2}>
+            <Box m={2} mb={10}>
             <div>
         <Typography variant="h6">
               MXT Cache
