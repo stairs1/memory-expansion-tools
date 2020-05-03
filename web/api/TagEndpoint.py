@@ -35,8 +35,9 @@ class TagEndpoint(Resource):
         return {"success": 1}
 
     #@marshal_with(tag_marshaller)
+    @jwt_required
     def get(self):
-        username = "cayden" #get_jwt_identity()
+        username = get_jwt_identity()
         tags = self.db.getTags(username)
         resp = dict()
         if tags:
@@ -44,6 +45,7 @@ class TagEndpoint(Resource):
             resp["tags"] = tags
         else:
             resp["success"] = 0
+            resp["tags"] = None
         print(resp)
         return resp
 

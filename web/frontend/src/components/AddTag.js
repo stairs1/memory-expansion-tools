@@ -48,7 +48,7 @@ export default function AddTag(props) {
   return (
       <div>
       <Typography variant="h7">
-        Add New Label
+        Add New Label (make it 3 syllables so it's reliably picked up by voice transcription)
       </Typography>
         <form onSubmit={handleSubmit}>
           <TextField type="text" label="Add a new tag/label." onChange={handleLabelChange} value={label}/> 

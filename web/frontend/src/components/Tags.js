@@ -72,17 +72,19 @@ class Tags extends Component {
     async makeBins(){
         
         var tagBins = {}; //JSON object to hold all of the tag bins with labels as the keys to an array of most recent cache talks with that tag
-        for (var i = 0; i < this.state.tags.length; i++){
-            var bin = [];
-            for (var j = 0; j < this.state.cache.length; j++){
-                if (this.state.cache[j].talk.includes(this.state.tags[i])){
-                    bin.push(this.state.cache[j]);
+        if (this.state.tags != null){
+            for (var i = 0; i < this.state.tags.length; i++){
+                var bin = [];
+                for (var j = 0; j < this.state.cache.length; j++){
+                    if (this.state.cache[j].talk.includes(this.state.tags[i])){
+                        bin.push(this.state.cache[j]);
+                    }
                 }
+                tagBins[this.state.tags[i]] = bin;
             }
-            tagBins[this.state.tags[i]] = bin;
-        }
 
-        this.setState({tagBins : tagBins});
+            this.setState({tagBins : tagBins});
+        }
     }
 
     async componentWillMount() {
@@ -122,7 +124,7 @@ class Tags extends Component {
               Memory Bins
         </Typography>
             <List>
-                {this.state.tags.length > 0 && this.state.tags.map((tag, i) => (
+                {this.state.tags != null && this.state.tags.map((tag, i) => (
                     <div>
                     <Typography variant="h7">
                         {this.capitalizeFirstLetter(tag)}
