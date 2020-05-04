@@ -14,4 +14,6 @@ export const loginEnd = "/loginapi"
 export const refreshEnd = "/refresh"
 export const signupEnd = "/signupapi"
 export const searchEnd = "/searchapi"
+// Google Maps API Key 
+export const API_KEY = 'AIzaSyDrF-e0TO_qHQ1HTokpiZlHSarRz2mlnds'
 
