@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import MapContainer from './MapContainer/MapContainer'
 import Search from './Search/Search'
 import MXTCache from './MXTCache/MXTCache'
+import Stream from './Stream/Stream'
 
 export class Dashboard extends Component {
     render() {
@@ -20,6 +21,9 @@ export class Dashboard extends Component {
                         </div>                 
                         <div class='col-lg-4 col-md-6 col-sm-12'>
                             <MXTCache />
+                        </div>
+                        <div class='col-lg-4 col-md-6 col-sm-12'>
+                            <Stream />
                         </div>
                     </div>                    
                 </div>                
