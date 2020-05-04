@@ -1,7 +1,8 @@
-import { FETCH_MEMORIES, SEARCH_MEMORIES } from '../actions/types'
+import { FETCH_MEMORIES, SEARCH_MEMORIES, FETCH_MXT_CACHE } from '../actions/types'
 
 const initialState = {
-    memories: []
+    memories: [],
+    cache: [] 
 }
 
 export default function(state = initialState, action){
@@ -10,6 +11,11 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 memories: action.payload
+            }
+        case FETCH_MXT_CACHE:
+            return {
+                ...state,
+                cache: action.payload
             }
         default:
             return state
