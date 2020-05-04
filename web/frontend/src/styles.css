@@ -1,0 +1,12 @@
+.picker-colors {
+  display: none;
+}
+
+.picker {
+    display: inline-block;
+}
+
+.picker:hover + .picker-colors, .picker-colors:hover {
+  display: inline-block;
+}
+

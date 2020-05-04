@@ -23,14 +23,19 @@ class TagEndpoint(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("tag", type=str)
+        parser.add_argument("remove", type=int) #user can choose the remove option, which will delete the specified tag for the user if it exists
         args = parser.parse_args()
 
         tag = args["tag"]
+        rem = args["remove"]
 
         username = get_jwt_identity()
         userId = self.db.nameToId(username)
 
-        self.db.addTag(username, tag)
+        if rem is None or rem == 0:
+            self.db.addTag(username, tag)
+        else:
+            self.db.removeTag(username, tag)
 
         return {"success": 1}
 

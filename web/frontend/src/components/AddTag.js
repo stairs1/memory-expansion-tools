@@ -9,6 +9,8 @@ import MenuIcon from '@material-ui/icons/Menu'; import SearchIcon from '@materia
 import DirectionsIcon from '@material-ui/icons/Directions';
 import AddIcon from '@material-ui/icons/Add';
 
+import { useAlert } from 'react-alert'
+
 const useStyles = makeStyles(theme => ({
   root: {
     padding: '2px 4px',
@@ -32,11 +34,14 @@ const useStyles = makeStyles(theme => ({
 export default function AddTag(props) {
   const classes = useStyles();
   const [label, setLabel] = useState();
+    const alert = useAlert();
 
     function handleSubmit(evt){
         evt.preventDefault();
+        alert.success('You just added a new tag.');
         console.log(evt);
         props.adder(label);
+        setLabel("");
     }
 
   function handleLabelChange(evt) {
@@ -48,7 +53,7 @@ export default function AddTag(props) {
   return (
       <div>
       <Typography variant="h7">
-        Add New Label (make it 3 syllables so it's reliably picked up by voice transcription)
+        Add new tag (make it >=3 syllables so it's reliably picked up by voice transcription)
       </Typography>
         <form onSubmit={handleSubmit}>
           <TextField type="text" label="Add a new tag/label." onChange={handleLabelChange} value={label}/> 

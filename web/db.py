@@ -44,6 +44,14 @@ class Database:
         if resp:
             return True
 
+    def removeTag(self, username, tag):
+        userId = self.nameToId(username)
+        if not self.userExists(userId):
+            return None
+        tagsCollection = self.db.tags
+        tagsCollection.delete_one({"username" : username, "tag" : tag})
+        return True
+
     def getTags(self, username):
         userId = self.nameToId(username)
         if not self.userExists(userId):
@@ -161,6 +169,7 @@ class Database:
 
         recents = list()
         for item in resp:  # little weird b/c resp is a pymongo-cursor
+            item.pop("_id")
             recents.append(item)
         return recents
 

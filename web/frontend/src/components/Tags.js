@@ -13,6 +13,7 @@ class Tags extends Component {
     constructor(props){
         super(props);
         this.adder = this.adder.bind(this)
+        this.deleteLabel = this.deleteLabel.bind(this)
     }
     state = {
             tags: [],
@@ -20,17 +21,6 @@ class Tags extends Component {
             token: {}, 
             tagBins: {}
           }
-
-    capitalizeFirstLetter(str) {
-   var splitStr = str.toLowerCase().split(' ');
-   for (var i = 0; i < splitStr.length; i++) {
-       // You do not need to check if i is larger than splitStr length, as your for does that for you
-       // Assign it back to the array
-       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-   }
-   // Directly return the joined string
-   return splitStr.join(' ');
-}
 
     async getTags() {
 
@@ -68,7 +58,6 @@ class Tags extends Component {
             );
     }
 
-
     async makeBins(){
         
         var tagBins = {}; //JSON object to hold all of the tag bins with labels as the keys to an array of most recent cache talks with that tag
@@ -98,11 +87,9 @@ class Tags extends Component {
     }
 
     async adder(toAdd) {
-        console.log("ADDED");
-//        this.state.token = await AuthHandle.getToken();
         this.setState({ token : await AuthHandle.getToken()});
 
-        fetch(url + tagEnd, {
+        await fetch(url + tagEnd, {
             method: 'POST',
             headers: {
             'Accept': 'application/json',
@@ -113,7 +100,32 @@ class Tags extends Component {
             }).then((response) => response.json())
             .then((data) => {
         })
+        
+        //refresh the tags, cache, bin with new tag
+        await this.getTags();
+        await this.getCache();
+        await this.makeBins();
+        }
 
+    async deleteLabel(label) {
+        this.setState({ token : await AuthHandle.getToken()});
+
+        await fetch(url + tagEnd, {
+            method: 'POST',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + this.state.token
+            },
+            body: JSON.stringify({ "tag" : label, "remove" : 1})
+            }).then((response) => response.json())
+            .then((data) => {
+        })
+        
+        //refresh the tags, cache, bin with tag now removed
+        await this.getTags();
+        await this.getCache();
+        await this.makeBins();
         }
 
     render() {
@@ -126,11 +138,8 @@ class Tags extends Component {
             <List>
                 {this.state.tags != null && this.state.tags.map((tag, i) => (
                     <div>
-                    <Typography variant="h7">
-                        {this.capitalizeFirstLetter(tag)}
-                    </Typography>
 
-                    <TagBin talks={this.state.tagBins[tag]}/>
+                    <TagBin deleter={this.deleteLabel} title={tag} talks={this.state.tagBins[tag]}/>
                     </div>
                         ))
                     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,11 +12,15 @@ import IconButton from '@material-ui/core/IconButton';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { spacing } from '@material-ui/system';
 
+import { useAlert } from 'react-alert'
+
+import "../styles.css";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -23,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
   demo: {
     backgroundColor: theme.palette.background.paper,
+  },
+  margin: {
+    margin: theme.spacing(1),
   },
   title: {
     margin: theme.spacing(4, 0, 2),
@@ -36,14 +44,40 @@ function generate(element) {
     }),
   );
 }
-
 export default function TagBin(props) {
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
+    const alert = useAlert();
+
+    function deleteLabel(evt){
+        console.log(evt);
+        console.log(evt.currentTarget.value);
+        alert.error('You just deleted tag : \"' + evt.currentTarget.value + '\".');
+        props.deleter(evt.currentTarget.value);
+    }
+
+    function capitalizeFirstLetter(str) {
+   var splitStr = str.toLowerCase().split(' ');
+   for (var i = 0; i < splitStr.length; i++) {
+       // You do not need to check if i is larger than splitStr length, as your for does that for you
+       // Assign it back to the array
+       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+   }
+   // Directly return the joined string
+   return splitStr.join(' ');
+}
+
+
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} key={props.title}>
+        <div className="picker">
+          <Typography className={classes.margin}>{capitalizeFirstLetter(props.title)}</Typography>
+        </div>
+          <div className="picker-colors">
+            <Button onClick={deleteLabel} size="small" value={props.title}><DeleteIcon/></Button>
+          </div>
        <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <div className={classes.demo}>
@@ -64,8 +98,3 @@ export default function TagBin(props) {
     </div>
   );
 }
-
-
-//          <Typography variant="h6" className={classes.title}>
-//            Text only
-//          </Typography>
