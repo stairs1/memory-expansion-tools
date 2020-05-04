@@ -1,23 +1,27 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 
-// Google Maps for React
+// Google Maps for React and API key for authorized access
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react'
+import { API_KEY } from '../../../constants'
 
 // Actions
 import { fetchMemories } from '../../../actions/dashboardActions' 
 
+// Styles 
 import './MapContainer.css' 
 
 export class MapContainer extends Component {
     render() {
-        const { memories } = this.props
+        const { memories, fetchMemories } = this.props
         const mapStyle = {
             width: '100%',
             height: '70vh',
             position: 'relative'
         }
-        if (memories.length > 0){
+        fetchMemories()
+        // Display map if we have memories
+        if (memories.length > 0){ 
             // Map center based on the last recorded point
             const initialCenter = {
                 lat: memories[memories.length - 1].latitude,
@@ -47,7 +51,7 @@ export class MapContainer extends Component {
                     </Map>
                 </Fragment>
             )
-        }else{
+        }else{ // Otherwise display to the user that there are no memories to
             return (
                 <Fragment>
                     <h1>Map</h1>
@@ -58,11 +62,8 @@ export class MapContainer extends Component {
             )
         }       
     }
-
-    componentWillMount(){
-        this.props.fetchMemories(); 
-    }
-
+    
+    // Extends the boundaries of the map so that all of the markers in the map are visible 
     componentDidUpdate(){
         const { memories } = this.props; 
         if (memories.length > 0){
@@ -79,7 +80,7 @@ export class MapContainer extends Component {
 }
 
 const gooogleApiKey = {
-    apiKey: 'AIzaSyDrF-e0TO_qHQ1HTokpiZlHSarRz2mlnds'
+    apiKey: API_KEY
 }
 
 const mapStateToProps = state => ({
