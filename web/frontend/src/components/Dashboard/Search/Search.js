@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 // Components
@@ -19,30 +19,28 @@ export class Search extends Component {
     render() {
         const { memories } = this.props
         return (
-            <Fragment>
-                <Box m={2}>
-                    <Typography variant="h6">
-                        Search
-                    </Typography>
-                    <form onSubmit={this.handleSubmit}>
-                        <TextField 
-                            autoFocus 
-                            id="query" 
-                            label="Query" 
-                            value={this.state.query} 
-                            onChange={this.handleQueryChange} />
-                        <br />
-                        <Button type="submit" id="submit">Submit</Button>
-                        {
-                            memories.map(memory => {
-                                return (
-                                    <TalkCard data={memory} />
-                                )                                
-                            })
-                        } 
-                    </form>
-                </Box>
-            </Fragment>
+            <Box m={2}>
+                <Typography variant="h6">
+                    Search
+                </Typography>
+                <form onSubmit={this.handleSubmit}>
+                    <TextField 
+                        autoFocus 
+                        id="query" 
+                        label="Query" 
+                        value={this.state.query} 
+                        onChange={this.handleQueryChange} />
+                    <br />
+                    <Button type="submit" id="submit">Submit</Button>
+                    {
+                        memories.map(memory => {
+                            return (
+                                <TalkCard data={memory} />
+                            )                                
+                        })
+                    } 
+                </form>
+            </Box>
         )
     }
 

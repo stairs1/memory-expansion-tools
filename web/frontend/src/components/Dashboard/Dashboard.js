@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 // Components
 import MapContainer from './MapContainer/MapContainer'
 import Search from './Search/Search'
+import MXTCache from './MXTCache/MXTCache'
 
 export class Dashboard extends Component {
     render() {
@@ -17,6 +18,9 @@ export class Dashboard extends Component {
                         <div class='col-lg-4 col-md-6 col-sm-12'>
                             <Search />
                         </div>                 
+                        <div class='col-lg-4 col-md-6 col-sm-12'>
+                            <MXTCache />
+                        </div>
                     </div>                    
                 </div>                
             </Fragment>
