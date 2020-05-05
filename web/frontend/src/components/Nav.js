@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import { Box } from '@material-ui/core';
-import React, { useState, Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
