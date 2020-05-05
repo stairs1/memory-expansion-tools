@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 // Components
 import TalkCard from "../../TalkCard";
 import { Box, TextField, Button, Typography } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 
 // Actions
 import { searchMemories } from '../../../actions/dashboardActions'
@@ -17,10 +18,11 @@ export class Search extends Component {
     }
 
     render() {
-        const { memories } = this.props
+        const { searchResults } = this.props
         return (
             <Box m={2}>
                 <Typography variant="h6">
+                    <SearchIcon />
                     Search
                 </Typography>
                 <form onSubmit={this.handleSubmit}>
@@ -33,7 +35,7 @@ export class Search extends Component {
                     <br />
                     <Button type="submit" id="submit">Submit</Button>
                     {
-                        memories.map(memory => {
+                        searchResults.map(memory => {
                             return (
                                 <TalkCard data={memory} />
                             )                                
@@ -57,7 +59,7 @@ export class Search extends Component {
 }
 
 const mapStateToProps = state => ({
-    memories: state.dashboard.memories
+    searchResults: state.dashboard.searchResults
 })
 
 const mapDispatchToProps = {
