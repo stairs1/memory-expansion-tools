@@ -55,14 +55,14 @@ export const searchMemories = query => async(dispatch) => {
             'Authorization': 'Bearer ' + token
 	    },
         body: JSON.stringify({ 
-            'time' : 0, 
             'phrases' : [{
                 'speech' : query
             }]
         })
     })
-    .then(res => {console.log(res); res.json()})
+    .then(res => res.json())
 	.then(searchResults => {
+        console.log(searchResults);
         dispatch({
             type: SEARCH_MEMORIES, 
             payload: searchResults
