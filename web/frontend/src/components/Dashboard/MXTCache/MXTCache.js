@@ -11,7 +11,7 @@ import { fetchMXTCache, selectMemory } from '../../../actions/dashboardActions'
 
 export class MXTCache extends Component {
     render() {
-        const { fetchMXTCache, cache } = this.props 
+        const { cache, selectMemory } = this.props 
         return (
             <Box m={2}>
                 <Typography variant="h6">
@@ -26,12 +26,11 @@ export class MXTCache extends Component {
                                 <div onClick={() => {
                                         if (memory.selected == false){
                                             memory.selected = true
-                                            this.handleCacheItemClick(memory)
+                                            selectMemory(memory)
                                         }else{
                                             memory.selected = false
-                                            this.handleCacheItemClick(null)
+                                            selectMemory(null)
                                         }
-                                        
                                     }}>
                                     <TalkCard data={memory} />
                                 </div>                                
@@ -45,10 +44,6 @@ export class MXTCache extends Component {
 
     componentWillMount = () => {
         this.props.fetchMXTCache() 
-    }
-
-    handleCacheItemClick = memory => {
-        this.props.selectMemory(memory)
     }
 }
 

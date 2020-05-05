@@ -7,7 +7,7 @@ import { Box, TextField, Button, Typography } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
 // Actions
-import { searchMemories } from '../../../actions/dashboardActions'
+import { searchMemories, selectMemory } from '../../../actions/dashboardActions'
 
 export class Search extends Component {
     constructor(){
@@ -18,7 +18,7 @@ export class Search extends Component {
     }
 
     render() {
-        const { searchResults } = this.props
+        const { searchResults, selectMemory } = this.props
         return (
             <Box m={2}>
                 <Typography variant="h6">
@@ -36,8 +36,19 @@ export class Search extends Component {
                     <Button type="submit" id="submit">Submit</Button>
                     {
                         searchResults.map(memory => {
+                            memory.selected = false
                             return (
-                                <TalkCard data={memory} />
+                                <div onClick={() => {
+                                    if (memory.selected == false){
+                                        memory.selected = true
+                                        selectMemory(memory)
+                                    }else{
+                                        memory.selected = false
+                                        selectMemory(null)
+                                    }
+                                }}>
+                                    <TalkCard data={memory} />
+                                </div>                                
                             )                                
                         })
                     } 
@@ -63,7 +74,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    searchMemories
+    searchMemories,
+    selectMemory
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search)

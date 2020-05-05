@@ -16,13 +16,13 @@ import './MapContainer.css'
 
 export class MapContainer extends Component {
     render() {
-        const { mapMemories } = this.props
+        const { cache, searchResults } = this.props
         const mapStyle = {
             width: '90%',
             height: '90%'
         }
         // Display map if we have memories
-        if (mapMemories.length > 0){ 
+        if (cache.length > 0){ 
             return (
                 <Box m={2}>
                     <Typography variant="h6">
@@ -35,15 +35,30 @@ export class MapContainer extends Component {
                         streetViewControl={false}
                         style={mapStyle}
                         mapTypeControl={false}>
+                        { 
+                            cache.map(memory => { // Display red markers on the map for memories that are in the cache and not in the search result
+                                if (memory.latitude && memory.longitude && !this.containsMemory(cache, memory))
+                                    return (
+                                        <Marker 
+                                            position={{
+                                                lat: memory.latitude,
+                                                lng: memory.longitude
+                                            }}
+                                            icon={{url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"}} />
+                                    )
+                            })
+                        }
                         {
-                            mapMemories.map(memory => {
-                                return (
-                                    <Marker 
-                                        position={{
-                                            lat: memory.latitude,
-                                            lng: memory.longitude
-                                        }} />
-                                )
+                            searchResults.map(memory => { // Display blue markers on the map for any memories in the search results  
+                                if (memory.latitude && memory.longitude)
+                                    return (
+                                        <Marker 
+                                            position={{
+                                                lat: memory.latitude,
+                                                lng: memory.longitude
+                                            }}
+                                            icon={{url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"}} />
+                                    )
                             })
                         }
                     </Map>
@@ -63,18 +78,23 @@ export class MapContainer extends Component {
         }       
     }
 
-    // Fetch memories before component mounts
-    componentWillMount(){
-        this.props.fetchMemories()
+    // Function used to check if the cache contians a search result of not (compare by value instead of reference)
+    containsMemory = (arr, memory) => {
+        arr.forEach(mem => {
+            if (mem.latitude == memory.latitude && mem.longitude == memory.longitude && mem.address == memory.address 
+                && mem.timestamp == memory.timestamp && mem.talk == memory.talk)
+                return true
+        })
+        return false
     }
     
     /* Extends the boundaries of the map so that all of the markers in the map are visible initially,
-       and zooms in on a selected memory if a cache selection is performed */
+       and zooms in on a selected memory if a selection is performed */
     componentDidUpdate = () => {
-        const { mapMemories, selectedMemory } = this.props
+        const { cache, selectedMemory } = this.props
         const bounds = new window.google.maps.LatLngBounds()
-        if (mapMemories.length > 0 && selectedMemory == null){
-            mapMemories.map(memory => {
+        if (cache.length > 0 && selectedMemory == null){
+            cache.map(memory => {
                 bounds.extend(new window.google.maps.LatLng(
                     memory.latitude,
                     memory.longitude
@@ -97,7 +117,8 @@ const gooogleApiKey = {
 }
 
 const mapStateToProps = state => ({
-    mapMemories: state.dashboard.mapMemories,
+    cache: state.dashboard.cache,
+    searchResults: state.dashboard.searchResults, 
     selectedMemory: state.dashboard.selectedMemory
 })
 
