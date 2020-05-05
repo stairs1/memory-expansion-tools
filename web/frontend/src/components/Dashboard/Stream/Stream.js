@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import { Box, Typography } from '@material-ui/core';
 import TalkCard from "../../TalkCard";
 import { url } from "../../../constants";
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 class Stream extends Component {
     constructor() {
@@ -21,7 +22,7 @@ class Stream extends Component {
     
     connectSock() {
         const socket = io(url)
-        socket.on("my_response", data => {this.setState({value: data}); console.log(this.state.value.phrases[0])})
+        socket.on("my_response", data => {this.setState({value: data})})
         socket.emit("join", {data : "dgs"})
     }
 
@@ -29,6 +30,7 @@ class Stream extends Component {
         return (
             <Box m={2}>
                 <Typography variant="h6">
+                    <PlayArrowIcon />
                     Memory Stream
                 </Typography>
                 <div class='split left'>

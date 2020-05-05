@@ -19,6 +19,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import MemoryIcon from '@material-ui/icons/Memory';
+import DashboardIcon from '@material-ui/icons/Dashboard'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HelpIcon from '@material-ui/icons/Help';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -184,7 +185,7 @@ export default function BottomAppBar(props) {
                       <Typography variant="body2">Tags</Typography>
                   </IconButton>
                   <IconButton color="secondary" component={Link} to="/dashboard" classes={{label: classes.iconButtonLabel}}>
-                      <MemoryIcon />
+                      <DashboardIcon />
                       <Typography variant="body2">
                           Dashboard
                       </Typography>
