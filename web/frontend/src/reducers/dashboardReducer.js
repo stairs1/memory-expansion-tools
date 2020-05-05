@@ -1,19 +1,15 @@
-import { FETCH_MEMORIES, SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY } from '../actions/types'
+import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY, DELETE_TAG, GET_TAGS, ADD_TAG } from '../actions/types'
 
 const initialState = {
     mapMemories: [],
     searchResults: [], 
     cache: [],
+    tags: [], 
     selectedMemory: null 
 }
 
 export default function(state = initialState, action){
     switch (action.type){
-        case FETCH_MEMORIES:
-            return {
-                ...state,
-                mapMemories: action.payload
-            }
         case FETCH_MXT_CACHE:
             return {
                 ...state,
@@ -29,6 +25,17 @@ export default function(state = initialState, action){
                 ...state,
                 selectedMemory: action.payload
             }
+        case GET_TAGS:
+            return {
+                ...state,
+                tags: action.payload 
+            }
+        case ADD_TAG:
+            state.tags.push(action.payload)
+            return state
+        case DELETE_TAG:
+            state.tags.splice(state.tags.findIndex(action.payload), 1)
+            return state
         default:
             return state
     }

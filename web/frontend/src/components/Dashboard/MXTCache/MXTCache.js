@@ -24,7 +24,7 @@ export class MXTCache extends Component {
                             memory.selected = false 
                             return (
                                 <div onClick={() => {
-                                        if (memory.selected == false){
+                                        if (memory.selected === false){
                                             memory.selected = true
                                             selectMemory(memory)
                                         }else{

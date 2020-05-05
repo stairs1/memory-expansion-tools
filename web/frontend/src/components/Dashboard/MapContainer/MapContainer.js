@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { Box, Typography } from '@material-ui/core';
@@ -7,9 +7,6 @@ import ExploreIcon from '@material-ui/icons/Explore';
 // Google Maps for React and API key for authorized access
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react'
 import { API_KEY } from '../../../constants'
-
-// Actions
-import { fetchMemories } from '../../../actions/dashboardActions' 
 
 // Styles 
 import './MapContainer.css' 
@@ -122,8 +119,4 @@ const mapStateToProps = state => ({
     selectedMemory: state.dashboard.selectedMemory
 })
 
-const mapDispatchToProps = {
-    fetchMemories
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(GoogleApiWrapper(gooogleApiKey)(MapContainer))
+export default connect(mapStateToProps)(GoogleApiWrapper(gooogleApiKey)(MapContainer))
