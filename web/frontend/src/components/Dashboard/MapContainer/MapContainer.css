@@ -1,8 +1,7 @@
 .no-memories{
-    position: relative;
-    height: 70vh;
-    width: 100%; 
+    position: absolute;
+    height: 90%;
+    width: 90%; 
     background-color: #333333; 
     color: white; 
-    padding-top: 50%; 
 }

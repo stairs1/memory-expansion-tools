@@ -13,13 +13,13 @@ import './MapContainer.css'
 
 export class MapContainer extends Component {
     render() {
-        const { cache, searchResults } = this.props
+        const { cache, searchResults, selectedMemory } = this.props
         const mapStyle = {
             width: '90%',
             height: '90%'
         }
-        // Display map if we have memories
-        if (cache.length > 0){ 
+        // Display map if we have memories in the cache or search results or have selected a memory in the memory stream
+        if (cache.length > 0 || searchResults.length > 0 || selectedMemory != null){ 
             return (
                 <Box m={2}>
                     <Typography variant="h6">
@@ -58,6 +58,15 @@ export class MapContainer extends Component {
                                     )
                             })
                         }
+                        {
+                            (!selectedMemory || !selectedMemory.latitude || !selectedMemory.longitude) ? null : 
+                            <Marker 
+                                position={{
+                                    lat: selectedMemory.latitude,
+                                    lng: selectedMemory.longitude
+                                }}
+                                icon={{url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"}} />
+                        }
                     </Map>
                 </Box>
             )
@@ -68,7 +77,7 @@ export class MapContainer extends Component {
                         Map
                     </Typography>
                     <div class='no-memories text-center'>
-                        No memories to show
+                        No memories to show. Memories in the MXT cache and search results will appear here.
                     </div>
                 </Box>
             )
@@ -88,9 +97,9 @@ export class MapContainer extends Component {
     /* Extends the boundaries of the map so that all of the markers in the map are visible initially,
        and zooms in on a selected memory if a selection is performed */
     componentDidUpdate = () => {
-        const { cache, selectedMemory } = this.props
+        const { cache, searchResults, selectedMemory } = this.props
         const bounds = new window.google.maps.LatLngBounds()
-        if (cache.length > 0 && selectedMemory == null){
+        if ((cache.length > 0 || searchResults > 0) && selectedMemory == null){
             cache.map(memory => {
                 bounds.extend(new window.google.maps.LatLng(
                     memory.latitude,
