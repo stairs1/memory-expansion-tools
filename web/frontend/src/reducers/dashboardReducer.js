@@ -1,4 +1,5 @@
 import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY, DELETE_TAG, GET_TAGS, ADD_TAG } from '../actions/types'
+import { omit } from 'lodash'
 
 const initialState = {
     mapMemories: [],
@@ -41,21 +42,21 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 tags: action.payload ? action.payload : [], 
-                tagBins
+                tagBins: Object.assign({}, state.tagBins, tagBins)
             }
         case ADD_TAG:
-            const { tags } = state
-            tags.push(action.payload)
-            state.tagBins[action.payload] = []
+            let tagBinsObject = {}
+            tagBinsObject[action.payload] = state.cache.filter(memory => memory.talk.includes(action.payload))
             return {
                 ...state,
-                tags
+                tags: [...state.tags, action.payload],
+                tagBins: Object.assign({}, state.tagBins, tagBinsObject)
             }
         case DELETE_TAG:
-            delete state.tagBins[action.payload]
             return {
                 ...state,
-                tags: state.tags.filter(tag => tag != action.payload)
+                tags: state.tags.filter(tag => tag != action.payload),
+                tagBins: omit(state.tagBins, action.payload)
             }
         default:
             return state

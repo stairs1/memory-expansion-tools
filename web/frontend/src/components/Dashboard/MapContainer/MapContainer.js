@@ -59,7 +59,8 @@ export class MapContainer extends Component {
                             })
                         }
                         {
-                            (!selectedMemory || !selectedMemory.latitude || !selectedMemory.longitude) ? null : 
+                            (!selectedMemory || !selectedMemory.latitude || !selectedMemory.longitude || 
+                                this.containsMemory(cache, selectedMemory) || this.containsMemory(searchResults, selectedMemory)) ? null : 
                             <Marker 
                                 position={{
                                     lat: selectedMemory.latitude,
@@ -99,8 +100,8 @@ export class MapContainer extends Component {
     componentDidUpdate = () => {
         const { cache, searchResults, selectedMemory } = this.props
         const bounds = new window.google.maps.LatLngBounds()
-        if ((cache.length > 0 || searchResults > 0) && selectedMemory == null){
-            cache.map(memory => {
+        if ((cache.length > 0 || searchResults.length > 0) && selectedMemory == null){
+            cache.concat(searchResults).map(memory => {
                 bounds.extend(new window.google.maps.LatLng(
                     memory.latitude,
                     memory.longitude

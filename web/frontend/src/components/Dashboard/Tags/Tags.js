@@ -52,8 +52,7 @@ export class Tags extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    cache: state.dashboard.cache,
+const mapStateToProps = state => ({
     tags: state.dashboard.tags
 })
 

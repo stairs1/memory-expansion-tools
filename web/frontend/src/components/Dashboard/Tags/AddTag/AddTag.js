@@ -22,7 +22,7 @@ export class AddTag extends Component {
         return (
             <Fragment>
                 <Typography varient='h7'>
-                    Add new tag (make it >=3 syllables so it's reliably picked up by voice transcription)
+                    Add new tag (make it >=2 syllables so it's reliably picked up by voice transcription)
                 </Typography>
                 <form onSubmit={this.handleSubmit}>
                     <TextField
@@ -45,20 +45,29 @@ export class AddTag extends Component {
     }
 
     handleSubmit = event => {
+        const { newTag } = this.state
+        const { tags } = this.props
         event.preventDefault()
-        if (syllable(this.state.newTag) >= 3){ // Check that the new tag is at least three syllables
-            this.props.createTag(this.state.newTag)
-            this.props.alert.success('You just added a new tag.');
+        if (syllable(newTag) < 2) // Check that the new tag is at least two syllables
+            this.props.alert.error('The tag must be at least two syllables')     
+        else if (tags.includes(newTag)){ // Check that the tag doesn't already exist
+            this.props.alert.error('That tag already exists') 
+        }else{
+            this.props.createTag(newTag)
+            this.props.alert.success('Successfully created tag');
             this.setState({
                 newTag: ''
             })
-        }else
-            this.props.alert.error('The tag must be at least three syllables')    
+        }
     }
 }
+
+const mapStateToProps = state => ({
+    tags: state.dashboard.tags
+})
 
 const mapDispatchToProps = {
     createTag
 }
 
-export default connect(null, mapDispatchToProps)(withAlert()(AddTag))
+export default connect(mapStateToProps, mapDispatchToProps)(withAlert()(AddTag))
