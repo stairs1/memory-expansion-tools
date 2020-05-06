@@ -26,7 +26,7 @@ export class Dashboard extends Component {
                     <div class='col-lg-6 col-sm-12' style={{ height: '70vh', overflowY: 'scroll', border: '1px solid #bd3a1b' }}>
                         <Stream />
                     </div>
-                    <div class='col-lg-6 col-sm-12' style={{ height: '70vh', overflowY: 'scroll', border: '1px solid #bd3a1b' }}>
+                    <div class='col-lg-6 col-sm-12' style={{ height: '70vh', overflowY: 'scroll', border: '1px solid #bd3a1b', marginBottom: '64px' }}>
                         <Tags />
                     </div>
                 </div>         

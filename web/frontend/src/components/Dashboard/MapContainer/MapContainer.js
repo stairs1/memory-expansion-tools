@@ -24,7 +24,7 @@ export class MapContainer extends Component {
                 <Box m={2}>
                     <Typography variant="h6">
                         <ExploreIcon />
-                        Map
+                        Map (Red = cached memory, Blue = search result, Green = selected memory)
                     </Typography>
                     <Map 
                         google={this.props.google} 
@@ -37,10 +37,12 @@ export class MapContainer extends Component {
                                 if (memory.latitude && memory.longitude && !this.containsMemory(cache, memory))
                                     return (
                                         <Marker 
+                                            title={memory.talk}
                                             position={{
                                                 lat: memory.latitude,
                                                 lng: memory.longitude
                                             }}
+                                            onClick={() => console.log('click')}
                                             icon={{url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"}} />
                                     )
                             })
@@ -50,6 +52,7 @@ export class MapContainer extends Component {
                                 if (memory.latitude && memory.longitude)
                                     return (
                                         <Marker 
+                                            title={memory.talk}
                                             position={{
                                                 lat: memory.latitude,
                                                 lng: memory.longitude
@@ -59,14 +62,15 @@ export class MapContainer extends Component {
                             })
                         }
                         {
-                            (!selectedMemory || !selectedMemory.latitude || !selectedMemory.longitude || 
-                                this.containsMemory(cache, selectedMemory) || this.containsMemory(searchResults, selectedMemory)) ? null : 
+                            (selectedMemory && selectedMemory.latitude && selectedMemory.longitude) ?
                             <Marker 
+                                title={selectedMemory.talk}
                                 position={{
                                     lat: selectedMemory.latitude,
                                     lng: selectedMemory.longitude
                                 }}
                                 icon={{url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"}} />
+                            : null
                         }
                     </Map>
                 </Box>
@@ -87,6 +91,8 @@ export class MapContainer extends Component {
 
     // Function used to check if the cache contians a search result of not (compare by value instead of reference)
     containsMemory = (arr, memory) => {
+        console.log(arr)
+        console.log(memory)
         arr.forEach(mem => {
             if (mem.latitude == memory.latitude && mem.longitude == memory.longitude && mem.address == memory.address 
                 && mem.timestamp == memory.timestamp && mem.talk == memory.talk)
@@ -114,7 +120,7 @@ export class MapContainer extends Component {
                 selectedMemory.longitude
             ))
             this.refs.resultMap.map.fitBounds(bounds)
-            this.refs.resultMap.map.setZoom(15)
+            this.refs.resultMap.map.setZoom(13)
         }
     }
 }
