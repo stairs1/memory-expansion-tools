@@ -11,6 +11,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "google-maps-react": "^2.0.6",
+    "lodash": "^4.17.15",
     "react": "^16.13.0",
     "react-alert": "^7.0.0",
     "react-alert-template-basic": "^1.0.0",
@@ -23,9 +24,11 @@
     "react-scripts": "3.4.0",
     "recompose": "^0.30.0",
     "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "socket.io-react": "^1.2.0",
+    "syllable": "^4.1.0",
     "typeface-roboto": "0.0.75"
   },
   "scripts": {

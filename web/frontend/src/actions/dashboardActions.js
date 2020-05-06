@@ -1,52 +1,9 @@
-import { FETCH_MEMORIES, SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY } from './types'; 
-import { url, mxtEnd, searchEnd } from "../constants";
+import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY, GET_TAGS, ADD_TAG, DELETE_TAG } from './types'; 
+import { url, mxtEnd, searchEnd, tagEnd } from "../constants";
 import AuthHandle from "../components/AuthHandler";
 
-export const fetchMemories = () => async(dispatch) => { 
-    // const token = await AuthHandle.getToken(); 
-    // fetch(url + searchEnd, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json',
-    //         'Authorization': 'Bearer ' + token
-	//     },
-    //     body: JSON.stringify({ 
-    //         'time' : 0, 
-    //         'phrases' : [{
-    //             'speech' : ''
-    //         }]
-    //     })
-    // })
-    // .then(res => res.json())
-    // .then(memories => {
-    //     dispatch({
-    //         type: FETCH_MEMORIES,
-    //         payload: memories 
-    //     })
-    // })
-    const token = await AuthHandle.getToken(); 
-    fetch(url + mxtEnd, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': "Bearer " + token
-        }
-    })
-    .then(res => res.json())
-    .then(memories => {
-        console.log(memories)
-        dispatch({
-            type: FETCH_MEMORIES,
-            payload: memories 
-        })
-    })
-}
-
 export const searchMemories = query => async(dispatch) => {
-    const token = await AuthHandle.getToken(); 
-    console.log('QUERY' + query)
+    const token = await AuthHandle.getToken()
     fetch(url + searchEnd, {
         method: 'POST',
         headers: {
@@ -62,7 +19,6 @@ export const searchMemories = query => async(dispatch) => {
     })
     .then(res => res.json())
 	.then(searchResults => {
-        console.log(searchResults);
         dispatch({
             type: SEARCH_MEMORIES, 
             payload: searchResults
@@ -71,7 +27,7 @@ export const searchMemories = query => async(dispatch) => {
 }
 
 export const fetchMXTCache = () => async(dispatch) => { 
-    const token = await AuthHandle.getToken(); 
+    const token = await AuthHandle.getToken()
     fetch(url + mxtEnd, {
         method: 'GET',
         headers: {
@@ -94,4 +50,68 @@ export const selectMemory = memory => dispatch => {
         type: SELECT_MEMORY, 
         payload: memory
     })
+}
+
+export const getTags = () => async(dispatch) => {
+    const token = await AuthHandle.getToken(); 
+    fetch(url + tagEnd, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const { tags } = data
+        dispatch({
+            type: GET_TAGS,
+            payload: tags 
+        })
+    })
+}
+
+export const deleteTag = tag => async(dispatch) => {
+    const token = await AuthHandle.getToken()
+    fetch(url + tagEnd, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+	    },
+        body: JSON.stringify({ 
+            tag,
+            'remove': 1 
+        })
+    })
+	.then(res => {
+        dispatch({
+            type: DELETE_TAG, 
+            payload: tag
+        })
+    })   
+}
+
+export const createTag = tag => async(dispatch) => {
+    const token = await AuthHandle.getToken()
+    fetch(url + tagEnd, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+	    },
+        body: JSON.stringify({ 
+            tag
+        })
+    })
+	.then(res => {
+        dispatch({
+            type: ADD_TAG, 
+            payload: tag
+        })
+        getTags()
+    })   
 }
