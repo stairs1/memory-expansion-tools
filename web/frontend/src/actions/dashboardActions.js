@@ -28,6 +28,7 @@ export const searchMemories = query => async(dispatch) => {
 
 export const fetchMXTCache = () => async(dispatch) => { 
     const token = await AuthHandle.getToken(); 
+    console.log(token)
     fetch(url + mxtEnd, {
         method: 'GET',
         headers: {
@@ -65,6 +66,7 @@ export const getTags = () => async(dispatch) => {
     .then(res => res.json())
     .then(data => {
         const { tags } = data
+        console.log(tags)
         dispatch({
             type: GET_TAGS,
             payload: tags 
@@ -74,6 +76,7 @@ export const getTags = () => async(dispatch) => {
 
 export const deleteTag = tag => async(dispatch) => {
     const token = await AuthHandle.getToken()
+    console.log('DELETING TAG')
     fetch(url + tagEnd, {
         method: 'POST',
         headers: {
@@ -112,5 +115,6 @@ export const createTag = tag => async(dispatch) => {
             type: ADD_TAG, 
             payload: tag
         })
+        getTags()
     })   
 }

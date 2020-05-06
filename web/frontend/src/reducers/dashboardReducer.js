@@ -5,6 +5,7 @@ const initialState = {
     searchResults: [], 
     cache: [],
     tags: [], 
+    tagBins: {},
     selectedMemory: null 
 }
 
@@ -26,16 +27,36 @@ export default function(state = initialState, action){
                 selectedMemory: action.payload
             }
         case GET_TAGS:
+            let tagBins = {}
+            if (action.payload){
+                action.payload.forEach(tag => {
+                    let bin = []
+                    state.cache.forEach(memory => {
+                        if (memory.talk.includes(tag))
+                            bin.push(memory)
+                    })
+                    tagBins[tag] = bin
+                })
+            }            
             return {
                 ...state,
-                tags: action.payload 
+                tags: action.payload ? action.payload : [], 
+                tagBins
             }
         case ADD_TAG:
-            state.tags.push(action.payload)
-            return state
+            const { tags } = state
+            tags.push(action.payload)
+            state.tagBins[action.payload] = []
+            return {
+                ...state,
+                tags
+            }
         case DELETE_TAG:
-            state.tags.splice(state.tags.findIndex(action.payload), 1)
-            return state
+            delete state.tagBins[action.payload]
+            return {
+                ...state,
+                tags: state.tags.filter(tag => tag != action.payload)
+            }
         default:
             return state
     }
