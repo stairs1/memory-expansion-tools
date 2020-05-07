@@ -1,22 +1,13 @@
-import Login from './components/Login.js';
-import Signup from './components/Signup.js';
-import MXT from './components/MXT.js';
-import Stream from './components/Stream.js';
-import Mem from './components/Mem.js';
-import Search from './components/Search.js';
 import Signout from './components/Signout.js';
 import BottomAppBar from './components/Nav.js';
 import TitleBar from './components/TitleBar.js';
 import SignInSide from './components/SignInSide.js';
 import SignUpSide from './components/SignUpSide.js';
 import HowTo from './components/HowTo.js';
-import Tags from './components/Tags.js';
-
 import Dashboard from './components/Dashboard/Dashboard'; 
-import CardMedia from '@material-ui/core/CardMedia';
-
 import AuthHandle from "./components/AuthHandler.js";
 import MetaTags from 'react-meta-tags';
+import Nav from './components/Nav/Nav'
 
 import React from "react";
 import {
@@ -35,9 +26,6 @@ import { CssBaseline, AppBar, Typography, MenuList, MenuItem
 } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
 
 const theme = createMuiTheme({
   palette: {
@@ -87,45 +75,24 @@ class App extends React.Component {
             <meta property="og:title" content="MXT | Memory Expansion Tools<" />
             <meta property="og:image" content="https://caydenpierce.com/cloud/mxt_logo_text_orange_grey_small.png" />
           </MetaTags>
-                    <BrowserRouter>
-                <BottomAppBar login={this.state.login} />
+                <BrowserRouter>
                 <CssBaseline/> {/* make things always look the same 
                     */}
                         {/* A <Switch> looks through its children <Route>s and
                             renders the first one that matches the current URL. */}
                         <Switch>
-                          <Route path="/mxt">
-                            <TitleBar/>
-                            <MXT />
-                          </Route>
-                          <Route path="/stream">
-                            <TitleBar/>
-                            <Stream />
-                          </Route>
-                          <Route path="/tags">
-                            <TitleBar/>
-                            <Tags />
-                          </Route>
-                          <Route path="/search">
-                            <TitleBar/>
-                            <Search />
-                          </Route>
                           <Route path="/dashboard">
-                            <TitleBar />
+                            <Nav />
                             <Dashboard />
-                          </Route>
-          {/* <Route path="/login">
-                            <TitleBar/>
-                            <Login authCallback={this.updateAuth.bind(this)}/>
-                          </Route>  */}                        
+                          </Route>                   
                           <Route path="/signout">
                             <Signout authCallback={this.updateAuth.bind(this)}/>                          
-                            </Route>
-
+                          </Route>
                           <Route path="/signup">
                             <SignUpSide/>
                           </Route>
                           <Route path="/howto">
+                            <Nav />
                             <HowTo/>
                           </Route>
                             }

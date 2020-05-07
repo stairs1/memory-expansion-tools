@@ -8,7 +8,7 @@
 
 .map-container{
     position: relative;
-    height: calc(100% - 7em);
+    height: calc(100% - 8em);
     width: calc(100% - 31px);
 }
 

@@ -1,0 +1,23 @@
+#nav-card{
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+
+#nav-icons{
+    position: absolute;
+    width: calc(100% - 48px);
+    height: 100%; 
+}
+
+.nav-icon{
+    cursor: pointer;
+    color: #bf360c;
+}
+
+.nav-icon:hover{
+    color: #ed410c;
+}
+
+.MuiTouchRipple-root{
+    color: #bf360c;
+}
