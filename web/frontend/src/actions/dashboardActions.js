@@ -28,6 +28,7 @@ export const searchMemories = query => async(dispatch) => {
 
 export const fetchMXTCache = () => async(dispatch) => { 
     const token = await AuthHandle.getToken()
+    console.log(token)
     fetch(url + mxtEnd, {
         method: 'GET',
         headers: {

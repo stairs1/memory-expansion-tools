@@ -1,7 +1,7 @@
 .no-memories{
     position: relative;
-    height: 90%;
-    width: 90%; 
+    height: calc(100% - 7em);
+    width: calc(100% - 31px); 
     background-color: #333333; 
     color: white; 
 }

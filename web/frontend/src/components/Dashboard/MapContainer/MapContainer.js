@@ -97,8 +97,6 @@ export class MapContainer extends Component {
 
     // Function used to check if the cache contians a search result of not (compare by value instead of reference)
     containsMemory = (arr, memory) => {
-        console.log(arr)
-        console.log(memory)
         arr.forEach(mem => {
             if (mem.latitude == memory.latitude && mem.longitude == memory.longitude && mem.address == memory.address 
                 && mem.timestamp == memory.timestamp && mem.talk == memory.talk)

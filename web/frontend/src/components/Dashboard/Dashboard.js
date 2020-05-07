@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 // Components
 import MapContainer from './MapContainer/MapContainer'
@@ -6,6 +7,9 @@ import Search from './Search/Search'
 import MXTCache from './MXTCache/MXTCache'
 import Stream from './Stream/Stream'
 import Tags from './Tags/Tags'
+
+// Actions
+import { fetchMXTCache, getTags } from '../../actions/dashboardActions'
 
 // Styles
 import './Dashboard.css'
@@ -36,6 +40,17 @@ export class Dashboard extends Component {
             </div>   
         )
     }
+
+    async componentWillMount(){
+        const { fetchMXTCache, getTags } = this.props
+        await fetchMXTCache() 
+        await getTags() 
+    }
 }
 
-export default Dashboard
+const mapDispatchToProps = {
+    fetchMXTCache, 
+    getTags 
+}
+
+export default connect(null, mapDispatchToProps)(Dashboard)
