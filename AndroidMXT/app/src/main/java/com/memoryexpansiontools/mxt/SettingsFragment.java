@@ -8,39 +8,43 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
+import androidx.fragment.app.Fragment;
+
 import java.util.Arrays;
 
-public class SettingsActivity extends AppCompatActivity {
-    public static final String LOG_TAG = SettingsActivity.class.getName();
+public class SettingsFragment extends Fragment {
+    public static final String LOG_TAG = com.memoryexpansiontools.mxt.SettingsFragment.class.getName();
     public static final int PERMISSION_REQUEST = 66;
     static Runnable transcriptionSwitchCallback = null;
     public static Build build = new Build();
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        TranscriptionManager.wakeup(getContext());
+        // Inflate the layout for this fragmen
+        return inflater.inflate(R.layout.settings_fragment, container, false);
+    }
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TranscriptionManager.wakeup(this);
-        setContentView(R.layout.settings_activity);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.settings, new SettingsFragment())
-                .commit();
+//        getActivity().getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.settings, new SettingsFragment())
+//                .commit();
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override
@@ -50,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
             // For now, require all permissions
             if(Arrays.stream(grantResults).anyMatch(i -> i == PackageManager.PERMISSION_DENIED)){
                 transcriptionSwitchCallback.run();
-                new AlertDialog.Builder(SettingsActivity.this)
+                new AlertDialog.Builder(getContext())
                         .setTitle("Why the permissions?")
                         .setMessage(
                                 "The microphone is used to transcribe your speech\n\n" +
@@ -61,20 +65,20 @@ public class SettingsActivity extends AppCompatActivity {
                         .show();
             }
             else{
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 prefs.edit().putBoolean("transcribe", true).commit();
-                TranscriptionManager.wakeup(getApplicationContext());
+                TranscriptionManager.wakeup(getContext());
             }
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SubSettingsFragment extends PreferenceFragmentCompat {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             SwitchPreference transcriptionPreference = findPreference("transcribe");
-            SettingsActivity.transcriptionSwitchCallback = (() -> {
+            com.memoryexpansiontools.mxt.SettingsFragment.transcriptionSwitchCallback = (() -> {
                 transcriptionPreference.setChecked(false);
             });
             createTranscriptionSwitchListener(findPreference("transcribe"));

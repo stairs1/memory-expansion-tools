@@ -42,7 +42,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".SettingsFragment"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -65,9 +65,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

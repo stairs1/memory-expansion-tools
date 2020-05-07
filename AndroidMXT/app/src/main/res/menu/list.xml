@@ -1,0 +1,31 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/stream"
+        android:icon="@drawable/ic_play_arrow_black_24dp"
+        android:title="Stream"
+        android:checked="true"
+        android:iconTint="@color/colorAccent"/>
+
+    <item
+        android:id="@+id/cache"
+        android:icon="@drawable/ic_memory_black_24dp"
+        android:title="Cache"
+        android:iconTint="@color/colorAccent"/>
+
+    <item
+        android:id="@+id/tagbins"
+        android:icon="@drawable/ic_tag"
+        android:title="Tags"
+        android:iconTint="@color/colorAccent"/>
+
+    <item
+        android:id="@+id/log"
+        android:icon="@drawable/ic_perm_identity_24px"
+        android:title="Account"
+        android:iconTint="@color/colorAccent"/>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings_24px"
+        android:title="Settings"
+        android:iconTint="@color/colorAccent"/>
+</menu>

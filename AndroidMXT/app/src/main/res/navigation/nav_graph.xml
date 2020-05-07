@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_stream">
+
+    <fragment
+        android:id="@+id/nav_cache"
+        android:name="com.memoryexpansiontools.mxt.CacheFragment"
+        tools:layout="@layout/cache_fragment"
+        android:label="MXT Cache" >
+        <action
+            android:id="@+id/action_nav_cache_to_nav_stream"
+            app:destination="@id/nav_stream" />
+        <action
+            android:id="@+id/action_nav_cache_to_nav_login"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_cache_to_nav_login2"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_cache_to_nav_settings"
+            app:destination="@id/nav_settings" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_stream"
+        android:name="com.memoryexpansiontools.mxt.StreamFragment"
+        tools:layout="@layout/stream_fragment"
+        android:label="Memory Stream" >
+        <action
+            android:id="@+id/action_nav_stream_to_nav_cache"
+            app:destination="@id/nav_cache" />
+        <action
+            android:id="@+id/action_nav_stream_to_nav_login"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_stream_to_nav_settings"
+            app:destination="@id/nav_settings" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_login"
+        android:name="com.memoryexpansiontools.mxt.LoginActivity"
+        tools:layout="@layout/login_fragment"
+        android:label="Login" >
+        <action
+            android:id="@+id/action_nav_login_to_nav_stream"
+            app:destination="@id/nav_stream" />
+        <action
+            android:id="@+id/action_nav_login_to_nav_cache"
+            app:destination="@id/nav_cache" />
+        <action
+            android:id="@+id/action_nav_login_to_nav_settings"
+            app:destination="@id/nav_settings" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_settings"
+        tools:layout="@layout/settings_fragment"
+        android:name="com.memoryexpansiontools.mxt.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_nav_cache"
+            app:destination="@id/nav_cache" />
+        <action
+            android:id="@+id/action_nav_settings_to_nav_login"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_settings_to_nav_stream"
+            app:destination="@id/nav_stream" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_tags"
+        android:name="com.memoryexpansiontools.mxt.TagsFragment"
+        tools:layout="@layout/tags_fragment"
+        android:label="Tag Bins" />
+</navigation>

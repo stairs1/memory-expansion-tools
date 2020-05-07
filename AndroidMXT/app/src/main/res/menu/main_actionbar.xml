@@ -1,21 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/login"
-        android:title="login"
-        android:icon="@drawable/ic_perm_identity_24px"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/cache"
-        android:icon="@drawable/ic_memory_black_24dp"
-        android:title="@string/cache"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_24px"
-        android:title="@string/action_settings"
-        app:showAsAction="ifRoom"/>
 </menu>
