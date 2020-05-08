@@ -4,10 +4,10 @@ import { connect } from 'react-redux'
 import io from 'socket.io-client'
 
 // Components
-import { Box, Typography } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import TalkCard from "../../TalkCard"
 import { url } from "../../../constants"
-import PlayArrowIcon from '@material-ui/icons/PlayArrow'
+import StickyTitle from '../StickyTitle/StickyTitle';
 
 // Actions
 import { selectMemory } from '../../../actions/dashboardActions'
@@ -40,11 +40,8 @@ class Stream extends Component {
     render() {
         const { selectMemory } = this.props
         return (
-            <Box m={2}>
-                <Typography variant="h6">
-                    <PlayArrowIcon />
-                    Memory Stream
-                </Typography>
+            <Box m={2} style={{ marginTop: '0px' }}>
+                <StickyTitle type='Stream' />     
                 <div class='split left'>
                 {
                     this.state.value.phrases.map(memory => {

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 // Components
-import { Box, List, Typography } from '@material-ui/core';
-import TalkCard from "../../TalkCard";
-import MemoryIcon from '@material-ui/icons/Memory';
+import { Box, List } from '@material-ui/core'
+import TalkCard from "../../TalkCard"
+import StickyTitle from '../StickyTitle/StickyTitle'
 
 // Actions 
 import { selectMemory } from '../../../actions/dashboardActions'
@@ -13,11 +13,8 @@ export class MXTCache extends Component {
     render() {
         const { cache, selectMemory } = this.props 
         return (
-            <Box m={2}>
-                <Typography variant="h6">
-                    <MemoryIcon />
-                    MXT Cache
-                </Typography>
+            <Box m={2} style={{ marginTop: '0px' }}>
+                <StickyTitle type="Cache" />
                 <List>
                     {
                         cache.map(memory => {
