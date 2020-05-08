@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import AuthHandle from "./AuthHandler.js";
 import { Redirect } from "react-router-dom";
 import { ButtonBase, Divider, Card, CardMedia } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton } from '@material-ui/core'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HelpIcon from '@material-ui/icons/Help';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -123,7 +127,7 @@ class SignInSide extends Component {
       const { classes } = this.props;
       return (
     <Grid container component="main" className={classes.root}>
-        {this.state.logout ? <Redirect to="/stream" /> : null}
+        {this.state.logout ? <Redirect to="/tools" /> : null}
       <CssBaseline />
       <Grid item xs={false} sm={4} md={6} className={classes.image} />
       <Grid item xs={12} sm={8} md={6} component={Paper} elevation={0} square>
@@ -137,6 +141,29 @@ class SignInSide extends Component {
                     />
             </Card>
             </Grid><br /><br />
+            <Grid item elevation={0} square>
+
+            <IconButton component={Link} to="/login">
+                <LockOpenIcon/>
+                <Typography>
+                    Login
+                </Typography>
+            </IconButton>
+            <IconButton component={Link} to="/signup">
+                <AccountCircleIcon/>
+                <Typography>
+                   Sign Up 
+                </Typography>
+            </IconButton>
+            <IconButton component={Link} to="/about">
+                <HelpIcon/>
+                <Typography>
+                   About 
+                </Typography>
+            </IconButton>
+
+
+              </Grid>
             <br /><br />
 
               <Grid item xs={5} sm={2}>
@@ -212,9 +239,9 @@ class SignInSide extends Component {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <a href="signup" variant="body2">
+                  {"Don't have an account? Sign Up."}
+                </a>
               </Grid>
             </Grid>
             <Box mt={5}>

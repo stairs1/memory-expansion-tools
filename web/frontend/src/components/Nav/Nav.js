@@ -6,6 +6,7 @@ import { AppBar, Toolbar, Card, CardMedia, IconButton } from '@material-ui/core'
 import DashboardIcon from '@material-ui/icons/Dashboard'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HelpIcon from '@material-ui/icons/Help';
+import HomeIcon from '@material-ui/icons/Home';
 
 // Styles 
 import './Nav.css'
@@ -22,11 +23,11 @@ export class Nav extends Component {
                         />
                     </Card>
                     <div id='nav-icons' class='d-flex justify-content-end align-items-center'>
-                        <IconButton component={Link} to="/howto">
-                            <HelpIcon className='nav-icon' />
+                        <IconButton component={Link} to="/tools">
+                            <HomeIcon className='nav-icon' />
                         </IconButton>
-                        <IconButton component={Link} to="/dashboard">
-                            <DashboardIcon className='nav-icon' />
+                        <IconButton component={Link} to="/about">
+                            <HelpIcon className='nav-icon' />
                         </IconButton>
                         <IconButton component={Link} to='/signout'>
                             <ExitToAppIcon className='nav-icon' />

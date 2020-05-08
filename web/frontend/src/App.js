@@ -81,7 +81,7 @@ class App extends React.Component {
                         {/* A <Switch> looks through its children <Route>s and
                             renders the first one that matches the current URL. */}
                         <Switch>
-                          <Route path="/dashboard">
+                          <Route path="/tools">
                             <Nav />
                             <Dashboard />
                           </Route>                   
@@ -91,8 +91,7 @@ class App extends React.Component {
                           <Route path="/signup">
                             <SignUpSide/>
                           </Route>
-                          <Route path="/howto">
-                            <Nav />
+                          <Route path="/about">
                             <HowTo/>
                           </Route>
                             }
