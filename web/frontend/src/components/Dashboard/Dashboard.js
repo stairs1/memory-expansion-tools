@@ -19,25 +19,25 @@ export class Dashboard extends Component {
         return (
             <div class='container-fluid'>
                 <div class='row'>
-                    <div id='map-container' class='col-lg-6 col-sm-12 dashboard-container position-relative'>
+                    <div id='map-container' class='col-lg-6 col-sm-12 dashboard-container left-blur position-relative'>
                         <MapContainer />
                     </div>            
                     <div class='col-lg-3 col-sm-12 dashboard-container'>
                         <MXTCache />
                     </div>
-                    <div class='col-lg-3 col-sm-12 dashboard-container'>
+                    <div class='col-lg-3 col-sm-12 dashboard-container right-blur'>
                         <Search />
                     </div>  
                 </div>   
                 <div class='row'>
-                    <div class='col-lg-6 col-sm-12 dashboard-container'>
+                    <div class='col-lg-6 col-sm-12 dashboard-container left-blur'>
                         <Stream />
                     </div>
-                    <div class='col-lg-6 col-sm-12 dashboard-container'>
+                    <div class='col-lg-6 col-sm-12 dashboard-container right-blur'>
                         <Tags />
                     </div>
                 </div>         
-            </div>   
+            </div> 
         )
     }
 

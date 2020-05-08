@@ -7,6 +7,8 @@
 
 .container-fluid{
     padding-top: 64px;
+    border-right: 2em solid #bd3a1b;
+    border-left: 2em solid #bd3a1b;
 }
 
 #map-container{
@@ -18,13 +20,34 @@
 .dashboard-container{
     height: 70vh;
     overflow-y: scroll;
-    border: 1px solid #bd3a1b;
+    border: 0.75em solid #93331a;
     overflow-x: hidden;
+    background-color: #eee;
+    outline: 1px solid #222;
+}
+
+.left-blur{
+    -webkit-box-shadow: -12px 2px 14px -10px rgba(0,0,0,0.7);
+    -moz-box-shadow: -12px 2px 14px -10px rgba(0,0,0,0.7);
+    box-shadow: -12px 2px 14px -10px rgba(0,0,0,0.7);
+}
+
+.right-blur{
+    -webkit-box-shadow: 12px 2px 14px -10px rgba(0,0,0,0.7);
+    -moz-box-shadow: 12px 2px 14px -10px rgba(0,0,0,0.7);
+    box-shadow: 12px 2px 14px -10px rgba(0,0,0,0.7);
 }
 
 @media only screen and (max-width: 992px) {
     .dashboard-container{
         height: unset;
         border: 1px solid #bd3a1b;
+        outline: none;
+    }
+
+    .container-fluid{
+        padding-right: none;
+        border-right: 0;
+        border-left: 0;
     }
 }

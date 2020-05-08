@@ -49,9 +49,13 @@ export class AddTag extends Component {
         const { tags } = this.props
         event.preventDefault()
         if (syllable(newTag) < 2) // Check that the new tag is at least two syllables
-            this.props.alert.error('The tag must be at least two syllables')     
+            this.props.alert.error('The tag must be at least two syllables', {
+                position: positions.BOTTOM_RIGHT
+            })     
         else if (tags.includes(newTag)){ // Check that the tag doesn't already exist
-            this.props.alert.error('That tag already exists') 
+            this.props.alert.error('That tag already exists', {
+                position: positions.BOTTOM_RIGHT
+            }) 
         }else{
             this.props.createTag(newTag)
             this.props.alert.success('Successfully created tag', { 
