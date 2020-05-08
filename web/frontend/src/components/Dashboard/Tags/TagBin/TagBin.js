@@ -8,7 +8,7 @@ import TalkCard from '../../../TalkCard'
 
 // Actions
 import { deleteTag, selectMemory } from '../../../../actions/dashboardActions'
-import { withAlert } from 'react-alert'
+import { withAlert, positions } from 'react-alert'
 
 export class TagBin extends Component {
     render() {
@@ -52,7 +52,9 @@ export class TagBin extends Component {
     deleteIconClick = () => {
         const { title, deleteTag } = this.props
         deleteTag(title)
-        this.props.alert.success('Successfully deleted tag');
+        this.props.alert.success('Successfully deleted tag', {
+            position: positions.BOTTOM_RIGHT
+        })
     }
 
     capitalizeFirstLetter = string => {

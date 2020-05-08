@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 // Components
 import { TextField, Button, Typography } from '@material-ui/core'
 import syllable from 'syllable'
-import { withAlert } from 'react-alert'
+import { withAlert, positions } from 'react-alert'
 
 // Actions
 import { createTag } from '../../../../actions/dashboardActions'
@@ -54,7 +54,9 @@ export class AddTag extends Component {
             this.props.alert.error('That tag already exists') 
         }else{
             this.props.createTag(newTag)
-            this.props.alert.success('Successfully created tag');
+            this.props.alert.success('Successfully created tag', { 
+                position: positions.BOTTOM_RIGHT 
+            })
             this.setState({
                 newTag: ''
             })
