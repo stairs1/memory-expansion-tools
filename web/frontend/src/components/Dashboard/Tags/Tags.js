@@ -7,9 +7,6 @@ import LabelImportantIcon from '@material-ui/icons/LabelImportant'
 import TagBin from './TagBin/TagBin'
 import AddTag from './AddTag/AddTag'
 
-// Actions 
-import { getTags } from '../../../actions/dashboardActions'
-
 export class Tags extends Component {
     render() {
         const { tags } = this.props  
@@ -46,18 +43,10 @@ export class Tags extends Component {
             )
         }        
     }
-
-    componentWillMount() {
-        this.props.getTags()
-    }
 }
 
 const mapStateToProps = state => ({
     tags: state.dashboard.tags
 })
 
-const mapDispatchToProps = {
-    getTags 
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Tags)
+export default connect(mapStateToProps)(Tags)

@@ -96,6 +96,7 @@ class SignInSide extends Component {
         this.props.authCallback();
         this.setState({logout : true});
         this.props.authCallback();
+        
 		return this.setState({ error: "Successful login."}); //we don't need this, remove once we are redirecting
     } else {
         console.log("FAILLLL***************");
