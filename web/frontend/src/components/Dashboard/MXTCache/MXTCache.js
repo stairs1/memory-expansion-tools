@@ -7,7 +7,7 @@ import TalkCard from "../../TalkCard";
 import MemoryIcon from '@material-ui/icons/Memory';
 
 // Actions 
-import { fetchMXTCache, selectMemory } from '../../../actions/dashboardActions'
+import { selectMemory } from '../../../actions/dashboardActions'
 
 export class MXTCache extends Component {
     render() {
@@ -41,10 +41,6 @@ export class MXTCache extends Component {
             </Box>
         )
     }
-
-    componentWillMount = () => {
-        this.props.fetchMXTCache() 
-    }
 }
 
 const mapStateToProps = state => ({
@@ -52,7 +48,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    fetchMXTCache,
     selectMemory
 }
 

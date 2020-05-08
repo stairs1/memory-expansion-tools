@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import { Link } from "react-router-dom";
 import AuthHandle from "./AuthHandler.js";
 import HelpIcon from '@material-ui/icons/Help';
 import { Redirect } from "react-router-dom";
+import { AppBar, Toolbar, IconButton } from '@material-ui/core'
 import { ButtonBase, Divider, Card, CardMedia } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import { spacing } from '@material-ui/system';
@@ -10,8 +13,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -140,6 +143,30 @@ class HowTo extends Component {
                     />
             </Card>
             </Grid><br /><br />
+            <Grid item elevation={0} square>
+
+            <IconButton component={Link} to="/login">
+                <LockOpenIcon/>
+                <Typography>
+                    Login
+                </Typography>
+            </IconButton>
+            <IconButton component={Link} to="/signup">
+                <AccountCircleIcon/>
+                <Typography>
+                   Sign Up 
+                </Typography>
+            </IconButton>
+            <IconButton component={Link} to="/about">
+                <HelpIcon/>
+                <Typography>
+                   About 
+                </Typography>
+            </IconButton>
+
+
+              </Grid>
+
             <br /><br />
 
               <Grid item xs={5} sm={2}>

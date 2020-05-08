@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import { CardMedia, CardAction, Card, CardContent, CardActions, CardActionArea, IconButton, FormControl, TextField, Button, Typography } from '@material-ui/core';
@@ -17,22 +17,22 @@ class TitleBar extends Component {
     render() {
         const { classes } = this.props;
         return(
-     <div>
-      <AppBar position="static">
-        <Toolbar>
-            <Card className={classes.card} >
-                    <CardMedia
-                        className={classes.media}
-                      component="img"
-                      image="https://caydenpierce.com/cloud/mxt_logo_text_orange_grey_small.png"
-                      
-                    />
-                </Card>
-        </Toolbar>
-      </AppBar>
-    </div>
-    )
-}
+          <Fragment>
+            <AppBar position="static">
+              <Toolbar>
+                  <Card className={classes.card} >
+                      <CardMedia
+                          className={classes.media}
+                        component="img"
+                        image="https://caydenpierce.com/cloud/mxt_logo_text_orange_grey_small.png"
+                        
+                      />
+                  </Card>
+              </Toolbar>
+            </AppBar>
+          </Fragment>
+        )
+    }
 }
 
 export default withStyles(styles)(TitleBar);

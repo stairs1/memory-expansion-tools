@@ -1,29 +1,14 @@
 import React, { useState, Fragment } from 'react';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
-import Fab from '@material-ui/core/Fab';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Avatar from '@material-ui/core/Avatar';
-import MenuIcon from '@material-ui/icons/Menu';
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import MemoryIcon from '@material-ui/icons/Memory';
 import DashboardIcon from '@material-ui/icons/Dashboard'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HelpIcon from '@material-ui/icons/Help';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
-//import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { Button, Popper, Menu, MenuItem, CssBaseline, AppBar, Typography, MenuList
 } from '@material-ui/core';
@@ -118,7 +103,7 @@ export default function BottomAppBar(props) {
 
     const accountMenuBuilder = function() {
             return (
-                <div>
+                <div class='Navbar'>
       <IconButton ref={anchorRef}
                   aria-controls={open ? 'menu-list-grow' : undefined}
                   aria-haspopup="true"
@@ -130,6 +115,9 @@ export default function BottomAppBar(props) {
                 >
             <AccountCircleIcon onClick={handleAccountMenuClick} />
             <Typography variant="body2"></Typography>
+          </IconButton>
+          <IconButton color="secondary" component={Link} to="/dashboard" classes={{label: classes.iconButtonLabel}}>
+              <DashboardIcon />
           </IconButton>
                 <IconButton color="secondary" component={Link} to="/howto" classes={{label: classes.iconButtonLabel}}>
                     <HelpIcon />
@@ -155,68 +143,18 @@ export default function BottomAppBar(props) {
           </div>
           )
     }
-    
-        
-    const userMenu = function() {
-        if (props.login){
-            return (
-              <Fragment>
-                  <IconButton color="secondary" component={Link} to="/stream" classes={{label: classes.iconButtonLabel}}>
-                      <PlayArrowIcon />
-                      <Typography variant="body2">
-                          Stream
-                      </Typography>
-                  </IconButton>
-                  <IconButton color="secondary" component={Link} to="/mxt" classes={{label: classes.iconButtonLabel}}>
-                      <MemoryIcon />
-                      <Typography variant="body2">
-                          Cache
-                      </Typography>
-                  </IconButton>
-                  <IconButton color="secondary" component={Link} to="/search" classes={{label: classes.iconButtonLabel}}>
-                      <SearchIcon />
-                      <Typography variant="body2">
-                          Search
-                      </Typography>
-                  </IconButton>
-                  <IconButton color="secondary" component={Link} to="/tags" classes={{label: classes.iconButtonLabel}}>
-                      <LabelImportantIcon />
-                      <Typography variant="body2">Tags</Typography>
-                  </IconButton>
-                  <IconButton color="secondary" component={Link} to="/dashboard" classes={{label: classes.iconButtonLabel}}>
-                      <DashboardIcon />
-                      <Typography variant="body2">
-                          Dashboard
-                      </Typography>
-                  </IconButton>
-              </Fragment>
-            )
-        } else {
-            return null;
-        }
-    }
 
   return (
-      <div>
-      <React.Fragment>
-      <CssBaseline />
-
-      <Box>
-      <AppBar position="fixed" color="primary" className={classes.appBar}>
-        <Toolbar>
-            {accountMenuBuilder()}
-          {/*
-          <Fab color="secondary" aria-label="add" className={classes.fabButton}>
-            <AddIcon />
-          </Fab>
-      */}
-          <div className={classes.grow} />
-            {userMenu()}
-               </Toolbar>
-
-      </AppBar>
-      </Box>
-    </React.Fragment>
-      </div>
+      <Fragment>
+        <CssBaseline />
+        <Box>
+          <AppBar position="fixed" color="primary" className={classes.appBar}>
+            <Toolbar>
+              {accountMenuBuilder()}
+              <div className={classes.grow} />
+            </Toolbar>
+          </AppBar>
+        </Box>
+      </Fragment>
   );
 }
