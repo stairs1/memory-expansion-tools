@@ -19,21 +19,21 @@ export class Dashboard extends Component {
         return (
             <div class='container-fluid'>
                 <div class='row'>
-                    <div class='col-lg-6 col-sm-12 position-relative' style={{ height: '70vh', border: '1px solid #bd3a1b' }}>
+                    <div id='map-container' class='col-lg-6 col-sm-12 dashboard-container position-relative'>
                         <MapContainer />
                     </div>            
-                    <div class='col-lg-3 col-sm-12' style={{ height: '70vh', overflowY: 'scroll', border: '1px solid #bd3a1b' }}>
+                    <div class='col-lg-3 col-sm-12 dashboard-container'>
                         <MXTCache />
                     </div>
-                    <div class='col-lg-3 col-sm-12' style={{ height: '70vh', overflowY: 'scroll', border: '1px solid #bd3a1b' }}>
+                    <div class='col-lg-3 col-sm-12 dashboard-container'>
                         <Search />
                     </div>  
                 </div>   
                 <div class='row'>
-                    <div class='col-lg-6 col-sm-12' style={{ height: '70vh', overflowY: 'scroll', border: '1px solid #bd3a1b' }}>
+                    <div class='col-lg-6 col-sm-12 dashboard-container'>
                         <Stream />
                     </div>
-                    <div class='col-lg-6 col-sm-12' style={{ height: '70vh', overflowY: 'scroll', border: '1px solid #bd3a1b' }}>
+                    <div class='col-lg-6 col-sm-12 dashboard-container'>
                         <Tags />
                     </div>
                 </div>         

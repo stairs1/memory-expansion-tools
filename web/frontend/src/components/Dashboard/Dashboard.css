@@ -8,3 +8,23 @@
 .container-fluid{
     padding-top: 64px;
 }
+
+#map-container{
+    height: 70vh !important;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+}
+
+.dashboard-container{
+    height: 70vh;
+    overflow-y: scroll;
+    border: 1px solid #bd3a1b;
+    overflow-x: hidden;
+}
+
+@media only screen and (max-width: 992px) {
+    .dashboard-container{
+        height: unset;
+        border: 1px solid #bd3a1b;
+    }
+}
