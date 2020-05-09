@@ -7,8 +7,8 @@
 
 .container-fluid{
     padding-top: 64px;
-    border-right: 2em solid #bd3a1b;
-    border-left: 2em solid #bd3a1b;
+    border: 2em solid #bd3a1b;
+    background-color: #bd3a1b;
 }
 
 #map-container{
@@ -20,7 +20,7 @@
 .dashboard-container{
     height: 70vh;
     overflow-y: scroll;
-    border: 0.75em solid #93331a;
+    /* border: 0.75em solid #93331a; */
     overflow-x: hidden;
     background-color: #eee;
     outline: 1px solid #222;

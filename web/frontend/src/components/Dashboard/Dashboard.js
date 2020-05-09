@@ -23,7 +23,8 @@ export class Dashboard extends Component {
                         <MapContainer />
                     </div>            
                     <div class='col-lg-3 col-sm-12 dashboard-container'>
-                        <MXTCache />
+                
+                            <MXTCache />
                     </div>
                     <div class='col-lg-3 col-sm-12 dashboard-container right-blur'>
                         <Search />
