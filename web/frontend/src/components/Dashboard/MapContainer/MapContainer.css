@@ -14,6 +14,8 @@
 
 .legend{
     position: relative;
+    text-align: center;
+    width: calc(100% - 31px);
 }
 
 .legend-icon{
