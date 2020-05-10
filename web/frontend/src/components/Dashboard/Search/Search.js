@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 // Components
-import TalkCard from "../../TalkCard";
-import { Box, TextField, Button, Typography } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import TalkCard from "../../TalkCard"
+import { Box, TextField, Button, Typography } from '@material-ui/core'
+import StickyTitle from '../StickyTitle/StickyTitle'
 
 // Actions
 import { searchMemories, selectMemory } from '../../../actions/dashboardActions'
@@ -20,11 +20,8 @@ export class Search extends Component {
     render() {
         const { searchResults, selectMemory } = this.props
         return (
-            <Box m={2}>
-                <Typography variant="h6">
-                    <SearchIcon />
-                    Search
-                </Typography>
+            <Box m={2} style={{ marginTop: '0px' }}>
+                <StickyTitle type='Search' />
                 <form onSubmit={this.handleSubmit}>
                     <TextField 
                         autoFocus 

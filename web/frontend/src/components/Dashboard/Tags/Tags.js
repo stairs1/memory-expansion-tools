@@ -2,21 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 // Components
-import { Box, List, Typography } from '@material-ui/core'
-import LabelImportantIcon from '@material-ui/icons/LabelImportant'
+import { Box, List } from '@material-ui/core'
 import TagBin from './TagBin/TagBin'
 import AddTag from './AddTag/AddTag'
+import StickyTitle from '../StickyTitle/StickyTitle'
 
 export class Tags extends Component {
     render() {
         const { tags } = this.props  
         if (tags != null){ // Displays tag bins if the user has any tags defined
             return (
-                <Box m={2}>
-                    <Typography variant="h6">
-                        <LabelImportantIcon />
-                        Memory Bins
-                    </Typography>
+                <Box m={2} style={{ marginTop: '0px' }}>
+                    <StickyTitle type='Tags' />
                     <List>
                         {
                             tags.map(tag => {
@@ -33,11 +30,8 @@ export class Tags extends Component {
             )
         }else{ 
             return (
-                <Box m={2}>
-                    <Typography variant="h6">
-                        <LabelImportantIcon />
-                        Memory Bins
-                    </Typography>
+                <Box m={2} style={{ marginTop: '0px' }}>
+                    <StickyTitle type='Tags' />
                     <AddTag />
                 </Box>
             )
