@@ -28,7 +28,7 @@ export class StickyTitle extends Component {
                     <div class='sticky-title d-flex align-items-center'>
                         <Typography variant="h6">
                             <LabelImportantIcon />
-                            Memory Bins
+                            Tag Bins
                         </Typography>
                     </div>      
                 )

@@ -68,7 +68,7 @@ class SignInSide extends Component {
     this.state = {
       username: '',
       password: '',
-        logout : false,
+      login: false,
       error: '',
     };
 
@@ -98,7 +98,7 @@ class SignInSide extends Component {
         //we should redirect to the MXT cache here
         console.log("success***************");
         this.props.authCallback();
-        this.setState({logout : true});
+        this.setState({login : true});
         this.props.authCallback();
         
 		return this.setState({ error: "Successful login."}); //we don't need this, remove once we are redirecting
@@ -122,12 +122,20 @@ class SignInSide extends Component {
     });
   }
 
+    async componentWillMount(){
+        //check if we are already logged in. If so, redirect to tools
+        const token = AuthHandle.getToken();
+        const go = await AuthHandle.authStatus();
+        if (go){
+            this.setState({login : true});
+        }
+    }
 
   render() {
       const { classes } = this.props;
       return (
     <Grid container component="main" className={classes.root}>
-        {this.state.logout ? <Redirect to="/tools" /> : null}
+        {this.state.login ? <Redirect to="/tools" /> : null}
       <CssBaseline />
       <Grid item xs={false} sm={4} md={6} className={classes.image} />
       <Grid item xs={12} sm={8} md={6} component={Paper} elevation={0} square>

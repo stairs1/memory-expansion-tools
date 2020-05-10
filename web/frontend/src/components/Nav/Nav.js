@@ -23,13 +23,7 @@ export class Nav extends Component {
                         />
                     </Card>
                     <div id='nav-icons' class='d-flex justify-content-end align-items-center'>
-                        <IconButton component={Link} to="/tools">
-                            <HomeIcon className='nav-icon' />
-                        </IconButton>
-                        <IconButton component={Link} to="/about">
-                            <HelpIcon className='nav-icon' />
-                        </IconButton>
-                        <IconButton component={Link} to='/signout'>
+                                              <IconButton component={Link} to='/signout'>
                             <ExitToAppIcon className='nav-icon' />
                         </IconButton>                        
                     </div>
@@ -40,3 +34,13 @@ export class Nav extends Component {
 }
 
 export default Nav
+
+/*
+  <IconButton component={Link} to="/tools">
+                            <HomeIcon className='nav-icon' />
+                        </IconButton>
+                        <IconButton component={Link} to="/about">
+                            <HelpIcon className='nav-icon' />
+                        </IconButton>
+
+*/

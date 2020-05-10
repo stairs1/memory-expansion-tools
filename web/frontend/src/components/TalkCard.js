@@ -63,7 +63,7 @@ export default function TalkCard(props) {
                 Address: {props.data.address}
           </Typography>
           <Typography variant="body2" paragraph>
-                GPS: {props.data.longitude}, {props.data.latitude}      
+                GPS: {props.data.latitude}, {props.data.longitude}      
           </Typography>
         </CardContent>
       </Collapse>
