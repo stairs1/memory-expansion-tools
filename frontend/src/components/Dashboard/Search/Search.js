@@ -27,7 +27,6 @@ export class Search extends Component {
                 </Typography>
                 <form onSubmit={this.handleSubmit}>
                     <TextField 
-                        autoFocus 
                         id="query" 
                         label="Query" 
                         value={this.state.query} 

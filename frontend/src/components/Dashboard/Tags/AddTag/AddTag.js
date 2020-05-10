@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 // Components
 import { TextField, Button, Typography } from '@material-ui/core'
 import syllable from 'syllable'
-import { withAlert } from 'react-alert'
+import { withAlert, positions } from 'react-alert'
 
 // Actions
 import { createTag } from '../../../../actions/dashboardActions'
@@ -48,10 +48,20 @@ export class AddTag extends Component {
         const { newTag } = this.state
         const { tags } = this.props
         event.preventDefault()
-        if (syllable(newTag) < 2) // Check that the new tag is at least two syllables
-            this.props.alert.error('The tag must be at least two syllables')     
-        else if (tags.includes(newTag)){ // Check that the tag doesn't already exist
+//        if (syllable(newTag) < 2) // Check that the new tag is at least two syllables
+//            this.props.alert.error('The tag must be at least two syllables')     
+        //we should not limit users from doing anything they want with their system. -Cayden
+        if (tags.includes(newTag)){ // Check that the tag doesn't already exist
             this.props.alert.error('That tag already exists') 
+        }
+        else if (newTag == "" || newTag == null || newTag == " ") // chech that new tag is valid
+            this.props.alert.error('The specificed tag is invalid.', {
+                position: positions.BOTTOM_RIGHT
+            })     
+        else if (tags.includes(newTag)){ // Check that the tag doesn't already exist
+            this.props.alert.error('The specified tag already exists', {
+                position: positions.BOTTOM_RIGHT
+            }) 
         }else{
             this.props.createTag(newTag)
             this.props.alert.success('Successfully created tag');

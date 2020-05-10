@@ -207,11 +207,10 @@ class SignInSide extends Component {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="text"
               label="Username (case-sensitive)"
-              name="email"
-              autoComplete="email"
-              autoFocus
+              name="text"
+            autoComplete="username"
                 value={this.state.username}
                 onChange={this.handleUserChange}
             />
