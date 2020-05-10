@@ -49,13 +49,13 @@ export class AddTag extends Component {
         const { tags } = this.props
         event.preventDefault()
         //we do not limit users from doing anything they want with their mxt system. -Cayden
-        //
-//        if (syllable(newTag) < 2) // Check that the new tag is at least two syllables
-//            this.props.alert.error('The tag must be at least two syllables', {
-//                position: positions.BOTTOM_RIGHT
-//            })     
-        if (tags.includes(newTag)){ // Check that the tag doesn't already exist
-            this.props.alert.error('That tag already exists', {
+        console.log("new tag is :" + newTag);
+        if (newTag == "" || newTag == null || newTag == " ") // chech that new tag is valid
+            this.props.alert.error('The specificed tag is invalid.', {
+                position: positions.BOTTOM_RIGHT
+            })     
+        else if (tags.includes(newTag)){ // Check that the tag doesn't already exist
+            this.props.alert.error('The specified tag already exists', {
                 position: positions.BOTTOM_RIGHT
             }) 
         }else{

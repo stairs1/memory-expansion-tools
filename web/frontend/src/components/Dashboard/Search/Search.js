@@ -24,7 +24,6 @@ export class Search extends Component {
                 <StickyTitle type='Search' />
                 <form onSubmit={this.handleSubmit}>
                     <TextField 
-                        autoFocus 
                         id="query" 
                         label="Query" 
                         value={this.state.query} 
