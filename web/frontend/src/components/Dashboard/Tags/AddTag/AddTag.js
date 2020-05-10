@@ -22,7 +22,7 @@ export class AddTag extends Component {
         return (
             <Fragment>
                 <Typography varient='h7'>
-                    Add new tag (make it >=2 syllables so it's reliably picked up by voice transcription)
+                    Add new tag (recommended >=3 syllables so it's reliably picked up by voice transcription)
                 </Typography>
                 <form onSubmit={this.handleSubmit}>
                     <TextField
@@ -48,11 +48,13 @@ export class AddTag extends Component {
         const { newTag } = this.state
         const { tags } = this.props
         event.preventDefault()
-        if (syllable(newTag) < 2) // Check that the new tag is at least two syllables
-            this.props.alert.error('The tag must be at least two syllables', {
-                position: positions.BOTTOM_RIGHT
-            })     
-        else if (tags.includes(newTag)){ // Check that the tag doesn't already exist
+        //we do not limit users from doing anything they want with their mxt system. -Cayden
+        //
+//        if (syllable(newTag) < 2) // Check that the new tag is at least two syllables
+//            this.props.alert.error('The tag must be at least two syllables', {
+//                position: positions.BOTTOM_RIGHT
+//            })     
+        if (tags.includes(newTag)){ // Check that the tag doesn't already exist
             this.props.alert.error('That tag already exists', {
                 position: positions.BOTTOM_RIGHT
             }) 
