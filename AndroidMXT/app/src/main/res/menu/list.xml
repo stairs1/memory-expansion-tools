@@ -13,12 +13,6 @@
         android:iconTint="@color/colorAccent"/>
 
     <item
-        android:id="@+id/tagbins"
-        android:icon="@drawable/ic_tag"
-        android:title="Tags"
-        android:iconTint="@color/colorAccent"/>
-
-    <item
         android:id="@+id/log"
         android:icon="@drawable/ic_perm_identity_24px"
         android:title="Account"

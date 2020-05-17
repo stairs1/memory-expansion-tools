@@ -1,4 +1,5 @@
 package com.memoryexpansiontools.mxt;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -268,7 +269,7 @@ public class ServerAdapter {
     }
 
 
-    public void getCache() {
+    public void getCache(Application lapp) {
         String turl = url + "/api/ltwo";
         //get the current access token from sharedprefs
         String token = getToken(true);
@@ -280,6 +281,9 @@ public class ServerAdapter {
                     public void onResponse(JSONArray response) {
                         Log.d("cayden", "cache fetch success");
                         Log.d("cayden", response.toString());
+                        CacheCreator cacheCreator = new CacheCreator();
+                        CacheRepository cRepo = new CacheRepository(lapp);
+                        cacheCreator.replace(response, cRepo); //replace the existing cache with this newly updated cache
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -289,7 +293,7 @@ public class ServerAdapter {
                 if (retry < 3) {
                     retry += 1;
                     refresh();
-                    getCache();
+                    getCache(lapp);
                 }
             }
         }){

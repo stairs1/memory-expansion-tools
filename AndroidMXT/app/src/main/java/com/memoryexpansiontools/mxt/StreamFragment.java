@@ -61,7 +61,7 @@ public class StreamFragment extends Fragment implements ItemClickListener {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
-        RecyclerView recyclerView = view.findViewById(R.id.nav_tags);
+        RecyclerView recyclerView = view.findViewById(R.id.phrase_wall);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
         final PhraseListAdapter adapter = new PhraseListAdapter(getContext());

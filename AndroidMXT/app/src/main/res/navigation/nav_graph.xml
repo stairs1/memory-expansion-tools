@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_nav_cache_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_cache_to_nav_new_settings"
+            app:destination="@id/nav_new_settings" />
     </fragment>
     <fragment
         android:id="@+id/nav_stream"
@@ -37,6 +40,30 @@
         <action
             android:id="@+id/action_nav_stream_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_stream_to_nav_new_settings"
+            app:destination="@id/nav_new_settings" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_new_settings"
+        android:name="com.memoryexpansiontools.mxt.SettingsFragment"
+        tools:layout="@layout/settings_new_fragment"
+        android:label="Settings">
+        <action
+            android:id="@+id/action_nav_new_settings_to_nav_stream"
+            app:destination="@id/nav_stream" />
+        <action
+            android:id="@+id/action_nav_new_settings_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_new_settings_to_nav_login"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_new_settings_to_nav_tags"
+            app:destination="@id/nav_tags" />
+        <action
+            android:id="@+id/action_nav_new_settings_to_nav_cache"
+            app:destination="@id/nav_cache" />
     </fragment>
     <fragment
         android:id="@+id/nav_login"
@@ -52,6 +79,9 @@
         <action
             android:id="@+id/action_nav_login_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_login_to_nav_new_settings"
+            app:destination="@id/nav_new_settings" />
     </fragment>
     <fragment
         android:id="@+id/nav_settings"
@@ -67,10 +97,17 @@
         <action
             android:id="@+id/action_nav_settings_to_nav_stream"
             app:destination="@id/nav_stream" />
+        <action
+            android:id="@+id/action_nav_settings_to_nav_new_settings"
+            app:destination="@id/nav_new_settings" />
     </fragment>
     <fragment
         android:id="@+id/nav_tags"
         android:name="com.memoryexpansiontools.mxt.TagsFragment"
         tools:layout="@layout/tags_fragment"
-        android:label="Tag Bins" />
+        android:label="Tag Bins" >
+        <action
+            android:id="@+id/action_nav_tags_to_nav_new_settings"
+            app:destination="@id/nav_new_settings" />
+    </fragment>
 </navigation>

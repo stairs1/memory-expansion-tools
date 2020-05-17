@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -56,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+    private BubbleTabBar bbtb;
+
+    @Override
+    public void onBackPressed() {
+        Log.d("cayden", "I will never execute and you will never see me :(");
+        super.onBackPressed();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         //bottom tab bar setup
 
-        BubbleTabBar bbtb = findViewById(R.id.bubbleTabBar);
+        bbtb = findViewById(R.id.bubbleTabBar);
         Activity act = this;
         bbtb.addBubbleListener(new OnBubbleClickListener() {
             public void onBubbleClick(int id){
@@ -98,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "Settings":
                         Log.d("cayden", "settings");
-                        navController.navigate(R.id.nav_settings);
-                        break;
-
+                        navController.navigate(R.id.nav_new_settings);
                 }
                 Log.d("cayden", Integer.toString(id));
             }
@@ -111,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_stream, R.id.nav_cache, R.id.nav_login)
+                R.id.nav_stream, R.id.nav_cache, R.id.nav_login, R.id.nav_new_settings, R.id.nav_tags)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);

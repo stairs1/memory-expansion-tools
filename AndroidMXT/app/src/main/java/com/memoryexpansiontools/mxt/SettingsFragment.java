@@ -34,17 +34,16 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         TranscriptionManager.wakeup(getContext());
         // Inflate the layout for this fragmen
-        return inflater.inflate(R.layout.settings_fragment, container, false);
+        return inflater.inflate(R.layout.settings_new_fragment, container, false);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        getActivity().getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.settings, new SettingsFragment())
-//                .commit();
-
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.settings, new SubSettingsFragment())
+                .commit();
     }
 
     @Override

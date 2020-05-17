@@ -8,7 +8,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/nav_tags"
+        android:id="@+id/phrase_wall"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorMainBackground"
@@ -21,9 +21,10 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/add_phrase_text"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
+        android:layout_width="309dp"
+        android:layout_height="46dp"
         android:layout_gravity="left"
+        android:layout_marginStart="24dp"
         android:layout_weight="5"
         android:background="#FFF"
         android:hint="@string/memory_hint"
