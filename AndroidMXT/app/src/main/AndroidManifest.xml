@@ -40,24 +40,25 @@
             android:name=".RecordAudioIntentService"
             android:exported="false" />
 
-        <activity
-            android:name=".SettingsFragment"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".ViewPhraseActivity"
-            android:label="@string/title_activity_view_phrase"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity android:name=".MainActivity">
+<!--        <activity-->
+<!--            android:name=".SettingsFragment"-->
+<!--            android:label="@string/title_activity_settings"-->
+<!--            android:parentActivityName=".MainActivity">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".MainActivity" />-->
+<!--        </activity>-->
+<!--        <activity-->
+<!--            android:name=".ViewPhraseActivity"-->
+<!--            android:label="@string/title_activity_view_phrase"-->
+<!--            android:parentActivityName=".MainActivity"-->
+<!--            android:theme="@style/AppTheme.NoActionBar">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".MainActivity" />-->
+<!--        </activity>-->
+        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustPan" android:configChanges="orientation|screenSize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

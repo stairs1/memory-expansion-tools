@@ -77,7 +77,7 @@ public class LoginActivity extends Fragment {
 
         login =  view.findViewById(R.id.login);
         username = view.findViewById(R.id.username);
-        username.requestFocus(); //focus on login text edit field
+        //username.requestFocus(); //focus on login text edit field
         password = view.findViewById(R.id.password);
         login.setOnClickListener(new View.OnClickListener() {
             @Override

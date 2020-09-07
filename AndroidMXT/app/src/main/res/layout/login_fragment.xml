@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Username"
-        android:inputType="textPersonName"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

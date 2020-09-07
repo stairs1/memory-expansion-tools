@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getName();
 
     public static int loginCount = 0;
+    public Integer menu_state; //ave the state of the bubble menu (bottom menu)
 
     private PhraseViewModel mPhraseViewModel;
 
@@ -73,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
+        //go back to the last page we were on if this is waking back up
+        if (menu_state != null){
+        }
+
         TranscriptionManager.wakeup(this);
 
         //bottom tab bar setup
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             public void onBubbleClick(int id){
                 Intent intent;
                 final NavController navController;
+                menu_state = id;
                 navController = Navigation.findNavController(act, R.id.nav_host_fragment);
                 Bubble o = findViewById(id);
                 Log.d("cayden lv", o.toString());
@@ -123,5 +129,14 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putInt("page", menu_state);
     }
 }
