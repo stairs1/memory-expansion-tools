@@ -30,7 +30,7 @@ public class TranscribeIntentService extends IntentService {
     Intent recogIntent = null;
     private boolean transcription_on = false;
     private int mStreamVolume = 0;
-    private AudioManager mAudioManager;
+    public AudioManager mAudioManager;
 
     private String lastPhrase = ""; //this saves the last phrase that was spoken, used to get around the bug where the speech recognizer run onResults() twice
 
@@ -131,8 +131,9 @@ public class TranscribeIntentService extends IntentService {
             mSpeechRecognizer.startListening(recogIntent);
 
             //mute sound so users don't hear voice recognition beep
-            mStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC); // getting system volume into var for later un-muting
-            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0); //muting
+            // commented out for demo where only works while app open
+//            mStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC); // getting system volume into var for later un-muting
+//            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0); //muting
         }
     };
 

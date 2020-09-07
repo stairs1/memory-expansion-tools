@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int tags_id = 2131296505;
     public static final int account_id = 2131296404;
     public static final int settings_id = 2131296469;
+    private int mStreamVolume = 0;
 
     public static final String LOG_TAG = MainActivity.class.getName();
 
@@ -137,6 +138,31 @@ public class MainActivity extends AppCompatActivity {
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
-        savedInstanceState.putInt("page", menu_state);
+//        if(savedInstanceState != null){
+//            savedInstanceState.putInt("page", menu_state);
+//        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        TranscriptionManager.wakeup(getApplicationContext());
+
+        // mute when we enter app, unmute when we leave
+        AudioManager mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        if(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) != 0){
+            mStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        Log.d(LOG_TAG, "stopping main activity");
+        TranscriptionManager.stopTranscription(getApplicationContext());
+        AudioManager mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mStreamVolume, 0);
     }
 }
