@@ -22,6 +22,7 @@ import android.widget.ListView;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,6 +39,9 @@ import com.memoryexpansiontools.mxt.CacheFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+
+import static com.memoryexpansiontools.mxt.SettingsFragment.PERMISSION_REQUEST;
+import static com.memoryexpansiontools.mxt.SettingsFragment.SubSettingsFragment.getPerms;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -77,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
 
         //go back to the last page we were on if this is waking back up
         if (menu_state != null){
+        }
+
+        // require settings on startup
+        if(!SettingsFragment.SubSettingsFragment.checkPerms(getApplicationContext())){
+            ActivityCompat.requestPermissions( this, getPerms(), PERMISSION_REQUEST );
         }
 
         TranscriptionManager.wakeup(this);
