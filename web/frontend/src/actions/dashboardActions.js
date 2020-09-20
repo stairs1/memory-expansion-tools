@@ -1,5 +1,5 @@
 import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY, GET_TAGS, ADD_TAG, DELETE_TAG } from './types'; 
-import { url, mxtEnd, searchEnd, tagEnd } from "../constants";
+import { url, mxtEnd, searchEnd, tagEnd, transcribeEnd, newNoteEnd } from "../constants";
 import AuthHandle from "../components/AuthHandler";
 
 export const searchMemories = query => async(dispatch) => {
@@ -44,6 +44,60 @@ export const fetchMXTCache = () => async(dispatch) => {
             payload: cache 
         })
     })
+}
+
+export const transcribeHandshake = async () => {
+    const token = await AuthHandle.getToken()
+    return await fetch(url + transcribeEnd, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token
+        }
+    })
+    .then(r => r.text())
+    .then(parseInt);
+}
+
+const TRANSCRIBE_RETRIES = 8;
+export const transcribe = async (A) => {
+    const token = await AuthHandle.getToken()
+    function transcribe_(i) {
+        return fetch(url + transcribeEnd, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/octet-stream',
+                'Authorization': "Bearer " + token
+            },
+            body: A
+        })
+        .then(r => r.text(), e => {
+            if(i < TRANSCRIBE_RETRIES)
+                return transcribe_(i + 1);
+            else throw e
+        });
+    }
+    return await transcribe_(0);
+}
+
+export const transcribeSubmit = async (transcript) => {
+    const token = await AuthHandle.getToken()
+    return await fetch(url + newNoteEnd, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token
+        },
+        body: JSON.stringify({
+            type: 'phrase',
+            phrases: [transcript],
+            timestamp: Date.now(),
+            // loc fields omitted for now: lat, long, address
+        })
+    });
 }
 
 export const selectMemory = memory => dispatch => {
