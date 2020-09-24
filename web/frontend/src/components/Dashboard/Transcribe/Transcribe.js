@@ -5,9 +5,26 @@ import { transcribeHandshake, transcribe, transcribeSubmit } from '../actions/da
 import { createBrowserHistory } from 'history'
 import { Box, FormControl, TextField, Button, ButtonBase, Typography } from '@material-ui/core';
 import MemoryIcon from '@material-ui/icons/Memory';
-import { CHUNK_PERIOD, DEFAULT_MICSTREAM_FORMAT } from "../constants";
 
 const history = createBrowserHistory();
+
+function setCaretPosition(ele, caretPos) {
+		if(ele != null) {
+				if(ele.createTextRange) {
+						var range = ele.createTextRange();
+						range.move('character', caretPos);
+						range.select();
+				}
+				else {
+						if(ele.selectionStart) {
+								ele.focus();
+								ele.setSelectionRange(caretPos, caretPos);
+						}
+						else
+								ele.focus();
+				}
+		}
+}
 
 export default class extends Component {
 	constructor(props) {
@@ -18,15 +35,38 @@ export default class extends Component {
 			idx: 0,
 			rx_idx: -1,
 			session: null,
+			
 			transcript: '',
-			mic_stream: null
+			transcript_buf: '',
+			input_pos_stash: null,
+			
+			mic_stream: null,
 		};
+		
+		this.input_ref = React.createRef();
 	}
 	componentDidUpdate(pprops, pstate) {
 		const diff = {
 			active: pstate.active !== this.state.active,
+			mic_active: pstate.mic_active !== this.state.mic_active,
 			// idx: pprops.idx !== this.props.idx
 		};
+		// if(diff.mic_active) {
+		// 	switch(this.props.mic_active) {
+		// 		case true:
+		// 			// stash cursor position
+		// 			this.setState();
+		// 			break;
+		// 		case false:
+		// 			break;
+		// 	}
+		// }
+		if(diff.mic_active && !this.props.mic_active && this.state.input_pos_stash !== null) {
+			// this is invoked after render, the input should be back to enabled
+			// restore caret position plus the previous transcript length
+			console.log(this.state.input_pos_stash);
+			setCaretPosition(this.input_ref.current, this.state.input_pos_stash)
+		}
 		if(diff.active && this.state.active) {
 			console.log(this.state.active, this.state.mic_stream);
 			transcribeHandshake()
@@ -37,9 +77,9 @@ export default class extends Component {
 						else {
 							const mic_stream_ = new MicrophoneStream();
 							
-							// State machine for windowing data stream
-							// may migrate to rx later
-							let format = DEFAULT_MICSTREAM_FORMAT;
+							// [STATE MACHINE]
+							const CHUNK_PERIOD = 1.2; // # seconds per chunk
+							let format = { channels: 1, bitDepth: 32, sampleRate: 44100, signed: true, float: true };
 							let data_chunk = [];
 							getUserMedia({ video: false, audio: true })
 								.then(function(stream) {
@@ -47,10 +87,11 @@ export default class extends Component {
 								}).catch(function(error) {
 									console.log(error);
 								});
-							mic_stream_.on('format', f => { format = f; });
+							mic_stream_.on('format', f => { console.log(f); format = f; });
 							mic_stream_.on('data', data_ => {
 								try {
 									if(this.state.mic_active) {
+										// console.log(Array.from(MicrophoneStream.toRaw(data_)).reduce((a, b) => Math.max(a, Math.abs(b)), 0));
 										data_chunk.push.apply(data_chunk, MicrophoneStream.toRaw(data_));
 										if(data_chunk.length > format.sampleRate * CHUNK_PERIOD) {
 											const data_chunk_stash = data_chunk.map(d => d * (1 << 15));
@@ -58,9 +99,9 @@ export default class extends Component {
 											this.setState(({ idx }) => {
 												data_chunk_stash.push(idx, this.state.session);
 												transcribe(new Int16Array(data_chunk_stash))
-													.then(transcript => this.setState(st => {
+													.then(transcript_buf => this.setState(st => {
 														if(st.rx_idx < idx)
-															return { transcript, rx_idx: idx };
+															return { transcript_buf, rx_idx: idx };
 													}));
 												return { idx: idx + 1 };
 											})
@@ -93,7 +134,31 @@ export default class extends Component {
 			mic_active: true
 		};
 	})
-	handleMicToggle = e => this.setState(({ mic_active }) => ({ mic_active: !mic_active }))
+	handleMicToggle = e => this.setState(({ mic_active, transcript_buf, transcript }) => {
+		let next_input_pos = null;
+		let next_transcript_buf = transcript_buf;
+		let next_transcript = transcript;
+		switch(mic_active) {
+			case true:
+				next_transcript_buf = '';
+				next_transcript =
+					transcript.slice(0, this.state.input_pos_stash || undefined)
+					+ transcript_buf
+					+ transcript.slice(this.state.input_pos_stash || Infinity);
+				break;
+			case false:
+				// mic about to go live: stash current position
+				next_input_pos = this.input_ref.current.selectionStart;
+				console.log(next_input_pos)
+				break;
+		}
+		return {
+			mic_active: !mic_active,
+			transcript_buf: next_transcript_buf,
+			transcript: next_transcript,
+			input_pos_stash: next_input_pos
+		};
+	})
 	handleManualEdit = e => this.setState({ transcript: e.target.value })
 	handleFormSubmit = e => {
 		e.preventDefault();
@@ -111,11 +176,16 @@ export default class extends Component {
 			this.state.active
 			&& <React.Fragment>
 					<ButtonBase onClick={this.handleMicToggle} id="toggle_mic">{ this.state.mic_active ? 'Mute Mic' : 'Unmute Mic' }</ButtonBase>
-					<form id="transcribe_form" onSubmit={this.handleFormSubmit}>{/*  method="POST" src={url + transcribeEnd} enctype="application/x-www-form-urlencoded" */}
+					<form id="transcribe_form" onSubmit={this.handleFormSubmit}>{/*	method="POST" src={url + transcribeEnd} enctype="application/x-www-form-urlencoded" */}
 						<TextField
+							disabled={this.state.mic_active}
+							inputRef={this.input_ref}
 							multiline={true}
 							onChange={this.handleManualEdit}
-							value={this.state.transcript}
+							value={
+								this.state.transcript.slice(0, this.state.input_pos_stash || undefined)
+								+ (this.state.transcript_buf || '')
+								+ this.state.transcript.slice(this.state.input_pos_stash || Infinity)}
 							/>
 						<Button type="submit" id="submit">Submit</Button>
 					</form>
