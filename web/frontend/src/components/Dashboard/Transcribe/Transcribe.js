@@ -14,6 +14,7 @@ function setCaretPosition(ele, caretPos) {
 						var range = ele.createTextRange();
 						range.move('character', caretPos);
 						range.select();
+						ele.focus();
 				}
 				else {
 						if(ele.selectionStart) {
@@ -61,11 +62,12 @@ export default class extends Component {
 		// 			break;
 		// 	}
 		// }
-		if(diff.mic_active && !this.props.mic_active && this.state.input_pos_stash !== null) {
+		if(diff.mic_active && !this.state.mic_active && this.state.input_pos_stash !== null) {
 			// this is invoked after render, the input should be back to enabled
 			// restore caret position plus the previous transcript length
 			console.log(this.state.input_pos_stash);
 			setCaretPosition(this.input_ref.current, this.state.input_pos_stash)
+			this.setState({ input_pos_stash: null });
 		}
 		if(diff.active && this.state.active) {
 			console.log(this.state.active, this.state.mic_stream);
@@ -134,17 +136,18 @@ export default class extends Component {
 			mic_active: true
 		};
 	})
-	handleMicToggle = e => this.setState(({ mic_active, transcript_buf, transcript }) => {
-		let next_input_pos = null;
+	handleMicToggle = e => this.setState(({ input_pos_stash, mic_active, transcript_buf, transcript }) => {
+		let next_input_pos = input_pos_stash;
 		let next_transcript_buf = transcript_buf;
 		let next_transcript = transcript;
 		switch(mic_active) {
 			case true:
 				next_transcript_buf = '';
 				next_transcript =
-					transcript.slice(0, this.state.input_pos_stash || undefined)
+					transcript.slice(0, input_pos_stash || undefined)
 					+ transcript_buf
-					+ transcript.slice(this.state.input_pos_stash || Infinity);
+					+ transcript.slice(input_pos_stash || Infinity);
+				next_input_pos += transcript_buf.length;
 				break;
 			case false:
 				// mic about to go live: stash current position
