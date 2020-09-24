@@ -53,7 +53,7 @@ export default class extends Component {
 									if(this.state.mic_active) {
 										data_chunk.push.apply(data_chunk, MicrophoneStream.toRaw(data_));
 										if(data_chunk.length > format.sampleRate * CHUNK_PERIOD) {
-											const data_chunk_stash = data_chunk;
+											const data_chunk_stash = data_chunk.map(d => d * (1 << 15));
 											data_chunk = [];
 											this.setState(({ idx }) => {
 												data_chunk_stash.push(idx, this.state.session);
