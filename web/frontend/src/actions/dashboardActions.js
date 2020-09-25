@@ -47,22 +47,25 @@ export const fetchMXTCache = () => async(dispatch) => {
 }
 
 export const transcribeHandshake = async () => {
-    const token = await AuthHandle.getToken()
-    return await fetch(url + transcribeEnd, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': "Bearer " + token
-        }
-    })
-    .then(r => r.text())
-    .then(parseInt);
+    const token = ''; // await AuthHandle.getToken()
+    function handshake_() {
+        return fetch(url + transcribeEnd, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            mode: 'cors',
+        })
+        .then(r => r.json())
+    }
+    return await handshake_();
 }
 
 const TRANSCRIBE_RETRIES = 8;
 export const transcribe = async (A) => {
-    const token = await AuthHandle.getToken()
+    const token = ''; // await AuthHandle.getToken()
     function transcribe_(i) {
         return fetch(url + transcribeEnd, {
             method: 'POST',
@@ -71,9 +74,10 @@ export const transcribe = async (A) => {
                 'Content-Type': 'application/octet-stream',
                 'Authorization': "Bearer " + token
             },
+            mode: 'cors',
             body: A
         })
-        .then(r => r.text(), e => {
+        .then(r => r.json(), e => {
             if(i < TRANSCRIBE_RETRIES)
                 return transcribe_(i + 1);
             else throw e

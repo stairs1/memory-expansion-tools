@@ -101,9 +101,9 @@ export default class extends Component {
 											this.setState(({ idx }) => {
 												data_chunk_stash.push(idx, this.state.session);
 												transcribe(new Int16Array(data_chunk_stash))
-													.then(transcript_buf => this.setState(st => {
+													.then(transcript_response => this.setState(st => {
 														if(st.rx_idx < idx)
-															return { transcript_buf, rx_idx: idx };
+															return { transcript_buf : transcript_response.transcript, rx_idx: idx };
 													}));
 												return { idx: idx + 1 };
 											})
@@ -119,9 +119,10 @@ export default class extends Component {
 							return mic_stream_;
 						}
 					})();
+                    console.log(session);
 					
 					return {
-						session, mic_stream
+                        session: session.session_id, mic_stream
 					};
 				}));
 		}
