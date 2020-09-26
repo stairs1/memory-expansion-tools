@@ -19,6 +19,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
+import '../index.css'; //import form styling css
 
 function Copyright() {
   return (
@@ -175,21 +176,14 @@ class SignInSide extends Component {
             <br /><br />
 
               <Grid item xs={5} sm={2}>
+		<Typography>
+			This website works with the MXT mobile app. Get it here:
+		</Typography>
             <ButtonBase onClick={() => window.open("https://play.google.com/store/apps/details?id=com.memoryexpansiontools.mxt", "_blank")} >
               <Card style={{boxShadow: "none"}}>
                 <CardMedia
                     component="img"
                     image='https://caydenpierce.com/cloud/en_badge_web_generic.png'
-                    />
-            </Card>
-            </ButtonBase>
-            </Grid>
-              <Grid item xs={5} sm={2}>
-            <ButtonBase onClick={() => window.open("https://github.com/stairs1/memory-expansion-tools/", "_blank")} >
-              <Card style={{boxShadow: "none"}}>
-                <CardMedia
-                    component="img"
-                    image='https://caydenpierce.com/cloud/GitHub_Logo.png'
                     />
             </Card>
             </ButtonBase>
@@ -209,33 +203,28 @@ class SignInSide extends Component {
               {this.state.error}
             </h3>
           }
+    Username:
+    <input type="text"
+	 autocorrect="off" 
+	autocapitalize="none" 
+	autocomplete="off" 
+	class="feedback-input"
+	placeholder="Username"
+	value={this.state.username}
+	onChange={this.handleUserChange}
+	id="text" type="text" name="name" />
+	<br />
+    Password:
+    <input 
+	id="password" 
+	type="password" 
+	placeholder="Password"
+	class="feedback-input"
+	value={this.state.password}
+	onChange={this.handlePassChange}
+	name="password" />
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="text"
-              label="Username (case-sensitive)"
-              name="text"
-            autoComplete="username"
-                value={this.state.username}
-                onChange={this.handleUserChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-                value={this.state.password}
-                onChange={this.handlePassChange}
-            />
-            <Button
+                     <Button
               type="submit"
               fullWidth
               variant="contained"
@@ -263,3 +252,42 @@ class SignInSide extends Component {
 }
 
 export default withStyles(useStyles)(SignInSide)
+
+//
+//   <TextField
+//              variant="outlined"
+//              margin="normal"
+//              required
+//              fullWidth
+//              id="text"
+//              type="text"
+//              label="Username (case-sensitive)"
+//	      InputProps={{autoCapitalize: false, autoComplete: false}}
+//              name="text"
+//            autoComplete="username"
+//                value={this.state.username}
+//                onChange={this.handleUserChange}
+//            />
+//            <TextField
+//              variant="outlined"
+//              margin="normal"
+//              required
+//              fullWidth
+//              name="password"
+//              label="Password"
+//              type="password"
+//              id="password"
+//              autoComplete="current-password"
+//                value={this.state.password}
+//                onChange={this.handlePassChange}
+//            />
+//
+//<Grid item xs={5} sm={2}>
+//            <ButtonBase onClick={() => window.open("https://github.com/stairs1/memory-expansion-tools/", "_blank")} >
+//              <Card style={{boxShadow: "none"}}>
+//                <CardMedia
+//                    component="img"
+//                    image='https://caydenpierce.com/cloud/GitHub_Logo.png'
+//                    />
+//
+//                          </Card>

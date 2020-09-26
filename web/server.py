@@ -39,7 +39,7 @@ from api.PhraseUpdate import PhraseSocket
 app = Flask(__name__)
 app.debug = True
 app._static_folder = os.path.abspath("templates/static/")
-app.config["JWT_SECRET_KEY"] = "acidTest#One"
+app.config["JWT_SECRET_KEY"] = "supah#Mem1"
 
 api = Api(app)  # flask_restful
 jwt = JWTManager(app)  # flask_jwt_extended

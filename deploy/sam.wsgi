@@ -5,7 +5,7 @@ import sys
 import os
 
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, '/var/www/html/sam/SAMdroid/web')
+sys.path.insert(0, '/var/www/html/mxt/web')
 
 print("****************** exec is {}".format(sys.executable))
 

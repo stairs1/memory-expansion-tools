@@ -19,6 +19,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import '../index.css'; //import form styling css
 
 function Copyright() {
   return (
@@ -196,6 +197,10 @@ class SignUpSide extends Component {
             <br /><br />
 
               <Grid item xs={6} sm={3}>
+		<Typography>
+			This website works with the MXT mobile app. Get it here:
+		</Typography>
+
             <ButtonBase onClick={() => window.open("https://play.google.com/store/apps/details?id=com.memoryexpansiontools.mxt", "_blank")} >
               <Card style={{boxShadow: "none"}}>
                 <CardMedia
@@ -206,17 +211,7 @@ class SignUpSide extends Component {
             </Card>
             </ButtonBase>
             </Grid>
-  <Grid item xs={5} sm={2}>
-            <ButtonBase onClick={() => window.open("https://github.com/stairs1/memory-expansion-tools/", "_blank")} >
-              <Card style={{boxShadow: "none"}}>
-                <CardMedia
-                    component="img"
-                    image='https://caydenpierce.com/cloud/GitHub_Logo.png'
-                    />
-            </Card>
-            </ButtonBase>
             <Divider />
-            </Grid>
 
           <Avatar className={classes.avatar}>
             <AccountCircleIcon/>
@@ -231,58 +226,50 @@ class SignUpSide extends Component {
               {this.state.error}
             </h3>
           }
-
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Username (case-sensitive)"
-              name="username"
-              autoComplete="username"
-              autoFocus
-                value={this.state.username}
-                onChange={this.handleUserChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-                value={this.state.password}
-                onChange={this.handlePassChange}
-            />
-        <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="email"
-              label="Email"
-              type="text"
-              id="email"
+	    Username:
+	    <input type="text"
+		 autocorrect="off" 
+		autocapitalize="none" 
+		autocomplete="off" 
+		class="feedback-input"
+		value={this.state.username}
+		onChange={this.handleUserChange}
+		placeholder="Username"
+		type="text" name="email" />
+		<br />
+	 Email:
+	    <input type="text"
+		 autocorrect="off" 
+		autocapitalize="none" 
+		autocomplete="off" 
+		class="feedback-input"
+		placeholder="Email"
                 value={this.state.email}
                 onChange={this.handleEmailChange}
-            />
-          <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="name"
-              label="Name"
-              type="text"
-              id="name"
-                value={this.state.name}
+		id="text" type="text" name="name" />
+		<br />
+		Name:
+	    <input type="text"
+		 autocorrect="off" 
+		autocapitalize="none" 
+		autocomplete="off" 
+		class="feedback-input"
+		placeholder="Name"
+		value={this.state.name}
                 onChange={this.handleNameChange}
-            />
+		id="text" type="text" name="name" />
+		<br />
 
+	    Password:
+	    <input 
+		id="password" 
+		type="password" 
+		placeholder="Password"
+		class="feedback-input"
+		value={this.state.password}
+		onChange={this.handlePassChange}
+		name="password" />
+        
 
             <Button
               type="submit"
@@ -313,3 +300,56 @@ class SignUpSide extends Component {
 }
 
 export default withStyles(useStyles)(SignUpSide)
+
+//  <TextField
+//              variant="outlined"
+//              margin="normal"
+//              required
+//              fullWidth
+//              id="email"
+//              label="Username (case-sensitive)"
+//              name="username"
+//              autoComplete="username"
+//              autoFocus
+//                value={this.state.username}
+//                onChange={this.handleUserChange}
+//            />
+//            <TextField
+//              variant="outlined"
+//              margin="normal"
+//              required
+//              fullWidth
+//              name="password"
+//              label="Password"
+//              type="password"
+//              id="password"
+//              autoComplete="current-password"
+//                value={this.state.password}
+//                onChange={this.handlePassChange}
+//            />
+//
+//	  <TextField
+//              variant="outlined"
+//              margin="normal"
+//              required
+//              fullWidth
+//              name="email"
+//              label="Email"
+//              type="text"
+//              id="email"
+//                value={this.state.email}
+//                onChange={this.handleEmailChange}
+//            />
+//  <TextField
+//              variant="outlined"
+//              margin="normal"
+//              required
+//              fullWidth
+//              name="name"
+//              label="Name"
+//              type="text"
+//              id="name"
+//                value={this.state.name}
+//                onChange={this.handleNameChange}
+//            />
+//
