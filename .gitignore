@@ -1,3 +1,7 @@
+#deepspeech
+*.pbmm
+*.scorer
+
 #python stuffs
 
 *.pyc

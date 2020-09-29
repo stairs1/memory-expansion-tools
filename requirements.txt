@@ -4,8 +4,10 @@ certifi==2019.11.28
 cffi==1.13.2
 chardet==3.0.4
 Click==7.0
+deepspeech==0.8.2
 Flask==1.1.1
 Flask-Bcrypt==0.7.1
+Flask-Cors==3.0.9
 Flask-JWT-Extended==3.24.1
 Flask-RESTful==0.3.7
 Flask-SocketIO==4.2.1
@@ -14,6 +16,7 @@ idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.3
 MarkupSafe==1.1.1
+numpy==1.19.2
 pycparser==2.19
 PyJWT==1.7.1
 pymongo==3.10.1
@@ -21,6 +24,7 @@ python-engineio==3.11.2
 python-socketio==4.4.0
 pytz==2019.3
 requests==2.22.0
+scipy==1.5.2
 six==1.13.0
 urllib3==1.25.7
 Werkzeug==0.16.0
