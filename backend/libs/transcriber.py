@@ -1,13 +1,22 @@
 import time, logging
 import deepspeech
 import numpy as np
+import threading
 from scipy import signal
 import pathlib
 import os
 
 class Transcriber:
-    def __init__(self, model=None, scorer=None):
+    """
+    Stateful layer to hold audio data and interface with deepspeech.
+    holds a reference to our dict object that holds all of the transcribe sessions.
+    every x seconds, it checks to see if we have any streams that haven't been used in too long, and it kills them
+    """
+    def __init__(self, sessions, model=None, scorer=None):
         self.RATE_PROCESS = 16000 #16kHz sf for deepspeech open official model
+        self.wait_time = 20 #amount of seconds to wait before killing a stream
+        self.timeout_check_time = 5 #number seconds to check if a stream has gone over its timout time since last action
+        self.timeout(sessions)
         if model is None:
             path = pathlib.Path(__file__).parent.absolute()
             model_path = os.path.join(path, "./deepspeech-0.8.2-models.pbmm")
@@ -24,6 +33,9 @@ class Transcriber:
     #create a new deepspeech stream and return to the caller
     def new_stream(self):
         return self.model.createStream()
+
+    def kill_stream(self, stream):
+        stream.finishStream()
     
     def resample(self, data16, input_rate):
         """
@@ -46,3 +58,19 @@ class Transcriber:
         stream.feedAudioContent(frames)
         result = stream.intermediateDecode()
         return result
+
+    def timeout(self, sessions):
+        """
+        Check through all the sessions and kills any that have been alive for too long (too long is defined in __init__)
+        Runs itself over and over on a set inverval
+        """
+        timeout_thread = threading.Timer(self.timeout_check_time, self.timeout, args=(sessions,))
+        timeout_thread.daemon = True
+        timeout_thread.start()
+        for session in list(sessions):
+            if session == "last_used_id":
+                continue
+            if time.time() - sessions[session]["last_timestamp"] > self.wait_time:
+                print("Killing session #{}".format(session))
+                self.kill_stream(sessions[session]["ds"])
+                sessions.pop(session)

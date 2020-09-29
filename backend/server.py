@@ -57,7 +57,7 @@ app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
 #hold transcription sessions and the deepspeech model class statefully here, then the endpoint is stateless
 sessions = dict()
 sessions["last_used_id"] = -1
-transcriber = Transcriber()
+transcriber = Transcriber(sessions)
 
 # start/attach everything
 phraseSock = PhraseSocket(app)
