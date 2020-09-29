@@ -152,7 +152,6 @@ export default class extends Component {
 			case false:
 				// mic about to go live: stash current position
 				next_input_pos = this.input_ref.current.selectionStart;
-				console.log(next_input_pos)
 				break;
 		}
 		return {
@@ -186,9 +185,12 @@ export default class extends Component {
 							multiline={true}
 							onChange={this.handleManualEdit}
 							value={
-								this.state.transcript.slice(0, this.state.input_pos_stash || undefined)
-								+ (this.state.transcript_buf || '')
-								+ this.state.transcript.slice(this.state.input_pos_stash || Infinity)}
+								this.state.mic_active
+								? this.state.transcript.slice(0, this.state.input_pos_stash || undefined)
+									+ (this.state.transcript_buf || '')
+									+ this.state.transcript.slice(this.state.input_pos_stash || Infinity)
+								: this.state.transcript
+							}
 							/>
 						<Button type="submit" id="submit">Submit</Button>
 					</form>
