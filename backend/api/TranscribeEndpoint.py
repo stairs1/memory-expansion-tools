@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import request
+import time
 import struct
 
 class Transcribe(Resource):
@@ -31,6 +32,7 @@ class Transcribe(Resource):
         #get the datastream from the body, parse it, add it to the deepspeech stream, get a transcription, and send the trasncription back to the user
         data, idx, session_id = self.parse_transcribe_request(request.data)
         transcript = self.get_transcript(data, self.sessions[session_id]["ds"])
+        self.sessions[session_id]["last_timestamp"] = time.time()
         return {"transcript" : transcript} #send the latest transcript text
 
     def get(self):
@@ -39,5 +41,6 @@ class Transcribe(Resource):
         self.sessions["last_used_id"] += 1 #increment that last used id
         self.sessions[session_id] = dict()
         self.sessions[session_id]["ds"] = self.transcriber.new_stream()
+        self.sessions[session_id]["last_timestamp"] = time.time()
         print(self.sessions)
         return {"session_id" : session_id}
