@@ -28,6 +28,12 @@ function setCaretPosition(ele, caretPos) {
 		}
 }
 
+function str_splice(main, sub, at = undefined) {
+	return main.slice(0, at || undefined)
+		+ sub
+		+ (at === undefined || at === null ? '' : main.slice(at));
+}
+
 export default class extends Component {
 	constructor(props) {
 		super(props);
@@ -141,18 +147,14 @@ export default class extends Component {
 	handleMicToggle = e => this.setState(({ active, input_pos_stash, mic_active, transcript_buf, transcript, mic_stream }) => {
 		let next_input_pos = input_pos_stash;
 		let next_transcript_buf = transcript_buf;
-		let next_transcript = transcript;
+		let next_transcript_head = transcript_head;
 		switch(mic_active) {
 			case true:
-                if(mic_stream !== null) {
-                    mic_stream.stop();
-                }
-                mic_stream.stop();
+				if(mic_stream !== null) {
+					mic_stream.stop();
+				}
 				next_transcript_buf = '';
-				next_transcript =
-					transcript.slice(0, input_pos_stash || undefined)
-					+ transcript_buf
-					+ transcript.slice(input_pos_stash || Infinity);
+				next_transcript_head = str_splice(transcript_head, transcript_buf, input_pos_stash);
 				next_input_pos += transcript_buf.length;
 				break;
 			case false:
@@ -163,16 +165,20 @@ export default class extends Component {
 		return {
 			mic_active: !mic_active,
 			transcript_buf: next_transcript_buf,
-			transcript: next_transcript,
+			transcript_head: next_transcript_head,
 			input_pos_stash: next_input_pos,
 			active: !active,
 			mic_stream: active ? null : mic_stream
 		};
 	})
-	handleManualEdit = e => this.setState({ transcript: e.target.value })
+	get_transcript = () => 
+		this.state.mic_active
+			? str_splice(this.state.transcript_head, this.state.transcript_buf, this.state.input_pos_stash)
+			: this.state.transcript_head
+	handleManualEdit = e => this.setState({ transcript_head: e.target.value })
 	handleFormSubmit = e => {
 		e.preventDefault();
-		transcribeSubmit(this.state.transcript + " MXT")
+		transcribeSubmit(this.get_transcript() + " MXT")
 			.then(_ => history.go(0)); // refresh on successful submission
 	}
 	
@@ -205,13 +211,7 @@ export default class extends Component {
 							multiline={true}
 							onChange={this.handleManualEdit}
                             fullWidth={true}
-							value={
-								this.state.mic_active
-								? this.state.transcript.slice(0, this.state.input_pos_stash || undefined)
-									+ (this.state.transcript_buf || '')
-									+ this.state.transcript.slice(this.state.input_pos_stash || Infinity)
-								: this.state.transcript
-							}
+							value={this.get_transcript()}
 							/>
                         <Box ml={2}>
 						<Button type="submit" id="submit" variant="contained">Submit</Button>
