@@ -82,12 +82,12 @@ export default class extends Component {
 				const stash_idx = session_idx.idx + 1;
 				transcribeHandshake()
 					.then(session => this.setState(st => {
-						if(st.session_idx.idx === stash_idx) {
+						if(st.session_idx.rx_idx <= stash_idx) {
 							const mic_stream = st.mic_stream || this.mk_mic_stream();
 							return {
 								session: session.session_id,
 								mic_stream,
-								session_idx: Object.assign(st.session_idx, { rx_idx: st.session_idx.idx })
+								session_idx: Object.assign(st.session_idx, { rx_idx: stash_idx }) // also possibly st.session_idx.idx since the responses are delayed anyways so the mic start timing isn't really critical. `stash_idx` as it is now is just clearer.
 							};
 						}
 					}));
@@ -123,10 +123,10 @@ export default class extends Component {
 							data_chunk_stash.push(mic_idx.idx, this.state.session);
 							transcribe(new Int16Array(data_chunk_stash))
 								.then(transcript_response => this.setState(st => {
-									if(st.mic_idx.idx >= stash_idx && this.state.mic_active) //have to check again if the mic is active, as some transcriptions come in after a delay , i.e. after the mix is inactive
+									if(st.mic_idx.rx_idx <= stash_idx && this.state.mic_active) //have to check again if the mic is active, as some transcriptions come in after a delay , i.e. after the mix is inactive
 										return {
 											transcript_buf : transcript_response.transcript,
-											mic_idx: Object.assign(st.mic_idx, { rx_idx: st.mic_idx.idx })
+											mic_idx: Object.assign(st.mic_idx, { rx_idx: stash_idx })
 										};
 								}));
 							return { mic_idx: Object.assign(mic_idx, { idx: stash_idx }) };
