@@ -123,9 +123,9 @@ export default class extends Component {
 							data_chunk_stash.push(mic_idx.idx, this.state.session);
 							transcribe(new Int16Array(data_chunk_stash))
 								.then(transcript_response => this.setState(st => {
-									if(st.mic_idx.idx === stash_idx)
+									if(st.mic_idx.idx === stash_idx && this.state.mic_active) //have to check again if the mic is active, as some transcriptions come in after a delay , i.e. after the mix is inactive
 										return {
-											transcript_buf : transcript_response,
+											transcript_buf : transcript_response.transcript,
 											mic_idx: Object.assign(st.mic_idx, { rx_idx: st.mic_idx.idx })
 										};
 								}));
@@ -162,8 +162,9 @@ export default class extends Component {
 					mic_stream.stop();
 				}
 				next_transcript_buf = '';
-				next_transcript_head = str_splice(transcript_head, transcript_buf, input_pos_stash);
-				next_input_pos += transcript_buf.length;
+                //if we are turning off transcrption, we want to add a space to the end so user can start typing easily
+				next_transcript_head = str_splice(transcript_head, transcript_buf + ' ', input_pos_stash);
+				next_input_pos += transcript_buf.length + 1; //+1 for the space added at the end
 				break;
 			case false:
 				// mic about to go live: stash current position
@@ -214,6 +215,13 @@ export default class extends Component {
                 <Box mr={2} flexGrow={8} order={4}>
 					<form id="transcribe_form" style={this.formContainer} onSubmit={this.handleFormSubmit}>{/*	method="POST" src={url + transcribeEnd} enctype="application/x-www-form-urlencoded" */}
 						<TextField
+                                onKeyPress={(ev) => {
+                                if (ev.key === 'Enter' & !ev.shiftKey) {
+                                  // Do code here
+                                  console.log("ENTERPRESSED");
+                                    this.handleFormSubmit(ev);
+                                }
+                              }}
 							disabled={this.state.mic_active}
 							inputRef={this.input_ref}
 							multiline={true}
