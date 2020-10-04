@@ -123,7 +123,7 @@ export default class extends Component {
 							data_chunk_stash.push(mic_idx.idx, this.state.session);
 							transcribe(new Int16Array(data_chunk_stash))
 								.then(transcript_response => this.setState(st => {
-									if(st.mic_idx.idx === stash_idx && this.state.mic_active) //have to check again if the mic is active, as some transcriptions come in after a delay , i.e. after the mix is inactive
+									if(st.mic_idx.idx >= stash_idx && this.state.mic_active) //have to check again if the mic is active, as some transcriptions come in after a delay , i.e. after the mix is inactive
 										return {
 											transcript_buf : transcript_response.transcript,
 											mic_idx: Object.assign(st.mic_idx, { rx_idx: st.mic_idx.idx })

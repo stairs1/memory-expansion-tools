@@ -38,7 +38,7 @@ export class MapContainer extends Component {
                                                     lat: memory.latitude,
                                                     lng: memory.longitude
                                                 }}
-                                                icon={{url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"}} />
+                                                icon={{url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"}} />
                                         )
                                 })
                             }
@@ -52,7 +52,7 @@ export class MapContainer extends Component {
                                                     lat: memory.latitude,
                                                     lng: memory.longitude
                                                 }}
-                                                icon={{url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'}} />
+                                                icon={{url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'}} />
                                         )
                                 })
                             }
@@ -64,7 +64,7 @@ export class MapContainer extends Component {
                                         lat: selectedMemory.latitude,
                                         lng: selectedMemory.longitude
                                     }}
-                                    icon={{url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}} />
+                                    icon={{url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'}} />
                                 : null
                             }
                         </Map>
