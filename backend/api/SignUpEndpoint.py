@@ -29,6 +29,7 @@ class SignUp(Resource):
 
     @marshal_with(signup_marshaller)
     def post(self):  # NOTE that this is actually using username and not userId...
+        print("POOOOSTTTTTTTTTTTT TOOOOOOOOOOOO SIIIIIIIIGGGGGGGGGGGGGNNNNNNNNUUUUUUUUUPPPPPPP")
         # define args to accepts from post
         parser = reqparse.RequestParser()
         parser.add_argument("username", type=str)

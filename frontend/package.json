@@ -1,6 +1,6 @@
 {
-  "name": "MXTfrontend",
-  "homepage": "https://memoryexpansiontools.com",
+  "name": "MXT",
+  "homepage": "/mxt/",
   "version": "0.1.0",
   "description": "Expand your memory, extend your mind.",
   "private": true,

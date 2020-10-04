@@ -75,7 +75,7 @@ class App extends React.Component {
             <meta property="og:title" content="MXT | Memory Expansion Tools<" />
             <meta property="og:image" content="https://caydenpierce.com/cloud/mxt_logo_text_orange_grey_small.png" />
           </MetaTags>
-                <BrowserRouter>
+                <BrowserRouter basename={'mxt'}>
                 <CssBaseline/> {/* make things always look the same 
                     */}
                         {/* A <Switch> looks through its children <Route>s and

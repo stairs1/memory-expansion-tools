@@ -1,3 +1,6 @@
+#ignore our ssl files !IMPORTANT
+*.pem
+
 #deepspeech
 *.pbmm
 *.scorer
