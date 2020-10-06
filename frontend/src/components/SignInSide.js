@@ -20,11 +20,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 
+import memoruxLogo from '../images/memorux_logo_plain_dark.png'
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-        Memory Expansion Tools <br />
+        Memorux <br />
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -140,7 +142,21 @@ class SignInSide extends Component {
                     
                     />
             </Card>
-            </Grid><br /><br />
+            </Grid><br />
+          <Grid item sm={6}>
+                <Typography>
+                    Created by:
+                </Typography>
+            </Grid>
+<Grid item sm={3}>
+              <Card style={{boxShadow: "none"}}>
+                <CardMedia
+                    component="img"
+                    image={memoruxLogo}
+                    />
+            </Card>
+            </Grid><br />
+
             <Grid item elevation={0} square>
 
             <IconButton component={Link} to="/login">
