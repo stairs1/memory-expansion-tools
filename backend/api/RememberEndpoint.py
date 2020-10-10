@@ -114,6 +114,6 @@ class Remember(Resource):
             phrases = phrases[:-1]
 
         # notify the PhraseManager so it can update the frontend if need be
-        self.PhraseManager.ping(username, speech, timestamp, stage)
+        self.PhraseManager.ping(username, phrases, stage)
 
         return {"success": 1}

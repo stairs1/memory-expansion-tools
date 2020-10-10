@@ -4,6 +4,7 @@
 
 upstream mxt.fake {
     server 127.0.0.1;
+
 }
 
 server {
@@ -24,7 +25,8 @@ server {
 		try_files $uri $uri/ =404;
 	}
 
-	location /mxt {
+
+	location /mxt/ {
 		proxy_pass http://mxt.fake/;
 	}
 }
@@ -33,9 +35,14 @@ server {
 	server_name mxt.fake;
 	root /var/www/html/mxt/frontend/build/;
 
+	location /api/ {
+	    proxy_pass  https://127.0.0.1:1337/;
+	}
+
 	location / {
 		try_files $uri /index.html;
 	}
+
 }
 
 	

@@ -18,16 +18,14 @@ class PhraseSocket:
         self.db = Database()
         self.db.connect()
 
-    def ping(self, username, speech, ts, stage):
+    def ping(self, username, phrases, stage):
         if username in self.connections:
-            print("TIME IS {}".format(ts))
-            item = dict()
-            item["speech"] = speech
-            item["timestamp"] = ts
-            item["prettyTime"] = datetime.fromtimestamp(ts).strftime(
+            phraseResults = list()
+            for item in phrases:
+                item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
                         "%a, %b %-d %-I:%M %p"
                     )
-            phraseResults = [item] #TODO change frontend to just accept regular JSON (this here is one item in a list, derp)
+                phraseResults.append(item)
             self.socketio.emit(
                 "my_response", {"phrases": phraseResults, "stage": stage}, room=username
             )
