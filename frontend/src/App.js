@@ -1,5 +1,4 @@
 import Signout from './components/Signout.js';
-import BottomAppBar from './components/Nav.js';
 import TitleBar from './components/TitleBar.js';
 import SignInSide from './components/SignInSide.js';
 import SignUpSide from './components/SignUpSide.js';

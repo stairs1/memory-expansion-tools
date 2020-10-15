@@ -82,7 +82,9 @@ pip3 install virtualenv; python3 -m virtualenv venv; source venv/bin/activate
 pip3 install -r requirements.txt
 ```  
 -need deepspeech v0.8.2 scorer and pbmm models
-    - download here: https://github.com/mozilla/DeepSpeech/releases/tag/v0.8.2
+    - download here: 
+        - https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.scorer
+        - https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.pbmm
     - put in /web/backend/libs
 
 #### Mongo Setup
