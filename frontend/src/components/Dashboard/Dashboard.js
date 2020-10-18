@@ -9,7 +9,12 @@ import Stream from './Stream/Stream'
 import Tags from './Tags/Tags'
 import Transcribe from './Transcribe/Transcribe.js';
 import Download from './Download/Download.js';
+import Dates from './Dates/Dates.js';
 
+import AuthHandler from '../AuthHandler.js';
+
+import io from 'socket.io-client'
+import { url } from "../../constants"
 // Actions
 import { fetchMXTCache, getTags } from '../../actions/dashboardActions'
 
@@ -17,6 +22,16 @@ import { fetchMXTCache, getTags } from '../../actions/dashboardActions'
 import './Dashboard.css'
 
 export class Dashboard extends Component {
+    constructor() {
+        super()
+        this.state = {
+            value: {
+                'phrases': [], 
+                'stage': []
+            }
+        }
+    }
+
     render() {
         return (
             <div>
@@ -52,6 +67,10 @@ export class Dashboard extends Component {
                 <div className="download-child">
                     <Download />
                 </div>
+                <div className="download-child">
+                    <Dates/>
+                </div>
+
                 </div>
                 <div class='spacer'>
                 </div>
@@ -67,9 +86,13 @@ export class Dashboard extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    mxtstream: state.dashboard.stream
+})
+
 const mapDispatchToProps = {
     fetchMXTCache, 
     getTags 
 }
 
-export default connect(null, mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

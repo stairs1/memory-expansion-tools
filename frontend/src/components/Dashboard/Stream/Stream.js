@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { connect } from 'react-redux'
+import AuthHandler from '../../AuthHandler.js';
 
 import io from 'socket.io-client'
 
@@ -23,13 +24,19 @@ class Stream extends Component {
         }
     }
 
+
     componentDidMount(){
-        this.connectSock() // Connect to the backend
+        this.connectMemoryStreamSock() // Connect to the backend
     }
     
-    connectSock() {
+    async connectMemoryStreamSock() {
+        var token = await AuthHandler.getToken();
+        console.log("got that token");
         const socket = io(url)
+        console.log("SOCK CREATED");
+
         socket.on("my_response", data => {
+            console.log("response");
             this.setState({value: data})
         })
         socket.emit("join", {
@@ -37,8 +44,10 @@ class Stream extends Component {
         })
     }
 
+
+
     render() {
-        const { selectMemory } = this.props
+        const { selectMemory, mxtstream } = this.props
         return (
             <Box m={2}>
                 <Typography variant="h6">
@@ -70,8 +79,13 @@ class Stream extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    mxtstream: state.dashboard.stream
+})
+
+
 const mapDispatchToProps = {
     selectMemory
 }
 
-export default connect(null, mapDispatchToProps)(Stream)
+export default connect(mapStateToProps, mapDispatchToProps)(Stream)
