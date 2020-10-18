@@ -35,6 +35,7 @@ from api.RecentEndpoint import Recent
 from api.L3Endpoint import L3
 from api.ToDoEndpoint import ToDo
 from api.TranscribeEndpoint import Transcribe
+from api.DownloadEndpoint import Download
 
 #custom libs
 from libs.transcriber import Transcriber
@@ -74,6 +75,7 @@ api.add_resource(ToDo, "/todo")
 api.add_resource(Refresh, "/refresh", resource_class_args=[jwt])
 api.add_resource(Recent, "/recent")
 api.add_resource(Transcribe, "/transcribe", resource_class_args=[sessions, transcriber])
+api.add_resource(Download, "/download", resource_class_args=[app, jwt])
 
 # for dev server
 def start():

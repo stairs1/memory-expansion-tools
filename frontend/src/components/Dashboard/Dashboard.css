@@ -17,7 +17,28 @@
     background-color: #ffffff;
     border-top: 2px solid black;
     box-shadow: 0 0 8px #474747;
+
 }
+
+.bottom-row {
+    display: flex;
+    position: fixed; 
+    padding: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 2px solid black;
+    box-shadow: 0 0 8px #474747;
+}
+
+.transcribe-child {
+    flex-grow: 90;
+}
+
+.download-child {
+    flex-grow: 0.01;
+}
+
 
 .spacer{
     height: 80px;

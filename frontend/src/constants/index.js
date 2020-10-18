@@ -17,6 +17,7 @@ export const signupEnd = "/signupapi"
 export const searchEnd = "/searchapi"
 export const newNoteEnd = '/remember'
 export const transcribeEnd = '/transcribe'
+export const downloadEnd = '/download'
 // Google Maps API Key 
 export const API_KEY = 'AIzaSyDrF-e0TO_qHQ1HTokpiZlHSarRz2mlnds'
 

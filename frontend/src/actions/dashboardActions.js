@@ -1,5 +1,5 @@
 import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY, GET_TAGS, ADD_TAG, DELETE_TAG } from './types'; 
-import { url, mxtEnd, searchEnd, tagEnd, transcribeEnd, newNoteEnd } from "../constants";
+import { url, mxtEnd, searchEnd, tagEnd, transcribeEnd, newNoteEnd, downloadEnd } from "../constants";
 import AuthHandle from "../components/AuthHandler";
 
 export const searchMemories = query => async(dispatch) => {
@@ -47,6 +47,7 @@ export const fetchMXTCache = () => async(dispatch) => {
 }
 
 export const transcribeHandshake = async () => {
+    console.log("DDDDDDDDDDDDDAAAAAAAAAAAAAAAAA");
     const token = ''; // await AuthHandle.getToken()
     function handshake_() {
         return fetch(url + transcribeEnd, {
@@ -172,4 +173,26 @@ export const createTag = tag => async(dispatch) => {
         })
         getTags()
     })   
+}
+
+export const downloadAction = async () => {
+    var start = 1999; //info.start;
+    var end = 2020; //info.end;
+    const token = await AuthHandle.getToken()
+    fetch(url + downloadEnd, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+	    },
+        body: JSON.stringify({ 
+            "start" : start,
+            "end" : end
+        })
+    })
+	.then(res => {
+        console.log(res);
+        return res;
+        })
 }

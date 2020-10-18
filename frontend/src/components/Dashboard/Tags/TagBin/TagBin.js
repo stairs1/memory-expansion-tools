@@ -14,7 +14,7 @@ export class TagBin extends Component {
     render() {
         const { title, tagBins, selectMemory } = this.props
         return (
-            <Fragment>
+            <div className="bin">
                 <Typography>
                     {this.capitalizeFirstLetter(title)}
                     <Button onClick={this.deleteIconClick} size="small">
@@ -45,7 +45,7 @@ export class TagBin extends Component {
                     </Fragment> 
                     : null
                 }
-            </Fragment>
+            </div>
         )
     }
 

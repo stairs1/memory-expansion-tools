@@ -20,6 +20,7 @@
     "react-alert-template-basic": "^1.0.0",
     "react-bootstrap": "^0.32.4",
     "react-cookie": "^4.0.3",
+    "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.0",
     "react-meta-tags": "^0.7.4",
     "react-redux": "^7.2.0",
