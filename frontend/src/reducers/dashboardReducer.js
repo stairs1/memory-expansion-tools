@@ -1,7 +1,9 @@
-import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY, DELETE_TAG, GET_TAGS, ADD_TAG } from '../actions/types'
+import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SET_MXT_STREAM, SET_DATE_RANGE, SELECT_MEMORY, DELETE_TAG, GET_TAGS, ADD_TAG } from '../actions/types'
 import { omit } from 'lodash'
 
 const initialState = {
+    mxtstream: [],
+    dateRange: [],
     mapMemories: [],
     searchResults: [], 
     cache: [],
@@ -17,6 +19,17 @@ export default function(state = initialState, action){
                 ...state,
                 cache: action.payload
             }
+        case SET_MXT_STREAM:
+             return {
+                ...state,
+                mxtstream: action.payload
+            }
+        case SET_DATE_RANGE:
+             return {
+                ...state,
+                dateRange: action.payload
+            }
+
         case SEARCH_MEMORIES:
             return {
                 ...state,

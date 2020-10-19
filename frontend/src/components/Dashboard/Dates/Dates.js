@@ -1,8 +1,9 @@
 import React, { Component, useState } from 'react';
+import { connect } from 'react-redux'
 import { addDays } from 'date-fns';
 import MicrophoneStream from 'microphone-stream';
 import getUserMedia from 'get-user-media-promise';
-import { saveDate, transcribeHandshake, transcribe, transcribeSubmit, downloadAction } from '../../../actions/dashboardActions'
+import { saveDate, transcribeHandshake, transcribe, transcribeSubmit, downloadAction, setDateRange } from '../../../actions/dashboardActions'
 import { createBrowserHistory } from 'history'
 import { Box, FormControl, TextField, Button, ButtonBase, Typography, Popover } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
@@ -42,7 +43,7 @@ function str_splice(main, sub, at = undefined) {
 		+ (at === undefined || at === null ? '' : main.slice(at));
 }
 
-export default class extends Component {
+class Dates extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -60,7 +61,8 @@ export default class extends Component {
 
         this.setStartDate = this.setStartDate.bind(this);
         this.openCal = this.openCal.bind(this);
-        this.closeCal = this.closeCal.bind(this);
+        this.cancelCal = this.cancelCal.bind(this);
+        this.saveCal = this.saveCal.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.changeDate = this.changeDate.bind(this);
 	}
@@ -68,15 +70,6 @@ export default class extends Component {
     changeDate(item){
         console.log(item);
         this.setState({ dateRange : [item.selection]});
-    }
-
-    downloadFiles(){
-        console.log("WE ARE DOWNLODING");
-        var info = {};
-        info.start = 1999;
-        info.end = 2020;
-        downloadAction();
-        console.log("ALL RUN");
     }
 
     setStartDate(date){
@@ -99,27 +92,31 @@ export default class extends Component {
     }
 
     openCal(event) {
-        this.setState( { open : true }); //, anchorEl : event.currentTarget });
+        this.setState( { open : true , anchorEl : event.currentTarget });
         console.log(event.currentTarget);
     }
 
-    closeCal() {
+    cancelCal() {
         this.setState( { open : false });
     }
 
+    saveCal(item) {
+        var dateRange = this.state.dateRange;
+        this.props.setDateRange(dateRange);
+        this.setState( { open : false });
+    }
 
     render() {
-
+        const { daterange } = this.props;
         return (
             <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start" m={2}>
         <Box order={1}>
                 <IconButton 
-                    id="micToggleButton"
                 edge="start"
                 onClick={this.openCal}
                 >
             <DateRangeIcon id="daterangebutton" />
-            <Typography variant="body2"></Typography>
+            <Box ml={1}><Typography color='primary' variant="body2">Date Range.</Typography></Box>
           </IconButton>
                  </Box>
 
@@ -130,25 +127,49 @@ export default class extends Component {
             anchorEl ={this.state.anchorEl}
       >
             <Box display="flex" flexDirection="column">
-            <Button onClick={this.closeCal}>Close</Button>
-            <DateRangePicker
-                  onChange={this.changeDate}
-                  showSelectionPreview={true}
-                  moveRangeOnFirstSelection={false}
-                  months={2}
-                  ranges={this.state.dateRange}
-                  direction="horizontal"
-                />;
+                <Box m={2} >
+                    <Typography >Select date range for MXT Cache and Memory Bins</Typography>
+                </Box>
+                <Box>
+                <DateRangePicker
+                      onChange={this.changeDate}
+                      showSelectionPreview={true}
+                      moveRangeOnFirstSelection={false}
+                      months={2}
+                      ranges={this.state.dateRange}
+                      direction="horizontal"
+                    />;
+                </Box>
+               <Box display="flex" m={2} justifyContent="flex-end">
+                <Box>
+                <Button flexGrow={4} order={1} variant="contained" color="secondary" onClick={this.cancelCal}>Close</Button>
+                </Box>
+                <Box>
+                <Button order={2} flexGrow={4} variant="contained" onClick={this.saveCal}>Select Range</Button>
+                </Box>
+                <Box>
+                    <p>{daterange}</p>
+                </Box>
+            </Box>
 
             </Box>
       </Popover>
     </div>
             
-        <Box order={2} mr={2}><Typography variant="body2">Download.</Typography></Box>
 	</Box>
         )
     }
 }
 
 
-          //anchorEl={"hello}
+const mapStateToProps = state => ({
+    dateRange: state.dashboard.dateRange, 
+    mxtstream: state.dashboard.mxtstream 
+})
+
+
+const mapDispatchToProps = {
+    setDateRange
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dates)

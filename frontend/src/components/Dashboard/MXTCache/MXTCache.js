@@ -44,7 +44,8 @@ export class MXTCache extends Component {
 }
 
 const mapStateToProps = state => ({
-    cache: state.dashboard.cache
+    cache: state.dashboard.cache,
+    dateRange: state.dashboard.dateRange,
 })
 
 const mapDispatchToProps = {

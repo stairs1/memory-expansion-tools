@@ -11,12 +11,13 @@ import Transcribe from './Transcribe/Transcribe.js';
 import Download from './Download/Download.js';
 import Dates from './Dates/Dates.js';
 
+import equal from 'fast-deep-equal'
 import AuthHandler from '../AuthHandler.js';
 
 import io from 'socket.io-client'
 import { url } from "../../constants"
 // Actions
-import { fetchMXTCache, getTags } from '../../actions/dashboardActions'
+import { fetchMXTCache, getTags, setMXTStream } from '../../actions/dashboardActions'
 
 // Styles
 import './Dashboard.css'
@@ -32,6 +33,26 @@ export class Dashboard extends Component {
         }
     }
 
+//    componentDidMount(){
+//        this.connectMemoryStreamSock() // Connect to the backend
+//    }
+//    
+//    async connectMemoryStreamSock() {
+//        var token = await AuthHandler.getToken();
+//        console.log("got that token");
+//        const socket = io(url)
+//        console.log("SOCK CREATED");
+//
+//        socket.on("my_response", data => {
+//            console.log("good response");
+//            this.setState({value: data})
+//            setMXTStream(data);
+//        })
+//        socket.emit("join", {
+//            data : "dgs"
+//        })
+//    }
+//
     render() {
         return (
             <div>
@@ -80,18 +101,33 @@ export class Dashboard extends Component {
     }
 
     async componentWillMount(){
-        const { fetchMXTCache, getTags } = this.props
-        await fetchMXTCache() 
+        const { fetchMXTCache, setMXTStream, getTags } = this.props
+        await fetchMXTCache(null, null) 
         await getTags() 
     }
+
+     async componentDidUpdate(prevProps) {
+         //if daterange updates, refetch cache
+          if(!equal(this.props.dateRange, prevProps.dateRange)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+              {
+                 const { dateRange, fetchMXTCache, getTags } = this.props;
+                var startDate = dateRange[0].startDate.getTime() / 1000;
+                var endDate = dateRange[0].endDate.getTime() / 1000;
+                await  fetchMXTCache(startDate, endDate);
+                await getTags() 
+
+              }
+        }
 }
 
 const mapStateToProps = state => ({
-    mxtstream: state.dashboard.stream
+    mxtstream: state.dashboard.mxtstream,
+    dateRange: state.dashboard.dateRange
 })
 
 const mapDispatchToProps = {
     fetchMXTCache, 
+    setMXTStream,
     getTags 
 }
 

@@ -173,12 +173,34 @@ class Database:
             recents.append(item)
         return recents
 
-    def getPhrases(self, username, num=100):
+    def getRange(self, userId, num, start, end):
+        if not self.userExists(userId):
+            return None
+
+        talksCollection = self.db.talks
+
+        resp = (
+                talksCollection.find({"userId": str(userId), "timestamp" : { "$gt" : start}, "timestamp" : { "$lt" : end}})
+            .sort([("timestamp", -1)])
+            .limit(num)
+        )
+
+        recents = list()
+        for item in resp:  # little weird b/c resp is a pymongo-cursor
+            item.pop("_id")
+            recents.append(item)
+        return recents
+
+
+    def getPhrases(self, username, num=100, startDate=None, endDate=None):
         userId = self.nameToId(username)
         if not self.userExists(userId):
             return None
 
-        talks = self.getMostRecent(userId, num)
+        if startDate is not None and endDate is not None:
+            talks = self.getRange(userId, num, startDate, endDate)
+        else:
+            talks = self.getMostRecent(userId, num)
         phrases = list()
         for item in talks:
             phrases.append(item)
@@ -209,7 +231,7 @@ class Database:
 
         return 1
 
-    def getL(self, userId, timestamp, level=2):
+    def getL(self, userId, timestamp, level=2, startDate=None, endDate=None):
         if not self.userExists(userId):
             return None
 
@@ -223,7 +245,12 @@ class Database:
             l = self.db.ltwotalks
             startTime = timestamp - 86400  # L2 lasts one day
 
-        resp = l.find({"timestamp": {"$gt": startTime}, "userId": str(userId)}).sort(
+        if startDate is not None and endDate is not None:
+            resp = l.find({"timestamp": {"$gt": startDate, "$lt": endDate},"userId": str(userId)}).sort(
+                [("timestamp", -1)]
+            )
+        else:
+            resp = l.find({"timestamp": {"$gt": startTime}, "userId": str(userId)}).sort(
             [("timestamp", -1)]
         )
 

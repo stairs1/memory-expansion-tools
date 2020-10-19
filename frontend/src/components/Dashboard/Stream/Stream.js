@@ -11,7 +11,7 @@ import { url } from "../../../constants"
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 
 // Actions
-import { selectMemory } from '../../../actions/dashboardActions'
+import { selectMemory, setMXTStream } from '../../../actions/dashboardActions'
 
 class Stream extends Component {
     constructor() {
@@ -36,7 +36,8 @@ class Stream extends Component {
         console.log("SOCK CREATED");
 
         socket.on("my_response", data => {
-            console.log("response");
+            this.props.setMXTStream(data);
+            console.log(this.props.mxtstream);
             this.setState({value: data})
         })
         socket.emit("join", {
@@ -44,10 +45,8 @@ class Stream extends Component {
         })
     }
 
-
-
     render() {
-        const { selectMemory, mxtstream } = this.props
+        const { selectMemory, mxtstream, tester } = this.props
         return (
             <Box m={2}>
                 <Typography variant="h6">
@@ -80,11 +79,13 @@ class Stream extends Component {
 }
 
 const mapStateToProps = state => ({
-    mxtstream: state.dashboard.stream
+    mxtstream: state.dashboard.mxtstream,
+    dateRange: state.dashboard.dateRange
 })
 
 
 const mapDispatchToProps = {
+    setMXTStream,
     selectMemory
 }
 

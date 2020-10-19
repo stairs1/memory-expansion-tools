@@ -1,8 +1,9 @@
-import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SELECT_MEMORY, GET_TAGS, ADD_TAG, DELETE_TAG } from './types'; 
+import { SEARCH_MEMORIES, FETCH_MXT_CACHE, SET_MXT_STREAM, SET_DATE_RANGE ,SELECT_MEMORY, GET_TAGS, ADD_TAG, DELETE_TAG } from './types'; 
 import { url, mxtEnd, searchEnd, tagEnd, transcribeEnd, newNoteEnd, downloadEnd } from "../constants";
 import AuthHandle from "../components/AuthHandler";
 
 export const searchMemories = query => async(dispatch) => {
+    console.log("DDDDDDDDDDDDDAAAAAAAAAAAAAAAAA");
     const token = await AuthHandle.getToken()
     fetch(url + searchEnd, {
         method: 'POST',
@@ -26,10 +27,14 @@ export const searchMemories = query => async(dispatch) => {
     })    
 }
 
-export const fetchMXTCache = () => async(dispatch) => { 
+export const fetchMXTCache = (startDate, endDate) => async(dispatch) => { 
     const token = await AuthHandle.getToken()
+    console.log("FROM MXT CAHCE" + startDate + endDate);
     console.log(token)
-    fetch(url + mxtEnd, {
+    fetch(url + mxtEnd + "?" + new URLSearchParams({
+            startDate: startDate,
+            endDate: endDate,
+        }), {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -46,8 +51,24 @@ export const fetchMXTCache = () => async(dispatch) => {
     })
 }
 
+export const setMXTStream = mxtstream => async(dispatch) => { 
+    console.log("SETTTING");
+    dispatch({
+        type: SET_MXT_STREAM,
+        payload: mxtstream 
+    })
+}
+
+export const setDateRange = dateRange => async(dispatch) => { 
+    console.log("SETTTING DATE RANGE");
+    console.log(dateRange);
+    dispatch({
+        type: SET_DATE_RANGE,
+        payload: dateRange 
+    })
+}
+
 export const transcribeHandshake = async () => {
-    console.log("DDDDDDDDDDDDDAAAAAAAAAAAAAAAAA");
     const token = ''; // await AuthHandle.getToken()
     function handshake_() {
         return fetch(url + transcribeEnd, {
@@ -111,9 +132,12 @@ export const selectMemory = memory => dispatch => {
     })
 }
 
-export const getTags = () => async(dispatch) => {
+export const getTags = (startDate, endDate) => async(dispatch) => {
     const token = await AuthHandle.getToken(); 
-    fetch(url + tagEnd, {
+    fetch(url + tagEnd + "?" + new URLSearchParams({
+            startDate: startDate,
+            endDate: endDate,
+        }), {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -175,24 +199,26 @@ export const createTag = tag => async(dispatch) => {
     })   
 }
 
-export const downloadAction = async () => {
+export const downloadAction = async (startDate, endDate) => {
     var start = 1999; //info.start;
     var end = 2020; //info.end;
+    var saveAs = require('file-saver');
     const token = await AuthHandle.getToken()
-    fetch(url + downloadEnd, {
-        method: 'POST',
+    fetch(url + downloadEnd + "?" + new URLSearchParams({
+            startDate: startDate,
+            endDate: endDate,
+        }), {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
 	    },
-        body: JSON.stringify({ 
-            "start" : start,
-            "end" : end
-        })
     })
 	.then(res => {
-        console.log(res);
-        return res;
-        })
+        const filename = res.headers.get('Content-Disposition').split(';')[1].split('filename')[1].split('=')[1].trim().replace(/"/g, "");
+        console.log(filename);
+        res.blob().then(blob => saveAs(blob, filename)); 
+    }
+    )
 }

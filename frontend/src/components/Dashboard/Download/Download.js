@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import MicrophoneStream from 'microphone-stream';
 import getUserMedia from 'get-user-media-promise';
 import { transcribeHandshake, transcribe, transcribeSubmit, downloadAction } from '../../../actions/dashboardActions'
@@ -33,7 +34,7 @@ function str_splice(main, sub, at = undefined) {
 		+ (at === undefined || at === null ? '' : main.slice(at));
 }
 
-export default class extends Component {
+class Download extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -51,15 +52,19 @@ export default class extends Component {
 		};
 		
 		this.input_ref = React.createRef();
+
+        this.downloadFiles = this.downloadFiles.bind(this);
 	}
 
     downloadFiles(){
-        console.log("WE ARE DOWNLODING");
-        var info = {};
-        info.start = 1999;
-        info.end = 2020;
-        downloadAction();
-        console.log("ALL RUN");
+        if (this.props.dateRange[0] != null){
+            var startDate = this.props.dateRange[0].startDate.getTime() / 1000;
+            var endDate = this.props.dateRange[0].endDate.getTime() / 1000;
+            downloadAction(startDate, endDate);
+        } else {
+            downloadAction(null, null);
+        }
+
     }
 
     render = () => <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start" m={2}>
@@ -70,10 +75,21 @@ export default class extends Component {
                 onClick={this.downloadFiles}
                 >
             <GetAppIcon />
-            <Typography variant="body2"></Typography>
+            <Box ml={1}>
+        <Typography color="primary" variant="body2">Download.</Typography></Box>
           </IconButton>
         </Box>
             
-        <Box order={2} mr={2}><Typography variant="body2">Download.</Typography></Box>
 	</Box>
 }
+
+const mapStateToProps = state => ({
+    dateRange: state.dashboard.dateRange
+})
+
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Download)
