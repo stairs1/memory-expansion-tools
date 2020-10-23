@@ -1,0 +1,49 @@
+#this looks fucked, but we have the upstream and the fake route because of the old nginx bug that doesn't allow for try_files and alias in the same server block
+#bug: https://trac.nginx.org/nginx/ticket/97
+#sneaky solution: https://stackoverflow.com/questions/34971191/nginx-alias-and-try-files-to-subfolder-doesnt-work (answer by Richard Smith)
+
+upstream mxt.fake {
+    server 127.0.0.1;
+
+}
+
+server {
+	# SSL configuration
+	#
+	listen 443 ssl default_server;
+	listen [::]:443 ssl default_server;
+	ssl_certificate     /etc/ssl/certs/fullchain.pem;
+	ssl_certificate_key /etc/ssl/certs/privkey.pem;
+	
+	server_name memorux.com;
+	index index.html index.htm;
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		root /var/www/html;
+		try_files $uri $uri/ =404;
+	}
+
+
+	location /mxt/ {
+		proxy_pass http://mxt.fake/;
+	}
+}
+
+server {
+	server_name mxt.fake;
+	root /var/www/html/mxt/frontend/build/;
+
+	location /api/ {
+	    proxy_pass  https://127.0.0.1:1337/;
+	}
+
+	location / {
+		try_files $uri /index.html;
+	}
+
+}
+
+	
+

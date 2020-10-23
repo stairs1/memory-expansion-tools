@@ -1,9 +1,0 @@
-.sticky-title{
-    top: 0px; 
-    width: 100%;
-    background-color: #eee;
-    height: 4em; 
-    position: -webkit-sticky;
-    position: sticky;
-    z-index: 1;
-}

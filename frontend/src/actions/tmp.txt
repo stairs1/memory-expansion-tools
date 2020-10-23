@@ -1,0 +1,23 @@
+seminar style course
+    -readings, students present what they learn, think about, develop
+    -professor orechestrating the students
+    -graded on it
+-talk slides -> HTML 5
+-camera with oscilloscope background
+-camera pointed at the green screen
+-overhead camera pointed down at the white table
+
+-make one camera in multiple scenes -> OBS
+
+-SWIM invention
+-how
+
+Furness
+
+-current work - supercockpit for the mind
+
+
+-need to record meetings/interviews -> Jitsi/Zoom
+-make it easy for people
+
+-Tom Furness, Rosalind Picard, Ray Kurzweil, Paul Travers, Steven Lake, Thad Starner, Bradley Rhodes,:w

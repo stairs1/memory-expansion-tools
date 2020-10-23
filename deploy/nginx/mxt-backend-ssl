@@ -1,0 +1,16 @@
+server {
+	listen 1337 ssl;
+	listen [::]:1337 ssl;
+	server_name memorux.com www.memorux.com;
+	ssl_certificate     /etc/ssl/certs/fullchain.pem;
+	ssl_certificate_key /etc/ssl/certs/privkey.pem;
+
+	location / {
+		include proxy_params;
+		proxy_http_version 1.1;
+		proxy_buffering off;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "Upgrade";
+		proxy_pass http://unix:/var/www/html/mxt/backend/mxt.sock;
+	}
+}
