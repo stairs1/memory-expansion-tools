@@ -1,9 +1,13 @@
 package com.memoryexpansiontools.mxt;
+import com.fxn.Bubble;
+import com.fxn.BubbleTabBar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,114 +16,127 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.memoryexpansiontools.mxt.CacheActivity;
+import com.fxn.OnBubbleClickListener;
+import com.google.android.material.navigation.NavigationView;
+import com.memoryexpansiontools.mxt.CacheFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener{
+public class MainActivity extends AppCompatActivity {
 
-    public static final int NEW_PHRASE_ACTIVITY_REQUEST_CODE = 1;
-    public static final int VIEW_PHRASE_ACTIVITY_REQUEST_CODE = 2;
-    public static final int SETTINGS_ACTIVITY_REQUEST_CODE = 2;
-    public static final int LOGIN_ACTIVITY_REQUEST_CODE = 3;
-    public static final int CACHE_ACTIVITY_REQUEST_CODE = 4; //I don't know what these are for yet but this looks cool
+    //bottom app bar ids
+    public static final int stream_id = 2131296489;
+    public static final int cache_id = 2131296332;
+    public static final int tags_id = 2131296505;
+    public static final int account_id = 2131296404;
+    public static final int settings_id = 2131296469;
 
     public static final String LOG_TAG = MainActivity.class.getName();
 
     public static int loginCount = 0;
+    public Integer menu_state; //ave the state of the bubble menu (bottom menu)
 
     private PhraseViewModel mPhraseViewModel;
 
-    @Override
-    public void onClick(View view, Phrase phrase){
-        Intent intent = new Intent(MainActivity.this, ViewPhraseActivity.class);
-        intent.putExtra("phrase", phrase.getId());
-        startActivityForResult(intent, VIEW_PHRASE_ACTIVITY_REQUEST_CODE);
-    }
+    private AppBarConfiguration mAppBarConfiguration;
+
+    private BubbleTabBar bbtb;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.main_actionbar, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-
-        Context mContext = this.getApplicationContext();
-        ConstraintLayout loginLayout = (ConstraintLayout) findViewById(R.id.mainlayout);
-
-        switch(item.getItemId()){
-            case R.id.action_settings:
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST_CODE);
-                return true;
-            case R.id.login:
-                Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(logIntent, LOGIN_ACTIVITY_REQUEST_CODE);
-                loginCount++;
-                return true;
-            case R.id.cache:
-                Intent cacheIntent = new Intent(MainActivity.this, CacheActivity.class);
-                startActivityForResult(cacheIntent, CACHE_ACTIVITY_REQUEST_CODE);
-                return true;
-            default: return super.onOptionsItemSelected(item);
-        }
+    public void onBackPressed() {
+        Log.d("cayden", "I will never execute and you will never see me :(");
+        super.onBackPressed();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
-        final PhraseListAdapter adapter = new PhraseListAdapter(this);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() -1);
+        //go back to the last page we were on if this is waking back up
+        if (menu_state != null){
+        }
 
         TranscriptionManager.wakeup(this);
 
-        // Get a new or existing ViewModel from the ViewModelProvider.
-        mPhraseViewModel = new ViewModelProvider(this).get(PhraseViewModel.class);
+        //bottom tab bar setup
 
-        mPhraseViewModel.getAllPhrases().observe(this, new Observer<List<Phrase>>() {
-            @Override
-            public void onChanged(@Nullable final List<Phrase> phrases) {
-                // Update the cached copy of the words in the adapter.
-                adapter.setPhrases(phrases);
-            }
-        });
-
-        EditText editText = findViewById(R.id.add_phrase_text);
-        Button submitButton = findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String words = editText.getText().toString();
-                if(!words.isEmpty()) {
-                    editText.setText("");
-                    mPhraseViewModel.addPhrase(words, getString(R.string.medium_text));
+        bbtb = findViewById(R.id.bubbleTabBar);
+        Activity act = this;
+        bbtb.addBubbleListener(new OnBubbleClickListener() {
+            public void onBubbleClick(int id){
+                Intent intent;
+                final NavController navController;
+                menu_state = id;
+                navController = Navigation.findNavController(act, R.id.nav_host_fragment);
+                Bubble o = findViewById(id);
+                Log.d("cayden lv", o.toString());
+                Log.d("cayden lv", o.getItem().toString());
+                String choice = o.getItem().getTitle().toString();
+                switch(choice){
+                    case "Stream":
+                        Log.d("cayden", "stream");
+                        navController.navigate(R.id.nav_stream);
+                        break;
+                    case "Cache":
+                        Log.d("cayden", "cache");
+                        navController.navigate(R.id.nav_cache);
+                        break;
+                    case "Tags":
+                        Log.d("cayden", "tags");
+                        navController.navigate(R.id.nav_tags);
+                        break;
+                    case "Account":
+                        Log.d("cayden", "account");
+                        navController.navigate(R.id.nav_login);
+                        break;
+                    case "Settings":
+                        Log.d("cayden", "settings");
+                        navController.navigate(R.id.nav_new_settings);
                 }
+                Log.d("cayden", Integer.toString(id));
             }
         });
 
+
+        //NavigationView navigationView = findViewById(R.id.nav_view); //get the navigation view, which is the hamburger menu slide out page
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_stream, R.id.nav_cache, R.id.nav_login, R.id.nav_new_settings, R.id.nav_tags)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        //NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putInt("page", menu_state);
     }
 }
