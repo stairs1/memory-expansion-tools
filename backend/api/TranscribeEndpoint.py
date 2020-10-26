@@ -7,9 +7,6 @@ class Transcribe(Resource):
     def __init__(self, sessions, transcriber):
         self.sessions = sessions
         self.transcriber = transcriber
-        #audio and transcription globals
-        self.sf_i = 48000 #incoming sampling frequency
-        self.sf_ds = 16000 #deep speech sampling frequency
 
     def parse_transcribe_request(self, raw_req):
         #parse incoming byte string
@@ -22,10 +19,9 @@ class Transcribe(Resource):
         return data, idx, session_id
 
     def get_transcript(self, buf, ds):
-        #get transcript
-        #resample to 16kHz from provided sampling rate
-        ds_buf = self.transcriber.resample(buf, self.sf_i)
-        transcript = self.transcriber.get_transcribe(ds_buf, ds)
+        # get transcript
+        # client already resampled to 16kHz from provided sampling rate already
+        transcript = self.transcriber.get_transcribe(buf, ds)
         return transcript
 
     def post(self):

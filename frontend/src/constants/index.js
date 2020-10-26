@@ -23,4 +23,5 @@ export const API_KEY = 'AIzaSyDrF-e0TO_qHQ1HTokpiZlHSarRz2mlnds'
 
 // transcription options
 export const CHUNK_PERIOD = 1.2;
+export const TARGET_RATE = 16E3;
 export const DEFAULT_MICSTREAM_FORMAT = { channels: 1, bitDepth: 32, sampleRate: 44100, signed: true, float: true };
