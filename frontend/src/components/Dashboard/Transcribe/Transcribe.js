@@ -6,6 +6,7 @@ import { createBrowserHistory } from 'history'
 import { Box, FormControl, TextField, Button, ButtonBase, Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MicIcon from '@material-ui/icons/Mic';
+import { CHUNK_PERIOD, TARGET_TRANSCRIBE_RATE } from '../../../constants/index';
 
 const history = createBrowserHistory();
 
@@ -99,7 +100,6 @@ export default class extends Component {
 		const mic_stream_ = new MicrophoneStream();
 		
 		// [STATE MACHINE]
-		const CHUNK_PERIOD = 1.2; // # seconds per chunk
 		let format = { channels: 1, bitDepth: 32, sampleRate: 44100, signed: true, float: true };
 		let data_chunk = [];
 		getUserMedia({ video: false, audio: true })
@@ -116,7 +116,11 @@ export default class extends Component {
 					// TODO may want to delay view changes until after the session ID is resolved (or error'd)
 					data_chunk.push.apply(data_chunk, MicrophoneStream.toRaw(data_));
 					if(data_chunk.length > format.sampleRate * CHUNK_PERIOD) {
-						const data_chunk_stash = data_chunk.map(d => d * (1 << 15));
+						const data_chunk_stash = [];
+						for(let i = 0.0; i < data_chunk.length; i += format.sampleRate / TARGET_RATE) {
+							data_chunk_stash.push(data_chunk[parseInt(i)] * (1 << 15));
+						}
+						// const data_chunk_stash = data_chunk.map(d => d * (1 << 15)).filter((_, i));
 						data_chunk = [];
 						this.setState(({ mic_idx }) => {
 							const stash_idx = mic_idx.idx + 1;
