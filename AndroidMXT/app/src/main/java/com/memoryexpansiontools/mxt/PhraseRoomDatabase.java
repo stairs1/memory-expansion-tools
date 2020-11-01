@@ -29,4 +29,5 @@ public abstract class PhraseRoomDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
 }

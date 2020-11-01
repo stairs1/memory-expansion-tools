@@ -10,6 +10,7 @@
     <string name="medium_spoken">spoken</string>
     <string name="cache">cache</string>
     <string name="stream">stream</string>
+    <string name="memory_hint">Enter memory to save here</string>
 
     <!-- Preference Titles -->
     <string name="data_streams_header">Data Streams</string>
@@ -37,11 +38,14 @@
     <!-- User -->
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="login_message">Welcome to your Expanded Memory. Please log in.</string>
+    <string name="login_message">Welcome to Memory Expansion Tools. Please log in.</string>
     <string name="alreadylogin_message">You are already logged in. Log in again to change accounts.</string>
     <string name="signup_message">If you don\'t have an account, sign up at memoryexpansiontools.com.</string>
 
     <!-- Wearables Preferences -->
     <string name="bluetooth_headset">Bluetooth Headset</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

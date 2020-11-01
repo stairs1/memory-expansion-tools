@@ -1,0 +1,26 @@
+.feedback-input {
+  color:black;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight:500;
+  font-size: 18px;
+  border-radius: 5px;
+  line-height: 22px;
+  background-color: transparent;
+  border:2px solid #222222;
+  transition: all 0.3s;
+  padding: 13px;
+  margin-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  width:100%;
+  box-sizing: border-box;
+  outline:0;
+}
+
+.feedback-input:focus { border:2px solid #CC4949; }
+
+textarea {
+  height: 150px;
+  line-height: 150%;
+  resize:vertical;
+}

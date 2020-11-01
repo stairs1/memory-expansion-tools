@@ -64,11 +64,8 @@ Download from the Google Play Store <https://play.google.com/store/apps/details?
 This has only been run/tested on an Ubuntu 18.04 LTS box.  
 #### Apache Setup  
 
--Install and configure apache2  
--Setup SSL with certbot - <https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04> 
--create a new virtualhost for same using something like the sam-apache.conf in the /server directory. Point to the WSGI file given here in the root / as sam.wsgi  
--enable the site with `a2ensite <name>`  
--restart apache with `sudo systemctl restart apache2`  
+- running on gunicorn, gevent, and nginx
+- see deploy folder for info
 
 #### Flask Setup
 -install Python3  
@@ -81,6 +78,11 @@ pip3 install virtualenv; python3 -m virtualenv venv; source venv/bin/activate
 ```  
 pip3 install -r requirements.txt
 ```  
+-need deepspeech v0.8.2 scorer and pbmm models
+    - download here: 
+        - https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.scorer
+        - https://github.com/mozilla/DeepSpeech/releases/download/v0.8.2/deepspeech-0.8.2-models.pbmm
+    - put in /web/backend/libs
 
 #### Mongo Setup
 

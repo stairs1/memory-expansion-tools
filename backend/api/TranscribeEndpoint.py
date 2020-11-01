@@ -1,0 +1,42 @@
+from flask_restful import Resource
+from flask import request
+import time
+import struct
+
+class Transcribe(Resource):
+    def __init__(self, sessions, transcriber):
+        self.sessions = sessions
+        self.transcriber = transcriber
+
+    def parse_transcribe_request(self, raw_req):
+        #parse incoming byte string
+        len_buf = len(raw_req) // 2
+        format_string = "<{}h".format(len_buf)
+        buf = struct.unpack_from(format_string, raw_req, offset=0)
+        data = buf[:-2]
+        idx = buf[-2]
+        session_id = buf[-1]
+        return data, idx, session_id
+
+    def get_transcript(self, buf, ds):
+        # get transcript
+        # client already resampled to 16kHz from provided sampling rate already
+        transcript = self.transcriber.get_transcribe(buf, ds)
+        return transcript
+
+    def post(self):
+        #get the datastream from the body, parse it, add it to the deepspeech stream, get a transcription, and send the trasncription back to the user
+        data, idx, session_id = self.parse_transcribe_request(request.data)
+        transcript = self.get_transcript(data, self.sessions[session_id]["ds"])
+        self.sessions[session_id]["last_timestamp"] = time.time()
+        return {"transcript" : transcript} #send the latest transcript text
+
+    def get(self):
+        #create a new session id for this request, as well as new deepspeech stream (which will be closed on timeout of when the user sends a session close ping)
+        session_id = (self.sessions["last_used_id"] + 1) % 65536 #get the last used id incremented by one (wrap around mod)
+        self.sessions["last_used_id"] += 1 #increment that last used id
+        self.sessions[session_id] = dict()
+        self.sessions[session_id]["ds"] = self.transcriber.new_stream()
+        self.sessions[session_id]["last_timestamp"] = time.time()
+        print(self.sessions)
+        return {"session_id" : session_id}

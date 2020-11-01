@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="stream" type="id"/>
+    <item name="cache" type="id"/>
+    <item name="tags" type="id"/>
+    <item name="account" type="id"/>
+    <item name="settings" type="id"/>
+</resources>

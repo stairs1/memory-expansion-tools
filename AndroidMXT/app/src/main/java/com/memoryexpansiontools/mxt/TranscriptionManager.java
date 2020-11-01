@@ -55,7 +55,7 @@ public class TranscriptionManager {
             // check for permissions, and if gone, set transcription and headset preferences to off.
             // This prevents the app from entering a broken state when permissions
             // are revoked from settings.
-            if(!SettingsActivity.SettingsFragment.checkPerms(context)){
+            if(!SettingsFragment.SubSettingsFragment.checkPerms(context)){
                 prefs.edit().putBoolean("transcribe", false).commit();
                 prefs.edit().putBoolean("bluetooth_headset", false).commit();
                 stopTranscriptionOnHeadset();

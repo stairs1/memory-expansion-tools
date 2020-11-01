@@ -1,0 +1,91 @@
+/* React adding an unneccassary div that needs to be styled as such for an subsequent child styling to work */
+.position-relative > div{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.container-fluid{
+    padding-top: 56px;
+    border-right: 1em solid #bd3a1b;
+    border-left: 1.5em solid #bd3a1b;
+    border-top: 1.5em solid #bd3a1b;
+    border-bottom: 1em solid #bd3a1b;
+    background-color: #bd3a1b;
+}
+
+#map-container{
+    height: 70vh !important;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+}
+
+.left-blur{
+    -webkit-box-shadow: -12px 2px 14px -10px rgba(0,0,0,0.7);
+    -moz-box-shadow: -12px 2px 14px -10px rgba(0,0,0,0.7);
+    box-shadow: -12px 2px 14px -10px rgba(0,0,0,0.7);
+}
+
+.right-blur{
+    -webkit-box-shadow: 12px 2px 14px -10px rgba(0,0,0,0.7);
+    -moz-box-shadow: 12px 2px 14px -10px rgba(0,0,0,0.7);
+    box-shadow: 12px 2px 14px -10px rgba(0,0,0,0.7);
+}
+
+.dashboard-container{
+    height: 70vh;
+    overflow-y: scroll;
+    /* border: 0.75em solid #93331a; */
+    overflow-x: hidden;
+    background-color: #eee;
+    outline: 1px solid #222;
+}
+
+.transcribe-row { 
+    position: fixed; 
+    padding: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 2px solid black;
+    box-shadow: 0 0 8px #474747;
+
+}
+
+.bottom-row {
+    display: flex;
+    position: fixed; 
+    padding: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 2px solid black;
+    box-shadow: 0 0 8px #474747;
+}
+
+.transcribe-child {
+    flex-grow: 90;
+}
+
+.download-child {
+    flex-grow: 0.01;
+}
+
+
+.spacer{
+    height: 80px;
+}
+
+@media only screen and (max-width: 992px) {
+    .dashboard-container{
+        height: unset;
+        border: 1px solid #bd3a1b;
+        outline: none;
+    }
+
+    .container-fluid{
+        padding-right: none;
+        border-right: 0;
+        border-left: 0;
+    }
+}

@@ -1,0 +1,8 @@
+export const SEARCH_MEMORIES = 'SEARCH_MEMORIES'
+export const FETCH_MXT_CACHE = 'FETCH_MXT_CACHE'
+export const SET_MXT_STREAM = 'SET_MXT_STREAM'
+export const SET_DATE_RANGE = 'SET_DATE_RANGE'
+export const SELECT_MEMORY = 'SELECT_MEMORY'
+export const GET_TAGS = 'GET_TAGS'
+export const ADD_TAG = 'ADD_TAG'
+export const DELETE_TAG = 'DELETE_TAG'

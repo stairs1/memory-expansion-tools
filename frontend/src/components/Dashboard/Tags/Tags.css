@@ -1,0 +1,6 @@
+.bin {
+    border: solid 1px black;
+    border-radius: 5px;
+    background: #ebebeb;
+    box-shadow: 15 15 5px #474747;
+}
