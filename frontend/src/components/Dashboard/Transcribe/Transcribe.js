@@ -117,7 +117,7 @@ export default class extends Component {
 					data_chunk.push.apply(data_chunk, MicrophoneStream.toRaw(data_));
 					if(data_chunk.length > format.sampleRate * CHUNK_PERIOD) {
 						const data_chunk_stash = [];
-						for(let i = 0.0; i < data_chunk.length; i += format.sampleRate / TARGET_RATE) {
+						for(let i = 0.0; i < data_chunk.length; i += format.sampleRate / TARGET_TRANSCRIBE_RATE) {
 							data_chunk_stash.push(data_chunk[parseInt(i)] * (1 << 15));
 						}
 						// const data_chunk_stash = data_chunk.map(d => d * (1 << 15)).filter((_, i));

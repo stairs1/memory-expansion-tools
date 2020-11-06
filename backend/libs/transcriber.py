@@ -5,6 +5,8 @@ import threading
 from scipy import signal
 import pathlib
 import os
+import struct
+import time
 
 class Buf:
     """
@@ -35,6 +37,10 @@ class Buf:
         print("SYNCLIST: ")
         print(self.synclist)
         print(self.last_idx)
+        for idx in self.synclist:
+            with open("latestaudio.raw", "ba+") as f:
+                b_data = struct.pack("<{}h".format(len(self.data[idx])), *self.data[idx])
+                f.write(b_data)
         if self.synclist[0] == (self.last_idx + 1): #if the smallest chunk id is one greater than the last sent chunk
             synced_chunks = [self.data[self.synclist[0]]]
             for i, nxt_chunk in enumerate(self.synclist[1:]):
@@ -49,6 +55,8 @@ class Buf:
             #update the last synced holder
             self.last_idx += len(synced_chunks)
             #return the latest synced up audio chunks
+            print("Len of synced_chunks is {}".format(len(synced_chunks)))
+            print("Len of one synced_chunks is {}".format(len(synced_chunks[0])))
             return synced_chunks
         return None
 
@@ -58,12 +66,24 @@ class Transcriber:
 
     A wrapper around the deepspeech stream class which allows for audio buffering, state saving, more efficient transcription (only transcribe where there is new data), etc. The most import part is the buffer: which is implement in the Buf class
             """
-    def __init__(self, model=None):
+    def __init__(self, model=None, scorer=None):
         self.RATE_PROCESS = 16000 #16kHz sf for deepspeech open official model
         self.new = False #is there new audio to transcribe?
         self.transcribe = "" #hold the current transcription
         self.buf = Buf() #create a new buffer to hold audio frames while syncing, and pass it back to caller
-        self.stream = model.createStream() #new deepspeech stream
+        if model is None:
+            path = pathlib.Path(__file__).parent.absolute()
+            model_path = os.path.join(path, "./deepspeech-0.8.2-models.pbmm")
+            self.model = deepspeech.Model(model_path)
+        else:
+            self.model = deepspeech.Model(model)
+        if scorer is None:
+            path = pathlib.Path(__file__).parent.absolute()
+            scorer_path = os.path.join(path, "./deepspeech-0.8.2-models.scorer")
+            self.model.enableExternalScorer(scorer_path)
+        else:
+            self.model.enableExternalScorer(scorer)
+        self.stream = self.model.createStream() #new deepspeech stream
             
     #resamples audio if to 16kHz for deepspeech, if needed
     def resample(self, data16, input_rate):
@@ -84,15 +104,22 @@ class Transcriber:
 
     #take audio and a deepspeech stream instance, add the audio to the stream buffer
     def feed_chunk(self, chunk, idx):
+        print("THE TYPE AND LEN OF THE PASSED IN CHUNK IS")
+        print(type(chunk))
+        print(len(chunk))
         #push the latest frames into the buffer, get back any newly synced chunks
         latest_synced_chunks = self.buf.feed_and_pop(chunk, idx)
         #if we have the some new audio that is in order (based on idx) feed that to the deepspeech steram
         if latest_synced_chunks is not None:
             #if we fed new audio, set 'new' to true, so get_transcribe knows to retranscribe
             new = True
-            for chunk in latest_synced_chunks:
+            for new_chunk in latest_synced_chunks:
+                print("THE TYPE AND LEN OF RETURNED CHUNK IS")
+                print(type(new_chunk))
+                print(len(new_chunk))
                 print("feading")
-                self.stream.feedAudioContent(chunk)
+                chunk_resampled = self.resample(new_chunk, 16000)
+                self.stream.feedAudioContent(chunk_resampled)
 
     #get the latest transcription
     def get_transcript(self):
@@ -119,20 +146,8 @@ class TranscribeManager:
         self.sessions["last_used_id"] = -1
         self.wait_time = 20 #amount of seconds to wait before killing a stream
         self.timeout_check_time = 5 #number seconds to check if a stream has gone over its timout time since last action
-        self.timeout() #continues to repeat indefinitly
-        if model is None:
-            path = pathlib.Path(__file__).parent.absolute()
-            model_path = os.path.join(path, "./deepspeech-0.8.2-models.pbmm")
-            self.model = deepspeech.Model(model_path)
-        else:
-            self.model = deepspeech.Model(model)
-        if scorer is None:
-            path = pathlib.Path(__file__).parent.absolute()
-            scorer_path = os.path.join(path, "./deepspeech-0.8.2-models.scorer")
-            self.model.enableExternalScorer(scorer_path)
-        else:
-            self.model.enableExternalScorer(scorer)
-
+        #self.timeout() #continues to repeat indefinitly
+        
     def end_session(self, session_id):
         self.sessions[session_id]["ts"].kill()
         self.sessions.pop(session_id)
@@ -143,7 +158,7 @@ class TranscribeManager:
         session_id = (self.sessions["last_used_id"] + 1) % 65536 #get the last used id incremented by one (wrap around mod)
         self.sessions["last_used_id"] += 1 #increment that last used id
         self.sessions[session_id] = dict()
-        self.sessions[session_id]["ts"] = Transcriber(self.model)
+        self.sessions[session_id]["ts"] = Transcriber()
         self.sessions[session_id]["last_timestamp"] = time.time()
         return session_id
 

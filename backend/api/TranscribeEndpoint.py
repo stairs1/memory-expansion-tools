@@ -15,13 +15,13 @@ class Transcribe(Resource):
         chunk = buf[:-2] #audio chunk
         idx = buf[-2]
         session_id = buf[-1]
-        return data, idx, session_id
+        return chunk, idx, session_id
 
     def post(self):
         print("TRANSCRIBE POST")
         #get the datastream from the body, parse it, add it to the deepspeech stream, get a transcription, and send the trasncription back to the user
         chunk, idx, session_id = self.parse_transcribe_request(request.data)
-        print(idx)
+        print(idx, session_id)
         #give the new audio chunk to the transcrive manager
         self.transcribemanager.feed_audio(chunk, idx, session_id)
         #get latest transcription
