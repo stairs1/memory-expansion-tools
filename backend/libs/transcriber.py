@@ -71,19 +71,7 @@ class Transcriber:
         self.new = False #is there new audio to transcribe?
         self.transcribe = "" #hold the current transcription
         self.buf = Buf() #create a new buffer to hold audio frames while syncing, and pass it back to caller
-        if model is None:
-            path = pathlib.Path(__file__).parent.absolute()
-            model_path = os.path.join(path, "./deepspeech-0.8.2-models.pbmm")
-            self.model = deepspeech.Model(model_path)
-        else:
-            self.model = deepspeech.Model(model)
-        if scorer is None:
-            path = pathlib.Path(__file__).parent.absolute()
-            scorer_path = os.path.join(path, "./deepspeech-0.8.2-models.scorer")
-            self.model.enableExternalScorer(scorer_path)
-        else:
-            self.model.enableExternalScorer(scorer)
-        self.stream = self.model.createStream() #new deepspeech stream
+        self.stream = model.createStream() #new deepspeech stream
             
     #resamples audio if to 16kHz for deepspeech, if needed
     def resample(self, data16, input_rate):
@@ -104,22 +92,15 @@ class Transcriber:
 
     #take audio and a deepspeech stream instance, add the audio to the stream buffer
     def feed_chunk(self, chunk, idx):
-        print("THE TYPE AND LEN OF THE PASSED IN CHUNK IS")
-        print(type(chunk))
-        print(len(chunk))
         #push the latest frames into the buffer, get back any newly synced chunks
         latest_synced_chunks = self.buf.feed_and_pop(chunk, idx)
         #if we have the some new audio that is in order (based on idx) feed that to the deepspeech steram
         if latest_synced_chunks is not None:
             #if we fed new audio, set 'new' to true, so get_transcribe knows to retranscribe
             new = True
-            for new_chunk in latest_synced_chunks:
-                print("THE TYPE AND LEN OF RETURNED CHUNK IS")
-                print(type(new_chunk))
-                print(len(new_chunk))
+            for chunk in latest_synced_chunks:
                 print("feading")
-                chunk_resampled = self.resample(new_chunk, 16000)
-                self.stream.feedAudioContent(chunk_resampled)
+                self.stream.feedAudioContent(chunk)
 
     #get the latest transcription
     def get_transcript(self):
