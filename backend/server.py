@@ -38,7 +38,7 @@ from api.TranscribeEndpoint import Transcribe
 from api.DownloadEndpoint import Download
 
 #custom libs
-from libs.transcriber import Transcriber
+from libs.transcriber import TranscribeManager
 from libs.PhraseUpdate import PhraseSocket
 
 # app setup
@@ -55,10 +55,8 @@ CORS(app)
 
 app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
 
-#hold transcription sessions and the deepspeech model class statefully here, then the endpoint is stateless
-sessions = dict()
-sessions["last_used_id"] = -1
-transcriber = Transcriber(sessions)
+#create the Transcription manager
+transcribemanager = TranscribeManager()
 
 # start/attach everything
 phraseSock = PhraseSocket(app)
@@ -74,7 +72,7 @@ api.add_resource(L3, "/lthree")
 api.add_resource(ToDo, "/todo")
 api.add_resource(Refresh, "/refresh", resource_class_args=[jwt])
 api.add_resource(Recent, "/recent")
-api.add_resource(Transcribe, "/transcribe", resource_class_args=[sessions, transcriber])
+api.add_resource(Transcribe, "/transcribe", resource_class_args=[transcribemanager])
 api.add_resource(Download, "/download", resource_class_args=[app, jwt])
 
 # for dev server
