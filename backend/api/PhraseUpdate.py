@@ -23,7 +23,10 @@ class PhraseSocket:
             print("gang {}".format(phrases))
             phraseResults = list()
             for item in phrases:
-                item["prettyTime"] = datetime.fromtimestamp(item["timestamp"]).strftime(
+                ts = item["timestamp"]
+                if ts > 16048547531: #if timestamp is in milliseconds, turn into seconds
+                    ts = ts / 1000
+                item["prettyTime"] = datetime.fromtimestamp(ts).strftime(
                         "%a, %b %-d %-I:%M %p"
                     )
                 phraseResults.append(item)

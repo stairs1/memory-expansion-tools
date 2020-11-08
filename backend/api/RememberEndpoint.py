@@ -91,8 +91,10 @@ class Remember(Resource):
 
         phrases = self.db.getPhrases(username)
         speech = sentPhrases[0]["speech"]
-        timestamp = self.handleTime(int(sentPhrases[0]["timestamp"]))
-        print(timestamp)
+        timestamp = sentPhrases[0]["timestamp"]
+        if timestamp > 16048547531: #if timestamp is in milliseconds
+            timestamp = timestamp / 1000
+        print("timestamp is {}".format(timestamp))
         stage = self.db.getL1Stage(userId)
 
         # check if it is a command for our working memory (L1) stage

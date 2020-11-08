@@ -77,6 +77,7 @@ api.add_resource(Download, "/download", resource_class_args=[app, jwt])
 
 # for dev server
 def start():
+    app.debug = True
     app.run(debug=True)
 
 if __name__ == "__main__":
