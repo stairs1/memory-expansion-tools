@@ -36,7 +36,6 @@ class Buf:
             synced_chunks = [self.data[self.synclist[0]]]
             for i, nxt_idx in enumerate(self.synclist[1:]):
                 if nxt_chunk == (self.last_idx + i + 2): #keep grabbing chunks if they are sequential after the first one
-                    print("Adding nxt_idx at {}".format(nxt_idx))
                     synced_chunks.append(self.data[nxt_idx])
             #drop these keys from our data holder
             to_drop = self.synclist[:len(synced_chunks)]
@@ -47,18 +46,15 @@ class Buf:
             #update the last synced holder
             self.last_idx += len(synced_chunks)
             #return the latest synced up audio chunks
-            print("Returning {} synced chunks".format(len(synced_chunks)))
             return synced_chunks
         elif (self.synclist[0] + self.max_spacing) < idx: #if the smallest chunk is max_space smaller the last sent chunk, then clear the buffer and resync
                 unsynced_chunks = list()
                 for i, nxt_idx in enumerate(self.synclist):
-                    print("Adding nxt_idx at {}".format(nxt_idx))
                     unsynced_chunks.append(self.data[nxt_idx])
                 #reset our holder to nothing now that we've emptied our buffers
                 self.data = dict()
                 self.last_idx = idx
                 self.synclist = list()
-                print("Flushing {} unsynced chunks".format(len(unsynced_chunks)))
                 return unsynced_chunks
         else: 
             return None
@@ -71,12 +67,14 @@ class Transcriber:
             """
     def __init__(self, model=None):
         self.RATE_PROCESS = 16000 #16kHz sf for deepspeech open official model
+        self.sf_i = 44100
         self.new = False #is there new audio to transcribe?
         self.transcribe_period = 1 #min time to wait to transcribe
         self.recent = 0 #count how recently we've made a transcription, should never transcribe more than self.rate times per second
         self.transcribe = "" #hold the current transcription
         self.buf = Buf() #create a new buffer to hold audio frames while syncing, and pass it back to caller
-        self.stream = model.createStream() #new deepspeech stream
+        self.model = model
+        self.stream = self.model.createStream() #new deepspeech stream
         self.deepspeech_lock = threading.Lock()
             
     #resamples audio if to 16kHz for deepspeech, if needed
@@ -98,37 +96,25 @@ class Transcriber:
 
     #take audio and a deepspeech stream instance, add the audio to the stream buffer
     def feed_chunk(self, chunk, idx):
+        #resample chunk
+        ds_chunk = np.array(chunk, dtype=np.int16)
         #push the latest frames into the buffer, get back any newly synced chunks
-        latest_chunks = self.buf.feed_and_pop(chunk, idx)
+        latest_chunks = self.buf.feed_and_pop(ds_chunk, idx)
         #if we have the some new audio that is in order (based on idx) feed that to the deepspeech steram
         if latest_chunks is not None:
             #if we fed new audio, set 'new' to true, so get_transcribe knows to retranscribe
             self.new = True
             #use multithreading so we can use a Lock/Mutex so we don't call deepspeech functions multiple times, breaking shit
             self.deepspeech_lock.acquire()
-            print("FEED THIS IS WHERE?")
             for new_chunk in latest_chunks:
-                print(len(chunk))
                 self.stream.feedAudioContent(new_chunk)
-            print("FEED THIS IS DONE")
             self.deepspeech_lock.release()
-            #threading.Thread(target=self.feed_ds, args=(latest_chunks,)).start()
 
     #feed chunks to deepspeech stream
     def feed_ds(self, latest_chunks):
         self.deepspeech_lock.acquire()
-        print("FEED THIS IS WHERE?")
         for chunk in latest_chunks:
             self.stream.feedAudioContent(chunk)
-        print("FEED THIS IS DONE")
-        self.deepspeech_lock.release()
-
-    #get transcript deepspeech stream
-    def get_ds(self):
-        self.deepspeech_lock.acquire()
-        print("GET THIS IS WHERE?")
-        self.transcribe = self.stream.intermediateDecode()
-        print("GET THIS IS DONE")
         self.deepspeech_lock.release()
 
     #get the latest transcription
@@ -138,13 +124,8 @@ class Transcriber:
             self.recent = time.time()
             #use multithreading so we can use a Lock/Mutex so we don't call deepspeech functions multiple times, breaking shit
             self.deepspeech_lock.acquire()
-            print("GET THIS IS WHERE?")
             self.transcribe = self.stream.intermediateDecode()
-            print("GET THIS IS DONE")
             self.deepspeech_lock.release()
-#            t1 = threading.Thread(target=self.get_ds)
-#            t1.start()
-#            t1.join()
         return self.transcribe
 
     def kill(self):
@@ -178,7 +159,6 @@ class TranscribeManager:
             self.model.enableExternalScorer(scorer_path)
         else:
             self.model.enableExternalScorer(scorer)
-        print("SF IS {}".format(self.model.sampleRate()))
 
     def end_session(self, session_id):
         self.sessions[session_id]["ts"].kill()
@@ -198,7 +178,6 @@ class TranscribeManager:
         """
         Give the audio chunk to the appropriate Transcriber
         """
-        print("FEED AUDIO")
         self.sessions[session_id]["last_timestamp"] = time.time()
         self.sessions[session_id]["ts"].feed_chunk(chunk, idx)
 
@@ -207,7 +186,6 @@ class TranscribeManager:
         Get the latest transcript from the appropriate Transcriber
         """
         transcript = self.sessions[session_id]["ts"].get_transcript()
-        print("GETTING TRANSCRPTIPT, IT IS '{}'".format(transcript))
         return transcript
 
     def timeout(self):
