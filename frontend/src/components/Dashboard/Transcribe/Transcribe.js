@@ -169,6 +169,8 @@ export default class extends Component {
                 //if we are turning off transcrption, we want to add a space to the end so user can start typing easily
 				next_transcript_head = str_splice(transcript_head, transcript_buf + ' ', input_pos_stash);
 				next_input_pos += transcript_buf.length + 1; //+1 for the space added at the end
+                //if turning off transcription, also want to reset our mix indices
+                this.setState({ mic_idx: { idx: 0, rx_idx: 0 } });
 				break;
 			case false:
 				// mic about to go live: stash current position

@@ -18,10 +18,8 @@ class Transcribe(Resource):
         return chunk, idx, session_id
 
     def post(self):
-        print("TRANSCRIBE POST")
         #get the datastream from the body, parse it, add it to the deepspeech stream, get a transcription, and send the trasncription back to the user
         chunk, idx, session_id = self.parse_transcribe_request(request.data)
-        print("LEN OF CHUNK IN POST IS {}".format(len(chunk)))
         #give the new audio chunk to the transcrive manager
         self.transcribemanager.feed_audio(chunk, idx, session_id)
         #get latest transcription
@@ -29,7 +27,5 @@ class Transcribe(Resource):
         return {"transcript" : transcript} #send the latest transcript text
 
     def get(self):
-        print("START TRANCRIVE SESSIONS")
         session_id = self.transcribemanager.new_session()
-        print(session_id)
         return {"session_id" : session_id}

@@ -2,6 +2,7 @@ from transcriber import TranscribeManager
 import pyaudio
 import threading, collections, queue, os, os.path
 import numpy as np
+from scipy import signal
 
 class Audio(object):
     """Streams raw audio from microphone. Data is received in a separate thread, and stored in a buffer, to be read from."""
@@ -109,7 +110,7 @@ def main():
     session_id = tm.new_session()
 
     #get audio locally from mic and feed it to the manager, which will feed it to the session stream
-    audio = Audio(input_rate=16000)
+    audio = Audio(input_rate=44100)
     print("Listening (ctrl-C to exit)...")
     
     frames = audio.frame_generator()
@@ -119,7 +120,7 @@ def main():
         count += 1
         chunk = np.frombuffer(frame, np.int16)
         tm.feed_audio(chunk, count, session_id)
-        if count % 50 == 0:
+        if count % 1 == 0:
             result = tm.get_transcript(session_id)
             print("Transcript is : {}".format(result))
 

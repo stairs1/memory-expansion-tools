@@ -29,6 +29,7 @@ class Buf:
         If this new chunk makes a sequence of gapless audio chunks, return the chunks that are in order, and drop them.
         Or, it this makes the number of chunks in the queue since last gap greater than the max spacing, return data and drop it.
         """
+        print("chunk idx: {}".format(idx))
         self.data[idx] = chunk
         self.synclist.append(idx)
         self.synclist = sorted(self.synclist)
@@ -107,7 +108,11 @@ class Transcriber:
             #use multithreading so we can use a Lock/Mutex so we don't call deepspeech functions multiple times, breaking shit
             self.deepspeech_lock.acquire()
             for new_chunk in latest_chunks:
-                self.stream.feedAudioContent(new_chunk)
+                #feed in sub chunk that are smaller so deepspeech doesn't kill itself (OOM?... I don't know -Cayden)
+                sub_chunk_size = 320
+                for i, _ in enumerate(new_chunk[::sub_chunk_size]):
+                    sub_chunk = new_chunk[i*sub_chunk_size:(i*sub_chunk_size)+sub_chunk_size]
+                    self.stream.feedAudioContent(sub_chunk)
             self.deepspeech_lock.release()
 
     #feed chunks to deepspeech stream
