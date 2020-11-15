@@ -36,7 +36,7 @@ class Buf:
         if self.synclist[0] == (self.last_idx + 1): #if the smallest chunk id is one greater than the last sent chunk
             synced_chunks = [self.data[self.synclist[0]]]
             for i, nxt_idx in enumerate(self.synclist[1:]):
-                if nxt_chunk == (self.last_idx + i + 2): #keep grabbing chunks if they are sequential after the first one
+                if nxt_idx == (self.last_idx + i + 2): #keep grabbing chunks if they are sequential after the first one
                     synced_chunks.append(self.data[nxt_idx])
             #drop these keys from our data holder
             to_drop = self.synclist[:len(synced_chunks)]
@@ -109,7 +109,7 @@ class Transcriber:
             self.deepspeech_lock.acquire()
             for new_chunk in latest_chunks:
                 #feed in sub chunk that are smaller so deepspeech doesn't kill itself (OOM?... I don't know -Cayden)
-                sub_chunk_size = 320
+                sub_chunk_size = 1600 
                 for i, _ in enumerate(new_chunk[::sub_chunk_size]):
                     sub_chunk = new_chunk[i*sub_chunk_size:(i*sub_chunk_size)+sub_chunk_size]
                     self.stream.feedAudioContent(sub_chunk)
