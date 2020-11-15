@@ -3,7 +3,6 @@ import { url, mxtEnd, searchEnd, tagEnd, transcribeEnd, newNoteEnd, downloadEnd 
 import AuthHandle from "../components/AuthHandler";
 
 export const searchMemories = query => async(dispatch) => {
-    console.log("DDDDDDDDDDDDDAAAAAAAAAAAAAAAAA");
     const token = await AuthHandle.getToken()
     fetch(url + searchEnd, {
         method: 'POST',
@@ -29,8 +28,6 @@ export const searchMemories = query => async(dispatch) => {
 
 export const fetchMXTCache = (startDate, endDate) => async(dispatch) => { 
     const token = await AuthHandle.getToken()
-    console.log("FROM MXT CAHCE" + startDate + endDate);
-    console.log(token)
     fetch(url + mxtEnd + "?" + new URLSearchParams({
             startDate: startDate,
             endDate: endDate,

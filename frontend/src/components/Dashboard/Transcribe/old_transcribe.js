@@ -6,7 +6,6 @@ import { createBrowserHistory } from 'history'
 import { Box, FormControl, TextField, Button, ButtonBase, Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MicIcon from '@material-ui/icons/Mic';
-import { CHUNK_PERIOD, TARGET_TRANSCRIBE_RATE } from '../../../constants/index';
 
 const history = createBrowserHistory();
 
@@ -83,12 +82,12 @@ export default class extends Component {
 				const stash_idx = session_idx.idx + 1;
 				transcribeHandshake()
 					.then(session => this.setState(st => {
-						if(st.session_idx.rx_idx <= stash_idx) {
+						if(st.session_idx.idx === stash_idx) {
 							const mic_stream = st.mic_stream || this.mk_mic_stream();
 							return {
 								session: session.session_id,
 								mic_stream,
-								session_idx: Object.assign(st.session_idx, { rx_idx: stash_idx }) // also possibly st.session_idx.idx since the responses are delayed anyways so the mic start timing isn't really critical. `stash_idx` as it is now is just clearer.
+								session_idx: Object.assign(st.session_idx, { rx_idx: st.session_idx.idx })
 							};
 						}
 					}));
@@ -100,6 +99,7 @@ export default class extends Component {
 		const mic_stream_ = new MicrophoneStream();
 		
 		// [STATE MACHINE]
+		const CHUNK_PERIOD = 1.2; // # seconds per chunk
 		let format = { channels: 1, bitDepth: 32, sampleRate: 44100, signed: true, float: true };
 		let data_chunk = [];
 		getUserMedia({ video: false, audio: true })
@@ -116,21 +116,17 @@ export default class extends Component {
 					// TODO may want to delay view changes until after the session ID is resolved (or error'd)
 					data_chunk.push.apply(data_chunk, MicrophoneStream.toRaw(data_));
 					if(data_chunk.length > format.sampleRate * CHUNK_PERIOD) {
-						const data_chunk_stash = [];
-						for(let i = 0.0; i < data_chunk.length; i += format.sampleRate / TARGET_TRANSCRIBE_RATE) {
-							data_chunk_stash.push(data_chunk[parseInt(i)] * (1 << 15));
-						}
-						// const data_chunk_stash = data_chunk.map(d => d * (1 << 15)).filter((_, i));
+						const data_chunk_stash = data_chunk.map(d => d * (1 << 15));
 						data_chunk = [];
 						this.setState(({ mic_idx }) => {
 							const stash_idx = mic_idx.idx + 1;
 							data_chunk_stash.push(mic_idx.idx, this.state.session);
 							transcribe(new Int16Array(data_chunk_stash))
 								.then(transcript_response => this.setState(st => {
-									if(st.mic_idx.rx_idx <= stash_idx && this.state.mic_active) //have to check again if the mic is active, as some transcriptions come in after a delay , i.e. after the mix is inactive
+									if(st.mic_idx.idx === stash_idx && this.state.mic_active) //have to check again if the mic is active, as some transcriptions come in after a delay , i.e. after the mix is inactive
 										return {
 											transcript_buf : transcript_response.transcript,
-											mic_idx: Object.assign(st.mic_idx, { rx_idx: stash_idx })
+											mic_idx: Object.assign(st.mic_idx, { rx_idx: st.mic_idx.idx })
 										};
 								}));
 							return { mic_idx: Object.assign(mic_idx, { idx: stash_idx }) };
@@ -169,8 +165,6 @@ export default class extends Component {
                 //if we are turning off transcrption, we want to add a space to the end so user can start typing easily
 				next_transcript_head = str_splice(transcript_head, transcript_buf + ' ', input_pos_stash);
 				next_input_pos += transcript_buf.length + 1; //+1 for the space added at the end
-                //if turning off transcription, also want to reset our mix indices
-                this.setState({ mic_idx: { idx: 0, rx_idx: 0 } });
 				break;
 			case false:
 				// mic about to go live: stash current position
