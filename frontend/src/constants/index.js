@@ -8,7 +8,8 @@
 //export const searchEnd = "/api/searchapi"
 
 //the below are used for testing locally. I have tried to get some proxying working so that we don't have to do this, but no luck
-export const url = "http://localhost:5000"
+//export const url = "http://localhost:5000"
+export const url = "https://memorux.com:1337"
 export const mxtEnd = "/ltwo"
 export const tagEnd = "/tag"
 export const loginEnd = "/loginapi"
@@ -19,7 +20,7 @@ export const newNoteEnd = '/remember'
 export const transcribeEnd = '/transcribe'
 export const downloadEnd = '/download'
 // Google Maps API Key 
-export const API_KEY = 'AIzaSyDrF-e0TO_qHQ1HTokpiZlHSarRz2mlnds'
+export const API_KEY = 'AIzaSyArANg3cSp_ws70Qn7-bTJPb4grOZlAc4I'
 
 // transcription options
 export const CHUNK_PERIOD = 1.2;
