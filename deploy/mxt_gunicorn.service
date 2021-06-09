@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance to serve MXT gunicorn backend
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/var/www/html/mxt/backend
+Environment="PATH=/var/www/html/mxt/venv/bin"
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/var/www/html/mxt/venv/bin/gunicorn --worker-class eventlet --workers 1 --bind unix:mxt.sock -m 007 gunicorn_deploy:app
+
+[Install]
+WantedBy=multi-user.target
